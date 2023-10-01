@@ -1,12 +1,14 @@
 %{
-    #include <stdio.h>   
+#include <stdio.h>
 %}
-
+digit [0-9]
+letter [A-Za-z]
+id {letter}({letter}|{digit})*
 %%
-[0-9]+  {printf("Number \n");}
-[a-zA-Z][a-zA-Z0-9]*    {printf("Word\n");}
+{digit}+ { printf("nombre : %s\n", yytext); }
+{id} { printf("identificador: %s\n", yytext); }
+. { printf("altres : %s\n", yytext); }
 %%
-
-int main(){
+void main() {
 yylex();
 }

@@ -1,6 +1,5 @@
-# Foobar
-
-Foobar is a Python library for dealing with word pluralization.
+# Compiler
+Compilador del lenguaje x para la asignatura de compiladores
 
 ## Installation
 
