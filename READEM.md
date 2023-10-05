@@ -20,7 +20,7 @@ lex ficheroLex.l
 ##Esto genera un archivo lex.yy.c que se puede añadir al proyecto o se puede ejecutar utilizando 
 gcc -lfl lex.yy.cc
 ##No se que es lo de -lfl pero si no falla y luego ejecutamos el fichero a.out que se ha generado
-\a.out
+./a.out
 ##y listo
 
 ```
