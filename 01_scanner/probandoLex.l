@@ -12,10 +12,10 @@ blancos [ \n\t\r]+
 
 /* Acciones */
 %%
-{digit}+ { printf("número: %s\n", yytext); }
-{id} { printf("identificador: %s\n", yytext); }
+{digit}+                               { printf("número: %s\n", yytext); }
+{id}                                   { printf("identificador: %s\n", yytext); }
 {blancos} { }
-. { printf("altres : %s\n", yytext); }
+.                                      { printf("altres : %s\n", yytext); } //Correspondiente a tokens que no sabemos reconocer
 %%
 
 

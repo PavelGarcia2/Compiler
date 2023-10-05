@@ -16,9 +16,9 @@ sudo pacman -S flex
 ## Usage
 
 ```bash
-lex ficheroLex.l
+lex probandoLex.l
 ##Esto genera un archivo lex.yy.c que se puede añadir al proyecto o se puede ejecutar utilizando 
-gcc -lfl lex.yy.cc
+gcc -lfl lex.yy.c
 ##No se que es lo de -lfl pero si no falla y luego ejecutamos el fichero a.out que se ha generado
 ./a.out
 ##y listo

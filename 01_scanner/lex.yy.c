@@ -744,7 +744,7 @@ YY_RULE_SETUP
 case 4:
 YY_RULE_SETUP
 #line 18 "probandoLex.l"
-{ printf("altres : %s\n", yytext); }
+{ printf("altres : %s\n", yytext); } //Correspondiente
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
