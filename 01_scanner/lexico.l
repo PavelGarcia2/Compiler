@@ -8,7 +8,7 @@
 digito [0-9]
 letra [A-Za-z]
 id {letra}({letra}|{digito})*
-clinea [\n\r]+
+slinea [\n\r]+
 espacios [ \t]+
 numero {digito}+
 
@@ -24,19 +24,17 @@ iterativo   "for"
 entero      "int"
 boleano     "bool"
 
-var ({entero}|{boleano}){espacios}{id}
-tupla      (({entero}|{boleano}){espacios})?{id}\[({numero})?\] 
-
+asignacion "="
 igual "=="
+
 
 
 
 
 /* Acciones */
 %%
-{tupla}                                { printf("Tupla: %s\n", yytext); }
+{asignacion}                                { printf("IAsignacion: %s\n", yytext); }
 {igual}                                { printf("Igualacion: %s\n", yytext); }
-{var}                                  { printf("Declracion variable: %s\n",yytext);}
 {condicional}                          { printf("Palabra reservada: %s\n", yytext); }
 {bucle}                                { printf("Palabra reservada : %s\n", yytext); }
 {iterativo}                            { printf("Palabra reservada: %s\n", yytext); }
@@ -44,7 +42,7 @@ igual "=="
 {boleano}                              { printf("Palabra reservada: %s\n", yytext); }
 {id}                                   { printf("identificador: %s\n", yytext); }
 {numero}                               { printf("número: %s\n", yytext); }
-{clinea}                               { }
+{slinea}                               { }
 {espacios}                             { }
 {rparen}                               { printf("Parentesis derecho %s\n", yytext); }
 {lparen}                               { printf("Parentesis izquierdo %s\n", yytext); }
