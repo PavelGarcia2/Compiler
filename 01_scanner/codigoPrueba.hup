@@ -1,0 +1,44 @@
+//Declaración de tipos
+int n;
+float m;
+char c;
+bool b; //por defecto false
+string str;
+
+//Tuplas y arrays
+tup t;
+t := (1,2);
+
+float array[][];
+array := new float[12][25];
+
+//constantes
+const int PI := 3.14567;
+
+//Operaciones
+//asignacion
+n := 4;
+
+if(n == 4){
+    print("funciona");
+}
+
+switch(n){
+    case 1:
+        print("funciona 1");
+        break;
+    case 2:
+        print("funciona 2");
+        break;
+    default:
+        print("funciona mayor que 2");
+
+}
+
+//Expresiones aritmetica
+
+//suma y asignacion
+int x := 2 + n;
+//multiplicacion
+x := 2 * x;
+
