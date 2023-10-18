@@ -17,10 +17,26 @@ rparen	\)
 lbracket	\{
 rbracket	\}
 
+suma         \+
+resta        \-
+multi        \*
+div          \/
+modulo       "mod"
+
+mayor       \>
+menor       \<
+igualMay    "=>" 
+igualMen    "=<"
+
+
+
 condicional  "if"
 bucle       "while"
 iterativo   "for"
 
+
+char        "char"
+float       "float"
 entero      "int"
 boleano     "bool"
 
@@ -33,7 +49,16 @@ igual "=="
 
 /* Acciones */
 %%
-{asignacion}                                { printf("IAsignacion: %s\n", yytext); }
+{asignacion}                           { printf("IAsignacion: %s\n", yytext); }
+{suma}                                 { printf("Signo suma: %s\n", yytext); }
+{resta}                                 { printf("Signo resta: %s\n", yytext); }
+{multi}                                 { printf("Signo multiplicacion: %s\n", yytext); }
+{div}                                 { printf("Signo division: %s\n", yytext); }
+{modulo}                                 { printf("Signo de modulo: %s\n", yytext); }
+
+
+
+
 {igual}                                { printf("Igualacion: %s\n", yytext); }
 {condicional}                          { printf("Palabra reservada: %s\n", yytext); }
 {bucle}                                { printf("Palabra reservada : %s\n", yytext); }
