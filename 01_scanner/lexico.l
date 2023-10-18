@@ -6,7 +6,8 @@
 
 /* Expresiones Regulares */
 digito      [0-9]
-letra       [A-Za-z]
+tilde       [ÁÀÉÈÍÓÒÚÏÜáàéèíóòúïü]
+letra       [A-Za-z]|{tilde}
 id          {letra}({letra}|{digito})*
 slinea      [\n\r]+
 espacios    [ \t]+
@@ -18,8 +19,6 @@ lbracket	   \{
 rbracket	   \}
 lcorchete   \[
 rcorchete   \]
-Scomilla    \' 
-Ccomilla    \" 
 coma        \,
 puntoComa   \;
 punto       \.
@@ -38,19 +37,25 @@ menor       \<
 igualMay    "=>" 
 igualMen    "=<"
 
-sfuncion    "fun"
+funcion     "fun"
 multiple    "switch"
 condicional "if"
 bucle       "while"
 iterativo   "for"
 constante   "const"
 retorno     "return"
+print       "print"
+println     "println"
 
-char        "char"
+character   "char"
 float       "float"
 entero      "int"
 boleano     "bool"
 string      "str"
+
+str         "\""[^"\""]*"\""
+char        "\'"[^"\'"]"\'"
+flt         {digito}*{punto}{digito}+
 
 true        ["true" | "True"]
 false       ["false" | "False"]
@@ -58,16 +63,19 @@ false       ["false" | "False"]
 asignacion  "="
 igual       "=="
 
-comLinea    "//"
-comInicio   "/*"
-comFin      "*/"
+comLinea    "//"([^\n\r])*
+multiCom    "/*"[^"*/"]*"*/"
 
 entrada     "in"
-salida      "out"
 sistema     "sys"
 
 /* Acciones */
 %%
+{funcion}                              { printf("Declaracion de una funcion: %s\n", yytext); }
+{multiCom}                             { printf("Comentario multiple: %s\n", yytext); }
+{comLinea}                             { printf("Linea comentario: %s\n", yytext); }
+{entrada}                              { printf("Entrada sistema: %s\n", yytext); }
+{sistema}                              { printf("Sistema: %s\n", yytext); }
 
 {and}                                  { printf("And: %s\n", yytext); }
 {or}                                   { printf("Or: %s\n", yytext); }
@@ -88,11 +96,20 @@ sistema     "sys"
 {condicional}                          { printf("Palabra reservada: %s\n", yytext); }
 {bucle}                                { printf("Palabra reservada : %s\n", yytext); }
 {iterativo}                            { printf("Palabra reservada: %s\n", yytext); }
+{multiple}                             { printf("Palabra reservada: %s\n", yytext); }
 
-{char}                                 { printf("Palabra reservado char: %s\n", yytext); }
+{character}                            { printf("Palabra reservado char: %s\n", yytext); }
 {float}                                { printf("Palabra reservada float: %s\n", yytext); }
 {entero}                               { printf("Palabra reservada entero: %s\n", yytext); }
 {boleano}                              { printf("Palabra reservada boolean: %s\n", yytext); }
+{string}                               { printf("Palabra reservada string: %s\n", yytext); }
+
+{str}                                  { printf("Contenido string %s\n", yytext); }
+{char}                                 { printf("Contenido caracter: %s\n", yytext); }
+{flt}                                  { printf("Contenido float: %s\n", yytext); }
+
+{print}                                { printf("Palabra reservada print: %s\n", yytext); }
+{println}                              { printf("Palabra reservada println: %s\n", yytext); }
 
 {id}                                   { printf("identificador: %s\n", yytext); }
 {numero}                               { printf("número: %s\n", yytext); }
@@ -102,21 +119,12 @@ sistema     "sys"
 {lparen}                               { printf("Parentesis izquierdo %s\n", yytext); }
 {rbracket}                             { printf("Lleve cerrada %s\n", yytext); } 
 {lbracket}                             { printf("Llave abierta %s\n", yytext); }
-{rcorchet}                             { printf("Corchete cerrada %s\n", yytext); } 
-{lbracket}                             { printf("Corchete abierta %s\n", yytext); }
-{Scomilla}                             { printf("Comilla simple %s\n", yytext); }
-{Ccomilla}                             { printf("Comilla compuesta %s\n", yytext); }
+{rcorchete}                            { printf("Corchete cerrada %s\n", yytext); } 
+{lcorchete}                            { printf("Corchete abierta %s\n", yytext); }
 {coma}                                 { printf("Coma %s\n", yytext); }
 {puntoComa}                            { printf("PuntoComa %s\n", yytext); }
 {punto}                                { printf("Punto %s\n", yytext); }
 
-{funcion}                              { printf("Declaración de una función: %s\n", yytext); }
-{comentarioInicio}                     { printf("Inicio de comentario: %s\n", yytext); }
-{comentarioFin}                        { printf("Final de comentarios: %s\n", yytext); }
-{comentario}                           { printf("Linea comentario: %s\n", yytext); }
-{in}                                   { printf("Entrada sistema: %s\n", yytext); }
-{out}                                  { printf("Salida sistema: %s\n", yytext); }
-{sys}                                  { printf("Sistema: %s\n", yytext); }
 .                                      { printf("altres : %s\n", yytext); } 
 %%
 

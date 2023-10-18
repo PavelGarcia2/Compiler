@@ -1,4 +1,9 @@
 //Declaración de tipos
+
+/*
+ Mi abuela la comitea
+*/
+
 int n;
 float m;
 char c;
@@ -7,17 +12,17 @@ string str;
 
 //Tuplas y arrays
 tup t;
-t := (1,2);
+t = (1,2);
 
 float array[][];
-array := new float[12][25];
+array = new float[12][25];
 
 //constantes
-const int PI := 3.14567;
+const int PI = 3.14567;
 
 //Operaciones
 //asignacion
-n := 4;
+n = 4;
 
 if(n == 4){
     print("funciona");
@@ -29,6 +34,7 @@ switch(n){
         break;
     case 2:
         print("funciona 2");
+        print('c')
         break;
     default:
         print("funciona mayor que 2");
@@ -38,7 +44,7 @@ switch(n){
 //Expresiones aritmetica
 
 //suma y asignacion
-int x := 2 + n;
+int x = 2 + n;
 //multiplicacion
-x := 2 * x;
+x = 2 * x;
 
