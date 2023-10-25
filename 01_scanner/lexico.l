@@ -2,6 +2,12 @@
 /* Librerias */
 %{
 #include <stdio.h>
+#include <tokens.h>
+
+int yylval;
+float yylvalF;
+char *yylvalID;
+
 %}
 
 /* Expresiones Regulares */
@@ -21,6 +27,7 @@ lcorchete   \[
 rcorchete   \]
 coma        \,
 puntoComa   \;
+dosPuntos   \:
 punto       \.
 
 and         \&
@@ -31,6 +38,7 @@ resta       \-
 multi       \*
 div         \/
 modulo      "mod"
+tupla       "tup"
 
 mayor       \>
 menor       \<
@@ -46,6 +54,10 @@ constante   "const"
 retorno     "return"
 print       "print"
 println     "println"
+new         "new"
+case        "case"
+break       "break"
+default     "default"
 
 character   "char"
 float       "float"
@@ -55,10 +67,10 @@ string      "str"
 
 str         "\""[^"\""]*"\""
 char        "\'"[^"\'"]"\'"
-flt         {digito}*{punto}{digito}+
+decimal     {digito}*{punto}{digito}+
 
-true        ["true" | "True"]
-false       ["false" | "False"]
+t           "true"
+f           "false"
 
 asignacion  "="
 igual       "=="
@@ -71,59 +83,70 @@ sistema     "sys"
 
 /* Acciones */
 %%
-{funcion}                              { printf("Declaracion de una funcion: %s\n", yytext); }
-{multiCom}                             { printf("Comentario multiple: %s\n", yytext); }
-{comLinea}                             { printf("Linea comentario: %s\n", yytext); }
-{entrada}                              { printf("Entrada sistema: %s\n", yytext); }
-{sistema}                              { printf("Sistema: %s\n", yytext); }
+{funcion}                              { return FUNCION; }
+{multiCom}                             { return MULTICOM; }
+{comLinea}                             { return COMLINEA; }
+{entrada}                              { return ENTRADA; }
+{sistema}                              { return SISTEMA; }
 
-{and}                                  { printf("And: %s\n", yytext); }
-{or}                                   { printf("Or: %s\n", yytext); }
+{and}                                  { return AND; }
+{or}                                   { return OR; }
 
-{asignacion}                           { printf("Asignacion: %s\n", yytext); }
-{suma}                                 { printf("Signo suma: %s\n", yytext); }
-{resta}                                { printf("Signo resta: %s\n", yytext); }
-{multi}                                { printf("Signo multiplicacion: %s\n", yytext); }
-{div}                                  { printf("Signo division: %s\n", yytext); }
-{modulo}                               { printf("Signo de modulo: %s\n", yytext); }
+{asignacion}                           { return ASIGNACION; }
+{suma}                                 { return SUMA; }
+{resta}                                { return RESTA; }
+{multi}                                { return MULTI; }
+{div}                                  { return DIV; }
+{modulo}                               { return MODULO; }
 
-{mayor}                                { printf("Signo mayor: %s\n", yytext); }
-{menor}                                { printf("Signo menor: %s\n", yytext); }
-{igualMay}                             { printf("Signo de mayor igual: %s\n", yytext); }
-{igualMen}                             { printf("Signo menor o igual: %s\n", yytext); }
-{igual}                                { printf("Igualacion: %s\n", yytext); }
+{mayor}                                { return MAYOR; }
+{menor}                                { return MENOR; }
+{igualMay}                             { return IGUALMAY; }
+{igualMen}                             { return IGUALMEN; }
+{igual}                                { return IGUAL; }
 
-{condicional}                          { printf("Palabra reservada: %s\n", yytext); }
-{bucle}                                { printf("Palabra reservada : %s\n", yytext); }
-{iterativo}                            { printf("Palabra reservada: %s\n", yytext); }
-{multiple}                             { printf("Palabra reservada: %s\n", yytext); }
+{new}                                  { return NEW; }
+{case}                                 { return CASE; }
+{break}                                { return BREAK; }
+{default}                              { return DEFAULT; }
 
-{character}                            { printf("Palabra reservado char: %s\n", yytext); }
-{float}                                { printf("Palabra reservada float: %s\n", yytext); }
-{entero}                               { printf("Palabra reservada entero: %s\n", yytext); }
-{boleano}                              { printf("Palabra reservada boolean: %s\n", yytext); }
-{string}                               { printf("Palabra reservada string: %s\n", yytext); }
+{condicional}                          { return CONDICIONAL; }
+{bucle}                                { return BUCLE; }
+{iterativo}                            { return ITERATIVO; }
+{multiple}                             { return MULTIPLE; }
 
-{str}                                  { printf("Contenido string %s\n", yytext); }
-{char}                                 { printf("Contenido caracter: %s\n", yytext); }
-{flt}                                  { printf("Contenido float: %s\n", yytext); }
+{character}                            { return CHARACTER; }
+{float}                                { return FLOAT; }
+{entero}                               { return ENTERO; }
+{boleano}                              { return BOLEANO; }
+{string}                               { return STRING; }
+{constante}                            { return CONSTANTE; }
+{tupla}                                { return TUPLA; }
 
-{print}                                { printf("Palabra reservada print: %s\n", yytext); }
-{println}                              { printf("Palabra reservada println: %s\n", yytext); }
+{str}                                  { return STR; }
+{char}                                 { return CHAR; }
+{decimal}                              { yylvalF = atof(yytext); return DECIMAL; }
 
-{id}                                   { printf("identificador: %s\n", yytext); }
-{numero}                               { printf("número: %s\n", yytext); }
-{slinea}                               {  }
-{espacios}                             {  }
-{rparen}                               { printf("Parentesis derecho %s\n", yytext); }
-{lparen}                               { printf("Parentesis izquierdo %s\n", yytext); }
-{rbracket}                             { printf("Lleve cerrada %s\n", yytext); } 
-{lbracket}                             { printf("Llave abierta %s\n", yytext); }
-{rcorchete}                            { printf("Corchete cerrada %s\n", yytext); } 
-{lcorchete}                            { printf("Corchete abierta %s\n", yytext); }
-{coma}                                 { printf("Coma %s\n", yytext); }
-{puntoComa}                            { printf("PuntoComa %s\n", yytext); }
-{punto}                                { printf("Punto %s\n", yytext); }
+{t}                                    { return T; }
+{f}                                    { return F; }
+
+{print}                                { return PRINT; }
+{println}                              { return PRINTLN; }
+
+{id}                                   { yylvalID = yytext; return ID; }
+{numero}                               { yylval = atoi(yytext); return NUMERO; }
+{slinea}                               { return SLINEA; }
+{espacios}                             { /* ignore */ }
+{rparen}                               { return RPAREN; }
+{lparen}                               { return LPAREN; }
+{rbracket}                             { return RBRACKET; } 
+{lbracket}                             { return LBRACKET; }
+{rcorchete}                            { return RCORCHETE; } 
+{lcorchete}                            { return LCORCHETE; }
+{coma}                                 { return COMA; }
+{puntoComa}                            { return PUNTOCOMA; }
+{punto}                                { return PUNTO;}
+{dosPuntos}                            { return DOSPUNTOS; }   
 
 .                                      { printf("altres : %s\n", yytext); } 
 %%
@@ -138,7 +161,29 @@ void main(int argc, char* argv[]) {
       if(archivo != NULL)
       {
          yyin = archivo;
-         yylex();
+
+         int tok;
+
+         while(tok = yylex())
+         {
+            printf("%d", tok);
+            if(tok == NUMERO)
+            {
+               printf("Numero = %d\n", yylval);
+            }
+            else if (tok == DECIMAL)
+            {
+               printf("Decimal = %f\n", yylvalF);
+            }
+            else if (tok == ID)
+            {
+               printf("ID = %s\n", yylvalID);
+            }
+            else 
+            {
+               printf("\n");
+            }
+         }
       }
       else
       {

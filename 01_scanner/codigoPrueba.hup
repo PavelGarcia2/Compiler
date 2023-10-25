@@ -8,7 +8,7 @@ int n;
 float m;
 char c;
 bool b; //por defecto false
-string str;
+str a;
 
 //Tuplas y arrays
 tup t;
