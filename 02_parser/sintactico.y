@@ -23,6 +23,7 @@ int yyerror(char *s);
 %union 
 {
     char *string;
+    
     int entero;
     float real;
 }
@@ -30,7 +31,10 @@ int yyerror(char *s);
 %%
 /* regles */
 
-
+/* variable : produccion {regla semantica}
+           |
+           ;
+*/
 
 
 %%
