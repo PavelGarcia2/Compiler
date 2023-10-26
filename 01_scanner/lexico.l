@@ -2,7 +2,7 @@
 /* Librerias */
 %{
 #include <stdio.h>
-#include <tokens.h>
+#include "tokens.h"
 
 int yylval;
 float yylvalF;
@@ -69,8 +69,8 @@ str         "\""[^"\""]*"\""
 char        "\'"[^"\'"]"\'"
 decimal     {digito}*{punto}{digito}+
 
-t           "true"
-f           "false"
+t           ("true"|"True")
+f           ("false"|"False")
 
 asignacion  "="
 igual       "=="
@@ -83,71 +83,61 @@ sistema     "sys"
 
 /* Acciones */
 %%
-{funcion}                              { return FUNCION; }
-{multiCom}                             { return MULTICOM; }
-{comLinea}                             { return COMLINEA; }
-{entrada}                              { return ENTRADA; }
-{sistema}                              { return SISTEMA; }
-
-{and}                                  { return AND; }
-{or}                                   { return OR; }
-
-{asignacion}                           { return ASIGNACION; }
-{suma}                                 { return SUMA; }
-{resta}                                { return RESTA; }
-{multi}                                { return MULTI; }
-{div}                                  { return DIV; }
-{modulo}                               { return MODULO; }
-
-{mayor}                                { return MAYOR; }
-{menor}                                { return MENOR; }
-{igualMay}                             { return IGUALMAY; }
-{igualMen}                             { return IGUALMEN; }
-{igual}                                { return IGUAL; }
-
-{new}                                  { return NEW; }
-{case}                                 { return CASE; }
-{break}                                { return BREAK; }
-{default}                              { return DEFAULT; }
-
-{condicional}                          { return CONDICIONAL; }
-{bucle}                                { return BUCLE; }
-{iterativo}                            { return ITERATIVO; }
-{multiple}                             { return MULTIPLE; }
-
-{character}                            { return CHARACTER; }
-{float}                                { return FLOAT; }
-{entero}                               { return ENTERO; }
-{boleano}                              { return BOLEANO; }
-{string}                               { return STRING; }
-{constante}                            { return CONSTANTE; }
-{tupla}                                { return TUPLA; }
-
-{str}                                  { return STR; }
-{char}                                 { return CHAR; }
-{decimal}                              { yylvalF = atof(yytext); return DECIMAL; }
-
-{t}                                    { return T; }
-{f}                                    { return F; }
-
-{print}                                { return PRINT; }
-{println}                              { return PRINTLN; }
-
-{id}                                   { yylvalID = yytext; return ID; }
-{numero}                               { yylval = atoi(yytext); return NUMERO; }
-{slinea}                               { return SLINEA; }
-{espacios}                             { /* ignore */ }
-{rparen}                               { return RPAREN; }
-{lparen}                               { return LPAREN; }
-{rbracket}                             { return RBRACKET; } 
-{lbracket}                             { return LBRACKET; }
-{rcorchete}                            { return RCORCHETE; } 
-{lcorchete}                            { return LCORCHETE; }
-{coma}                                 { return COMA; }
-{puntoComa}                            { return PUNTOCOMA; }
-{punto}                                { return PUNTO;}
-{dosPuntos}                            { return DOSPUNTOS; }   
-
+{funcion}                              { printing(yytext); return FUNCION; }
+{multiCom}                             { printing(yytext); return MULTICOM; }
+{comLinea}                             { printing(yytext); return COMLINEA; }
+{entrada}                              { printing(yytext); return ENTRADA; }
+{sistema}                              { printing(yytext); return SISTEMA; }
+{and}                                  { printing(yytext); return AND; }
+{or}                                   { printing(yytext); return OR; }
+{asignacion}                           { printing(yytext); return ASIGNACION; }
+{suma}                                 { printing(yytext); return SUMA; }
+{resta}                                { printing(yytext); return RESTA; }
+{multi}                                { printing(yytext); return MULTI; }
+{div}                                  { printing(yytext); return DIV; }
+{modulo}                               { printing(yytext); return MODULO; }
+{mayor}                                { printing(yytext); return MAYOR; }
+{menor}                                { printing(yytext); return MENOR; }
+{igualMay}                             { printing(yytext); return IGUALMAY; }
+{igualMen}                             { printing(yytext); return IGUALMEN; }
+{igual}                                { printing(yytext); return IGUAL; }
+{new}                                  { printing(yytext); return NEW; }
+{case}                                 { printing(yytext); return CASE; }
+{break}                                { printing(yytext); return BREAK; }
+{default}                              { printing(yytext); return DEFAULT; }
+{condicional}                          { printing(yytext); return CONDICIONAL; }
+{bucle}                                { printing(yytext); return BUCLE; }
+{iterativo}                            { printing(yytext); return ITERATIVO; }
+{multiple}                             { printing(yytext); return MULTIPLE; }
+{character}                            { printing(yytext); return CHARACTER; }
+{float}                                { printing(yytext); return FLOAT; }
+{entero}                               { printing(yytext); return ENTERO; }
+{boleano}                              { printing(yytext); return BOLEANO; }
+{string}                               { printing(yytext); return STRING; }
+{constante}                            { printing(yytext); return CONSTANTE; }
+{tupla}                                { printing(yytext); return TUPLA; }
+{str}                                  { printing(yytext); return STR; }
+{char}                                 { printing(yytext); return CHAR; }
+{decimal}                              { printing(yytext); yylvalF = atof(yytext); return DECIMAL; }
+{t}                                    { printing(yytext); return T; }
+{f}                                    { printing(yytext); return F; }
+{print}                                { printing(yytext); return PRINT; }
+{println}                              { printing(yytext); return PRINTLN; }
+{id}                                   { printing(yytext); yylvalID = yytext; return ID; }
+{numero}                               { printing(yytext); yylval = atoi(yytext); return NUMERO; }
+{slinea}                               { printing(yytext); return SLINEA; }
+{espacios}                             {  /* ignore */ }
+{rparen}                               { printing(yytext); return RPAREN; }
+{lparen}                               { printing(yytext); return LPAREN; }
+{rbracket}                             { printing(yytext); return RBRACKET; } 
+{lbracket}                             { printing(yytext); return LBRACKET; }
+{rcorchete}                            { printing(yytext); return RCORCHETE; } 
+{lcorchete}                            { printing(yytext); return LCORCHETE; }
+{coma}                                 { printing(yytext); return COMA; }
+{puntoComa}                            { printing(yytext); return PUNTOCOMA; }
+{punto}                                { printing(yytext); return PUNTO;}
+{dosPuntos}                            { printing(yytext); return DOSPUNTOS; }   
+{retorno}                              { printing(yytext); return RETORNO; } 
 .                                      { printf("altres : %s\n", yytext); } 
 %%
 
@@ -203,3 +193,5 @@ void main(int argc, char* argv[]) {
       }
    }
 }
+
+

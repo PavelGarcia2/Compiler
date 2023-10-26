@@ -60,5 +60,9 @@ enum yytokentype {
    BREAK = 312,
    DOSPUNTOS = 313,
    DEFAULT = 314,
-   TUPLA = 315   
+   TUPLA = 315,
+   ELSE = 316,
+   ELIF = 317,
+   NOT = 318,
+   PROGRAM = 319 
 };
