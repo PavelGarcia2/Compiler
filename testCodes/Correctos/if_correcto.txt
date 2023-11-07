@@ -1,0 +1,4 @@
+//if que mira si el numero es par
+if(numero%2){
+    println("Es par");
+}

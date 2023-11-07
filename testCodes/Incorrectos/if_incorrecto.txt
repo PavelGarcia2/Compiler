@@ -1,0 +1,5 @@
+//if incorrecto al que le falta un corchete
+
+if(numero%2)
+    println("Es par");
+}
