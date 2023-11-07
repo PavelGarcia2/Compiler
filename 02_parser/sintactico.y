@@ -11,7 +11,7 @@ int yyerror(char *s);
 %token AND OR NOT MAYOR MENOR IGUALMAY IGUALMEN IGUAL ASIGNACION
 %token FUNCION ENTRADA SISTEMA NEW PRINT PRINTLN
 %token CONDICIONAL ELSE ELIF BUCLE ITERATIVO MULTIPLE CASE BREAK DEFAULT RETORNO
-%token CHARACTER FLOAT ENTERO BOLEANO STRING CONSTANTE TUPLA
+%token CHARACTER FLOAT ENTERO BOLEANO STRING CONSTANTE TUPLA ARRAY
 %token SLINEA RPAREN LPAREN RBRACKET LBRACKET RCORCHETE LCORCHETE COMA PUNTOCOMA PUNTO DOSPUNTOS 
 %token EXEC
 
@@ -37,14 +37,59 @@ int yyerror(char *s);
 */
 
 PROGRAM : EXEC LCORCHETE SENTS RCORCHETE;
-SENTS : SENT SENTS | ;
-SENT : EXPRESION_SENT | DECLARACION_SENT | CONDICIONAL_SENT | ITERATIVO_SENT | FUNCION_SENT; /* incompleto */
+
+SENTS : SENT SENTS 
+        | ;
+        
+SENT : EXPRESION_SENT | DECLARACION_SENT 
+      | CONDICIONAL_SENT 
+      | ITERATIVO_SENT 
+      | FUNCION_SENT; /* incompleto */
+
+      
 DECLARACION_SENT : DECLARACION PUNTOCOMA;
-DECLARACION: ENTERO ID | CHARACTER ID | FLOAT ID | BOLEANO ID | STRING ID;
-EXPRESION_SENT : EXPRESION PUNTOCOMA;
-EXPRESION :  ID ASIGNACION EXPRESION | ; /* incompleto */
+
+DECLARACION:  TYPE ID 
+              | DEC_ARRAY;
+
+EXPRESION_SENT : EXPRESION PUNTOCOMA
+                | ; //le he metido un landa por si al momento de llamar a una expresion no hay nada deberia de seguir siendo valido
+                
+
+EXPRESION :  ID ASIGNACION EXPRESION //id = expresion ;
+            | ; /* incompleto */ //tiene que poder llamar ainit array para que furule bien array
+
+TYPE: ENTERO 
+      | CHARACTER  
+      | FLOAT 
+      | BOLEANO 
+      | TUPLA
+      ;
+
+SWITCH : MULTIPLE LPAREN ID RPAREN LCORCHETE CASES RCORCHETE; //switch (id) {cases}   {crear nodo de switch}
 
 
+CASES :  CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA CASES //case INIT: expresion; break;   case 1: break; si no hay expresion deriva en landa
+        | DEFAULT DOSPUNTOS SENTS BREAK PUNTOCOMA    //default: expresion break; si no hay expresion deriba en landa
+        | ; //no hay ningun case ni default o ya no hay que poner mas casos
+
+INIT_CASES : NUMERO 
+            | STR 
+            | CHAR ; //   case 1:   case "uno":  case '1': 
+
+DEC_ARRAY: TYPE ID ARRAY ARRAY_DEC ; // int a [][]* =? new int [valor] [valor]  int a[]
+                                     // a = new int[2][2] no se puede hacer hasta que pedro trabaje, la de chambiar nos se la sabe (INCOMPLETO)
+
+ARRAY_DEC: INIT_ARRAY  
+           | ;
+
+INIT_ARRAY: ASIGNACION NEW TYPE DIM_ARRAY;
+
+DIM_ARRAY: DIM_ARRAY LCORCHETE VALOR RCORCHETE // dimensiones infinitas 
+          | LCORCHETE VALOR RCORCHETE; // se acaba con minimi uno
+
+VALOR: ID 
+      | ENTERO ;
 %%
 /* accions */
 main(int argc, char *argv [])

@@ -65,4 +65,5 @@ enum yytokentype {
    ELIF = 317,
    NOT = 318,
    PROGRAM = 319 
+   ARRAY = 320
 };

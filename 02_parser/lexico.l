@@ -66,6 +66,7 @@ float       "float"
 entero      "int"
 boleano     "bool"
 string      "str"
+array       {lcorchete}{rcorchete}({lcorchete}{rcorchete})*
 
 str         "\""[^"\""]*"\""
 char        "\'"[^"\'"]"\'"
@@ -121,6 +122,7 @@ sistema     "sys"
 {string}                               { return STRING; }
 {constante}                            { return CONSTANTE; }
 {tupla}                                { return TUPLA; }
+{array}                                { return ARRAY; }
 {str}                                  { yylval.string = yytext; return STR; }
 {char}                                 { yylval.string = yytext;return CHAR; }
 {decimal}                              { yylval.real = atof(yytext); return DECIMAL; }
@@ -141,7 +143,7 @@ sistema     "sys"
 {puntoComa}                            { return PUNTOCOMA; }
 {punto}                                { return PUNTO;}
 {dosPuntos}                            { return DOSPUNTOS; }  
-{program}                              { return PROGRAM; } 
+{programa}                             { return PROGRAM; } 
 {retorno}                              { return RETORNO; } 
 .                                      { muestraError(); } 
 %%
