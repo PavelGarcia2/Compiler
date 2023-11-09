@@ -114,18 +114,37 @@ INIT_CASES : NUMERO
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       EXPRESION                                                   //
 
-OPLOG: AND | OR | NOT | MAYOR | MENOR | IGUALMAY | IGUALMEN | IGUAL; 
+OPLOG: AND 
+      | OR 
+      | NOT 
+      | MAYOR 
+      | MENOR 
+      | IGUALMAY 
+      | IGUALMEN 
+      | IGUAL; 
 
-OP: SUMA | RESTA | MULTI | DIV | MODULO;
+OP: SUMA 
+    | RESTA 
+    | MULTI 
+    | DIV 
+    | MODULO;
 
-BOOL: T | F;
-NUMERICO: NUMERO | DECIMAL;
+BOOL: T 
+      | F;
 
-EXPRESION: EXPRESION_SIMPLE EXPRESION | ; // Hay que mirar que operador ponemos entre exprsimple y expresion habria que poner uno global
+NUMERICO: NUMERO 
+          | DECIMAL;
 
-EXPRESION_SIMPLE: EXPRESION_BOOL | EXPRESION_NUM | BOOL | NUMERICO;
+EXPRESION: EXPRESION_SIMPLE EXPRESION 
+          | ; // Hay que mirar que operador ponemos entre exprsimple y expresion habria que poner uno global
 
-EXPRESION_BOOL: ID OPLOG ID | BOOL OPLOG BOOL;
+EXPRESION_SIMPLE: EXPRESION_BOOL 
+                  | EXPRESION_NUM 
+                  | BOOL 
+                  | NUMERICO;
+
+EXPRESION_BOOL: ID OPLOG ID 
+                | BOOL OPLOG BOOL;
 
 EXPRESION_NUM: NUMERICO OP NUMERICO;
 
