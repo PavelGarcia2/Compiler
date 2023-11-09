@@ -36,36 +36,57 @@ int yyerror(char *s);
            ;
 */
 
+// ------------------------------------------------------------------------------------------------------------------ //
+//                                                       GRAMMAR CORE                                                 //
+
 PROGRAM : EXEC LCORCHETE SENTS RCORCHETE;
 
-SENTS : SENT SENTS 
-        | ;
+SENTS : SENT SENTS | ;
         
-SENT : EXPRESION_SENT | DECLARACION_SENT 
-      | CONDICIONAL_SENT 
-      | ITERATIVO_SENT 
-      | FUNCION_SENT; /* incompleto */
+SENT : ASIGN_SENT | DECLARACION_SENT | CONDICIONAL_SENT | ITERATIVO_SENT | FUNCION_SENT;
 
-      
-DECLARACION_SENT : DECLARACION PUNTOCOMA;
 
-DECLARACION:  TYPE ID 
-              | DEC_ARRAY;
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       DECLACRACION_SENT                                           //
+DECLARACION_SENT : DECLARACIONES PUNTOCOMA;
 
-EXPRESION_SENT : EXPRESION PUNTOCOMA
-                | ; //le he metido un landa por si al momento de llamar a una expresion no hay nada deberia de seguir siendo valido
-                
+DECLARACIONES:  DEC | DEC_ARRAY;
 
-EXPRESION :  ID ASIGNACION EXPRESION //id = expresion ;
-            | ; /* incompleto */ //tiene que poder llamar ainit array para que furule bien array
+DEC: TYPE ID DEC_ASIGN;
 
-TYPE: ENTERO 
-      | CHARACTER  
-      | FLOAT 
-      | BOLEANO 
-      | TUPLA
-      ;
+DEC_ASIGN: ASIGNACION EXPRESION | ;
 
+DEC_ARRAY: TYPE ID ARRAY ARRAY_DEC | ID INIT_ARRAY; // int a [][]* =? new int [valor] [valor]  int a[]
+                                     // a = new int[2][2] no se puede hacer hasta que pedro trabaje, la de chambiar nos se la sabe (INCOMPLETO)
+                                     // si que se puede manin el segundo caso es ID INIT_ARRAY 
+ARRAY_DEC: INIT_ARRAY | ;
+
+INIT_ARRAY: ASIGNACION NEW TYPE DIM_ARRAY;
+
+DIM_ARRAY: DIM_ARRAY LCORCHETE VALOR RCORCHETE // dimensiones infinitas 
+          | LCORCHETE VALOR RCORCHETE; // se acaba con minimi uno
+
+VALOR: ID | ENTERO ;
+
+TYPE: ENTERO | CHARACTER | FLOAT | BOLEANO | TUPLA ;
+
+
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       ASIGNACION_SENT                                             //
+
+ASIGN_SENT : ASIGN PUNTOCOMA; //le he metido un landa por si al momento de llamar a una expresion no hay nada deberia de seguir siendo valido
+                              // puse que era una expresion pero era una asignacion quito el lambda, igualmente una expresion es del tipo A && B nunca va estar vacio eso
+
+ASIGN :  ASIGN_SIMPLE | ASIGN_ARRAY;
+
+ASIGN_SIMPLE: ID ASIGNACION EXPRESION;
+
+ASIGN_ARRAY : ID DIM_ARRAY ASIGNACION EXPRESION;
+
+
+
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       CONDICIONAL_SENT                                            //
 SWITCH : MULTIPLE LPAREN ID RPAREN LCORCHETE CASES RCORCHETE; //switch (id) {cases}   {crear nodo de switch}
 
 
@@ -77,19 +98,37 @@ INIT_CASES : NUMERO
             | STR 
             | CHAR ; //   case 1:   case "uno":  case '1': 
 
-DEC_ARRAY: TYPE ID ARRAY ARRAY_DEC ; // int a [][]* =? new int [valor] [valor]  int a[]
-                                     // a = new int[2][2] no se puede hacer hasta que pedro trabaje, la de chambiar nos se la sabe (INCOMPLETO)
 
-ARRAY_DEC: INIT_ARRAY  
-           | ;
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       ITERATIVO_SENT                                              //
 
-INIT_ARRAY: ASIGNACION NEW TYPE DIM_ARRAY;
 
-DIM_ARRAY: DIM_ARRAY LCORCHETE VALOR RCORCHETE // dimensiones infinitas 
-          | LCORCHETE VALOR RCORCHETE; // se acaba con minimi uno
 
-VALOR: ID 
-      | ENTERO ;
+
+
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       FUNCION_SENT                                                //
+
+
+
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       EXPRESION                                                   //
+
+OPLOG: AND | OR | NOT | MAYOR | MENOR | IGUALMAY | IGUALMEN | IGUAL; 
+
+OP: SUMA | RESTA | MULTI | DIV | MODULO;
+
+BOOL: T | F;
+NUMERICO: NUMERO | DECIMAL;
+
+EXPRESION: EXPRESION_SIMPLE EXPRESION | ; // Hay que mirar que operador ponemos entre exprsimple y expresion habria que poner uno global
+
+EXPRESION_SIMPLE: EXPRESION_BOOL | EXPRESION_NUM | BOOL | NUMERICO;
+
+EXPRESION_BOOL: ID OPLOG ID | BOOL OPLOG BOOL;
+
+EXPRESION_NUM: NUMERICO OP NUMERICO;
+
 %%
 /* accions */
 main(int argc, char *argv [])
