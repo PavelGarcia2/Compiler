@@ -113,6 +113,12 @@ ELSE_COND: ELIF LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET  ELSE_COND
 
 
 
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       BUCLE_WHILE_SENT                                              //
+WHILE : BUCLE LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET
+
+
+
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       FUNCION_SENT                                                //
