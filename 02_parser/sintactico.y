@@ -48,6 +48,7 @@ SENT : ASIGN_SENT | DECLARACION_SENT | CONDICIONAL_SENT | ITERATIVO_SENT | FUNCI
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       DECLACRACION_SENT                                           //
+
 DECLARACION_SENT : DECLARACIONES PUNTOCOMA;
 
 DECLARACIONES:  DEC | DEC_ARRAY;
@@ -87,7 +88,7 @@ ASIGN_ARRAY : ID DIM_ARRAY ASIGNACION EXPRESION;
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       CONDICIONAL_SENT                                            //
-SWITCH : MULTIPLE LPAREN ID RPAREN LCORCHETE CASES RCORCHETE; //switch (id) {cases}   {crear nodo de switch}
+SWITCH : MULTIPLE LPAREN ID RPAREN LBRACKET CASES RBRACKET; //switch (id) {cases}   {crear nodo de switch}
 
 
 CASES :  CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA CASES //case INIT: expresion; break;   case 1: break; si no hay expresion deriva en landa
@@ -98,6 +99,12 @@ INIT_CASES : NUMERO
             | STR 
             | CHAR ; //   case 1:   case "uno":  case '1': 
 
+
+IF_COND : CONDICIONAL LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET  ELSE_COND;   
+
+ELSE_COND: ELIF IF_COND
+          | ELSE LBRACKET SENTS RBRACKET
+          | ;
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       ITERATIVO_SENT                                              //
