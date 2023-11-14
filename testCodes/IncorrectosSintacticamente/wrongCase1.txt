@@ -1,0 +1,26 @@
+program {
+
+    int edad1;
+    int edad2;
+    String nombre;
+
+    func boolean mayor (int edad1, int edad2) {
+        bool esmayor = false;
+        ifs(edad1 > edad2){
+            esmayor = true;
+        }
+        return esmayor;
+    }
+
+    fun int multiplicarEdad (int edad, int mult) {
+        return edad * mult;
+    }
+
+    execute {
+        edad1 = 10;
+        edad2 = 2;
+        println(mayor(edad1,edad2));
+        int multEdad = multiplicarEdad(edad1,3);
+        println("Edad multiplicada = " + multEdad);
+    }
+}

@@ -112,7 +112,6 @@ ELSE_COND: ELIF LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET  ELSE_COND
 
 
 
-
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       BUCLE_WHILE_SENT                                              //
 WHILE : BUCLE LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET
@@ -122,7 +121,16 @@ WHILE : BUCLE LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       FUNCION_SENT                                                //
-
+FUNCION_SENT: FUNC PUNTOCOMA;
+FUNC: FUNCTION_USE | FUNCTION_DECLARATION;
+FUNCTION_DECLARATION: FUNCTION_NAME RCORCHETE SENTS LCORCHETE;
+FUNCTION_NAME: FUNCION TYPE ID;
+FUNCTION_USE: FUNCI RPAREN EXPRESION LPAREN;
+FUNCI: SYSTEM_FUN | USER_FUN;
+SYSTEM_FUN: ENTRADA_FUN | SALIDA_FUN; 
+SALIDA_FUN: PRINT | PRINTLN;
+ENTRADA_FUN: SISTEMA PUNTO ENTRADA;
+USER_FUN: ID;
 
 
 // ----------------------------------------------------------------------------------------------------------------- //
