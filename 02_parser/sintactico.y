@@ -43,7 +43,7 @@ PROGRAM : EXEC LCORCHETE SENTS RCORCHETE;
 
 SENTS : SENT SENTS | ;
         
-SENT : ASIGN_SENT | DECLARACION_SENT | CONDICIONAL_SENT | ITERATIVO_SENT | FUNCION_SENT;
+SENT : ASIGN_SENT | DECLARACION_SENT | CONDICIONAL_SENT | ITERATIVO_SENT | FUNCION_SENT | INCRDECR_SENTS;
 
 
 // ----------------------------------------------------------------------------------------------------------------- //
@@ -109,12 +109,13 @@ ELSE_COND: ELIF LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET  ELSE_COND
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       ITERATIVO_SENT                                              //
-
-
-
+ITERATIVO_SENT: BUCLE_SENT | FOR_SENT;
+FOR_SENT: ITERATIVO LPAREN VARFOR PUNTOCOMA EXPRESION_BOOL PUNTOCOMA AUGDISM RPAREN LCORCHETE SENTS RCORCHETE;
+VARFOR: DEC | ID
+AUGDISM: EXPRESION_NUM | INCRDECR_SENT;
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       BUCLE_WHILE_SENT                                              //
-WHILE : BUCLE LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET
+BUCLE_SENT : BUCLE LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET
 
 
 
@@ -168,7 +169,14 @@ EXPRESION_SIMPLE: EXPRESION_BOOL
 EXPRESION_BOOL: ID OPLOG ID 
                 | BOOL OPLOG BOOL;
 
-EXPRESION_NUM: NUMERICO OP NUMERICO;
+EXPRESION_NUM: NUMERICO OP NUMERICO | ID OP ID | ID OP NUMERICO | NUMERICO OP ID;
+
+// ----------------------------------------------------------------------------------------------------------------- //
+//                                                       INCRDECR_SENT                                                   //
+INCRDECR_SENTS: INCRDECR_SENT PUNTOCOMA
+INCRDECR_SENT: INCR_SENT | DECR_SENT
+INCR_SENT: ID SUMA SUMA
+DECR_SENT: ID RESTA RESTA
 
 %%
 /* accions */
