@@ -1,6 +1,9 @@
 PROGRAMA: DECL_VARS DECL_FUNCIONES MAIN 
         | ;
 
+MAIN: main {SENTS};
+
+
 DECL_VARS: TIPO ID DECL_ESP ASIGN puntocoma DECL_VARS 
          | ;
 
@@ -12,7 +15,10 @@ DECL_ARRAY: LCORCHETE RCORCHETE DECL_ARRAY | ;
 
 DECL_TUPLA: LPAREN TIPO COMA TIPO RPAREN;
 
-ASIGN: asignacion T_ASIGN
+REAL_ASIGN: id asignacion EXPRESION puntocoma;
+
+ASIGN: asignacion T_ASIGN 
+      | ;
 
 T_ASIGN: ASIGN_NOMAL
         | ASIGN_ARRAY
@@ -49,9 +55,42 @@ SENTS: SENT SENTS
         |
         ;
 
-SENT: if LPAREN PARAMS RPAREN LCORCHETE SENTS RCORCHETE 
-    | while LPAREN PARAMS RPAREN LCORCHETE SENTS RCORCHETE
-    | DECL_VARS;
+SENT: if LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE 
+    | while LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+    | for LPAREN ID ; EXPRESION ; OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+    | switch LPAREN ID RPAREN LCORCHETE *poner aqui casos* RCORCHETE
+    | DECL_VARS
+    | REAL_ASIGN
+    | ;
 
 
+OP: OP_LOG | OP_ARIT;
 
+OPLOG: and 
+      | or  
+      | > 
+      | <
+      | >=
+      | <=
+      | ==; 
+
+OPARIT: +
+       | -
+       | * 
+       | /
+       | mod;
+
+OP_RAPIDOS: id ++
+          | id --
+
+EXPRESION: (EXPRESION)
+          | EXPRESION OPARIT EXPRESION
+          | not EXPRESION
+          | EXPRESION OPLOG EXPRESION
+          | ID
+          | LLAMADA_FUNC;
+
+LLAMADA_FUNC: ID (PARAMETROS); 
+
+PARAMETROS: EXPRESION 
+            | EXPRESION, PARAMETROS;
