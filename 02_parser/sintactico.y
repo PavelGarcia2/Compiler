@@ -10,7 +10,7 @@ int yyerror(char *s);
 %token SUMA RESTA MULTI DIV MODULO
 %token AND OR NOT MAYOR MENOR IGUALMAY IGUALMEN IGUAL ASIGNACION
 %token FUNCION ENTRADA SISTEMA NEW PRINT PRINTLN
-%token CONDICIONAL ELSE ELIF BUCLE ITERATIVO MULTIPLE CASE BREAK DEFAULT RETORNO
+%token CONDICIONAL ELSE ELIF BUCLE ITERATIVO MULTIPLE CASE BREAK DEFAULT RETORNO NEW
 %token CHARACTER FLOAT ENTERO BOLEANO STRING CONSTANTE TUPLA ARRAY
 %token SLINEA RPAREN LPAREN RBRACKET LBRACKET RCORCHETE LCORCHETE COMA PUNTOCOMA PUNTO DOSPUNTOS 
 %token EXEC
@@ -39,7 +39,11 @@ int yyerror(char *s);
 // ------------------------------------------------------------------------------------------------------------------ //
 //                                                       GRAMMAR CORE                                                 //
 
-PROGRAM : EXEC LCORCHETE SENTS RCORCHETE;
+PROGRAM : PROGRAM_INIT LCORCHETE SENTS RCORCHETE;
+
+PROGRAM_INIT: ; 
+
+DECLS: DECL DECLS | ;
 
 SENTS : SENT SENTS | ;
         
@@ -116,9 +120,6 @@ AUGDISM: EXPRESION_NUM | INCRDECR_SENT;
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       BUCLE_WHILE_SENT                                              //
 BUCLE_SENT : BUCLE LPAREN EXPRESION RPAREN LBRACKET SENTS RBRACKET;
-
-
-
 
 // ----------------------------------------------------------------------------------------------------------------- //
 //                                                       FUNCION_SENT                                                //

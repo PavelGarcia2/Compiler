@@ -7,6 +7,7 @@ void muestraError();
 %}
 
 /* Expresiones Regulares */
+ejecutar    "exec"
 digito      [0-9]
 tilde       [ÁÀÉÈÍÓÒÚÏÜáàéèíóòúïü]
 letra       [A-Za-z]|{tilde}
@@ -145,6 +146,7 @@ sistema     "sys"
 {dosPuntos}                            { return DOSPUNTOS; }  
 {programa}                             { return PROGRAM; } 
 {retorno}                              { return RETORNO; } 
+{ejecutar}                             { return EJECUTAR; }
 .                                      { muestraError(); } 
 %%
 
