@@ -124,14 +124,14 @@ sistema     "sys"
 {constante}                            { return CONSTANTE; }
 {tupla}                                { return TUPLA; }
 {array}                                { return ARRAY; }
-{str}                                  { yylval.string = yytext; return STR; }
-{char}                                 { yylval.string = yytext;return CHAR; }
+{str}                                  { yylval.string = stdrup(yytext); return STR; }
+{char}                                 { yylval.simbolo = yytext;return CHAR; }
 {decimal}                              { yylval.real = atof(yytext); return DECIMAL; }
 {t}                                    { return T; }
 {f}                                    { return F; }
 {print}                                { return PRINT; }
 {println}                              { return PRINTLN; }
-{id}                                   { yylval.string = yytext; return ID; }
+{id}                                   { yylval.string = stdrup(yytext); return ID; }
 {numero}                               { yylval.entero = atoi(yytext); return NUMERO; }
 {slinea}                               { return SLINEA; }
 {rparen}                               { return RPAREN; }
