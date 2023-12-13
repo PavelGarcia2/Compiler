@@ -1,0 +1,2154 @@
+Terminales no usados en la gramática
+
+    ENTRADA
+    SISTEMA
+    ELSE
+    ELIF
+    CONSTANTE
+    ARRAY
+    T
+    F
+    PRINT
+    PRINTLN
+    SLNIEA
+    RBRACKET
+    LBRACKET
+    PUNTO
+    RETORNO
+
+
+Estado 28 conflictos: 6 desplazamiento/reducción
+Estado 56 conflictos: 6 desplazamiento/reducción
+Estado 61 conflictos: 12 desplazamiento/reducción
+Estado 96 conflictos: 12 desplazamiento/reducción
+Estado 97 conflictos: 12 desplazamiento/reducción
+Estado 125 conflictos: 6 desplazamiento/reducción
+Estado 126 conflictos: 6 desplazamiento/reducción
+Estado 127 conflictos: 6 desplazamiento/reducción
+Estado 146 conflictos: 6 desplazamiento/reducción
+Estado 156 conflictos: 6 desplazamiento/reducción
+Estado 158 conflictos: 6 desplazamiento/reducción
+
+
+Gramática
+
+    0 $accept: PROGRAMA $end
+
+    1 PROGRAMA: DECL_VARS DECL_FUNCIONES MAIN
+
+    2 MAIN: EJECUTAR LCORCHETE SENTS RCORCHETE
+
+    3 DECL_VARS: DECL_VARS TIPO ID DECL_ESP ASIGN PUNTOCOMA
+    4          | ε
+
+    5 DECL_ESP: DECL_ARRAY
+    6         | DECL_TUPLA
+
+    7 DECL_ARRAY: DECL_ARRAY LCORCHETE RCORCHETE
+    8           | ε
+
+    9 DECL_TUPLA: LPAREN TIPO COMA TIPO RPAREN
+
+   10 ASIGN: ASIGNACION T_ASIGN
+
+   11 T_ASIGN: ASIGN_NORMAL
+   12        | ASIGN_ARRAY
+   13        | ASIGN_TUPLA
+
+   14 ASIGN_NORMAL: EXPRESION
+
+   15 ASIGN_ARRAY: NEW TIPO DIM_ARRAY
+
+   16 DIM_ARRAY: DIM_ARRAY LCORCHETE EXPRESION RCORCHETE
+   17          | ε
+
+   18 ASIGN_TUPLA: NEW TUPLA DIM_TUPLA
+
+   19 DIM_TUPLA: LPAREN EXPRESION COMA EXPRESION RPAREN
+
+   20 REAL_ASIGN: ID ASIGNACION EXPRESION PUNTOCOMA
+
+   21 TIPO: ENTERO
+   22     | CHARACTER
+   23     | FLOAT
+   24     | BOLEANO
+   25     | TUPLA
+   26     | STRING
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+   28 TIPO_ARR: TIPO_ARR LCORCHETE RCORCHETE
+   29         | ε
+
+   30 DECL_FUNCIONES: DECL_FUNCIONES FUNC
+   31               | ε
+
+   32 SENTS: SENTS SENT
+   33      | ε
+
+   34 SENT: OTRAS_SENTS
+   35     | DECL_VARS
+   36     | REAL_ASIGN
+
+   37 OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+   38            | BUCLE LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+   39            | ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+   40            | MULTIPLE LPAREN ID RPAREN LCORCHETE CASOS RCORCHETE
+
+   41 CASOS: CASOS CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA
+   42      | CASO_DEFAULT
+   43      | ε
+
+   44 CASO_DEFAULT: DEFAULT DOSPUNTOS SENTS BREAK PUNTOCOMA
+
+   45 INIT_CASES: NUMERO
+   46           | STR
+   47           | CHAR
+
+   48 OP_LOG: AND
+   49       | OR
+   50       | MAYOR
+   51       | MENOR
+   52       | IGUALMAY
+   53       | IGUALMEN
+   54       | IGUAL
+
+   55 OP_ARIT: SUMA
+   56        | RESTA
+   57        | MULTI
+   58        | DIV
+   59        | MODULO
+
+   60 OP_RAPIDOS: OP_RAPIDO_S
+   61           | OP_RAPIDO_R
+
+   62 OP_RAPIDO_S: ID SUMA SUMA
+
+   63 OP_RAPIDO_R: ID RESTA RESTA
+
+   64 EXPRESION: LPAREN EXPRESION RPAREN
+   65          | EXPRESION_ARIT
+   66          | NOT EXPRESION
+   67          | EXPRESION_LOG
+   68          | ID
+   69          | NUMERO
+   70          | DECIMAL
+   71          | CHAR
+   72          | STR
+   73          | LLAMADA_FUNC
+
+   74 EXPRESION_ARIT: EXPRESION OP_ARIT EXPRESION
+
+   75 EXPRESION_LOG: EXPRESION OP_LOG EXPRESION
+
+   76 LLAMADA_FUNC: ID LPAREN PARAMETROS RPAREN PUNTOCOMA
+
+   77 PARAMETROS: PARAM_SIMPLE
+   78           | PARAM_COMPUESTO
+
+   79 PARAM_SIMPLE: EXPRESION
+
+   80 PARAM_COMPUESTO: PARAMETROS COMA EXPRESION
+
+
+Terminales con las reglas donde aparecen
+
+    $end (0) 0
+    error (256)
+    FUNCION (258) 27
+    ENTRADA (259)
+    SISTEMA (260)
+    AND (261) 48
+    OR (262) 49
+    NOT (263) 66
+    ASIGNACION (264) 10 20
+    SUMA (265) 55 62
+    RESTA (266) 56 63
+    MULTI (267) 57
+    DIV (268) 58
+    MODULO (269) 59
+    MAYOR (270) 50
+    MENOR (271) 51
+    IGUALMAY (272) 52
+    IGUALMEN (273) 53
+    IGUAL (274) 54
+    NEW (275) 15 18
+    CASE (276) 41
+    BREAK (277) 41 44
+    DEFAULT (278) 44
+    CONDICIONAL (279) 37
+    ELSE (280)
+    ELIF (281)
+    BUCLE (282) 38
+    ITERATIVO (283) 39
+    MULTIPLE (284) 40
+    CHARACTER (285) 22
+    FLOAT (286) 23
+    ENTERO (287) 21
+    BOLEANO (288) 24
+    STRING (289) 26
+    CONSTANTE (290)
+    TUPLA (291) 18 25
+    ARRAY (292)
+    STR <string> (293) 46 72
+    CHAR <simbolo> (294) 47 71
+    DECIMAL <real> (295) 70
+    T (296)
+    F (297)
+    PRINT (298)
+    PRINTLN (299)
+    ID <string> (300) 3 20 27 39 40 62 63 68 76
+    NUMERO <simbolo> (301) 45 69
+    SLNIEA (302)
+    RPAREN (303) 9 19 27 37 38 39 40 64 76
+    LPAREN (304) 9 19 27 37 38 39 40 64 76
+    RBRACKET (305)
+    LBRACKET (306)
+    RCORCHETE (307) 2 7 16 27 28 37 38 39 40
+    LCORCHETE (308) 2 7 16 27 28 37 38 39 40
+    COMA (309) 9 19 80
+    PUNTOCOMA (310) 3 20 39 41 44 76
+    PUNTO (311)
+    DOSPUNTOS (312) 41 44
+    RETORNO (313)
+    EJECUTAR (314) 2
+
+
+No terminales con las reglas donde aparecen
+
+    $accept (60)
+        on left: 0
+    PROGRAMA (61)
+        on left: 1
+        on right: 0
+    MAIN (62)
+        on left: 2
+        on right: 1
+    DECL_VARS (63)
+        on left: 3 4
+        on right: 1 3 35
+    DECL_ESP (64)
+        on left: 5 6
+        on right: 3
+    DECL_ARRAY (65)
+        on left: 7 8
+        on right: 5 7
+    DECL_TUPLA (66)
+        on left: 9
+        on right: 6
+    ASIGN (67)
+        on left: 10
+        on right: 3
+    T_ASIGN (68)
+        on left: 11 12 13
+        on right: 10
+    ASIGN_NORMAL (69)
+        on left: 14
+        on right: 11
+    ASIGN_ARRAY (70)
+        on left: 15
+        on right: 12
+    DIM_ARRAY (71)
+        on left: 16 17
+        on right: 15 16
+    ASIGN_TUPLA (72)
+        on left: 18
+        on right: 13
+    DIM_TUPLA (73)
+        on left: 19
+        on right: 18
+    REAL_ASIGN (74)
+        on left: 20
+        on right: 36
+    TIPO (75)
+        on left: 21 22 23 24 25 26
+        on right: 3 9 15 27
+    FUNC (76)
+        on left: 27
+        on right: 30
+    TIPO_ARR (77)
+        on left: 28 29
+        on right: 27 28
+    DECL_FUNCIONES (78)
+        on left: 30 31
+        on right: 1 30
+    SENTS (79)
+        on left: 32 33
+        on right: 2 27 32 37 38 39 41 44
+    SENT (80)
+        on left: 34 35 36
+        on right: 32
+    OTRAS_SENTS (81)
+        on left: 37 38 39 40
+        on right: 34
+    CASOS (82)
+        on left: 41 42 43
+        on right: 40 41
+    CASO_DEFAULT (83)
+        on left: 44
+        on right: 42
+    INIT_CASES (84)
+        on left: 45 46 47
+        on right: 41
+    OP_LOG (85)
+        on left: 48 49 50 51 52 53 54
+        on right: 75
+    OP_ARIT (86)
+        on left: 55 56 57 58 59
+        on right: 74
+    OP_RAPIDOS (87)
+        on left: 60 61
+        on right: 39
+    OP_RAPIDO_S (88)
+        on left: 62
+        on right: 60
+    OP_RAPIDO_R (89)
+        on left: 63
+        on right: 61
+    EXPRESION (90)
+        on left: 64 65 66 67 68 69 70 71 72 73
+        on right: 14 16 19 20 39 64 66 74 75 79 80
+    EXPRESION_ARIT (91)
+        on left: 74
+        on right: 65
+    EXPRESION_LOG (92)
+        on left: 75
+        on right: 67
+    LLAMADA_FUNC (93)
+        on left: 76
+        on right: 73
+    PARAMETROS (94)
+        on left: 77 78
+        on right: 27 37 38 76 80
+    PARAM_SIMPLE (95)
+        on left: 79
+        on right: 77
+    PARAM_COMPUESTO (96)
+        on left: 80
+        on right: 78
+
+
+Estado 0
+
+    0 $accept: • PROGRAMA $end
+
+    $default  reduce usando la regla 4 (DECL_VARS)
+
+    PROGRAMA   ir al estado 1
+    DECL_VARS  ir al estado 2
+
+
+Estado 1
+
+    0 $accept: PROGRAMA • $end
+
+    $end  desplazar e ir al estado 3
+
+
+Estado 2
+
+    1 PROGRAMA: DECL_VARS • DECL_FUNCIONES MAIN
+    3 DECL_VARS: DECL_VARS • TIPO ID DECL_ESP ASIGN PUNTOCOMA
+
+    CHARACTER  desplazar e ir al estado 4
+    FLOAT      desplazar e ir al estado 5
+    ENTERO     desplazar e ir al estado 6
+    BOLEANO    desplazar e ir al estado 7
+    STRING     desplazar e ir al estado 8
+    TUPLA      desplazar e ir al estado 9
+
+    $default  reduce usando la regla 31 (DECL_FUNCIONES)
+
+    TIPO            ir al estado 10
+    DECL_FUNCIONES  ir al estado 11
+
+
+Estado 3
+
+    0 $accept: PROGRAMA $end •
+
+    $default  aceptar
+
+
+Estado 4
+
+   22 TIPO: CHARACTER •
+
+    $default  reduce usando la regla 22 (TIPO)
+
+
+Estado 5
+
+   23 TIPO: FLOAT •
+
+    $default  reduce usando la regla 23 (TIPO)
+
+
+Estado 6
+
+   21 TIPO: ENTERO •
+
+    $default  reduce usando la regla 21 (TIPO)
+
+
+Estado 7
+
+   24 TIPO: BOLEANO •
+
+    $default  reduce usando la regla 24 (TIPO)
+
+
+Estado 8
+
+   26 TIPO: STRING •
+
+    $default  reduce usando la regla 26 (TIPO)
+
+
+Estado 9
+
+   25 TIPO: TUPLA •
+
+    $default  reduce usando la regla 25 (TIPO)
+
+
+Estado 10
+
+    3 DECL_VARS: DECL_VARS TIPO • ID DECL_ESP ASIGN PUNTOCOMA
+
+    ID  desplazar e ir al estado 12
+
+
+Estado 11
+
+    1 PROGRAMA: DECL_VARS DECL_FUNCIONES • MAIN
+   30 DECL_FUNCIONES: DECL_FUNCIONES • FUNC
+
+    FUNCION   desplazar e ir al estado 13
+    EJECUTAR  desplazar e ir al estado 14
+
+    MAIN  ir al estado 15
+    FUNC  ir al estado 16
+
+
+Estado 12
+
+    3 DECL_VARS: DECL_VARS TIPO ID • DECL_ESP ASIGN PUNTOCOMA
+
+    LPAREN  desplazar e ir al estado 17
+
+    $default  reduce usando la regla 8 (DECL_ARRAY)
+
+    DECL_ESP    ir al estado 18
+    DECL_ARRAY  ir al estado 19
+    DECL_TUPLA  ir al estado 20
+
+
+Estado 13
+
+   27 FUNC: FUNCION • TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    CHARACTER  desplazar e ir al estado 4
+    FLOAT      desplazar e ir al estado 5
+    ENTERO     desplazar e ir al estado 6
+    BOLEANO    desplazar e ir al estado 7
+    STRING     desplazar e ir al estado 8
+    TUPLA      desplazar e ir al estado 9
+
+    TIPO  ir al estado 21
+
+
+Estado 14
+
+    2 MAIN: EJECUTAR • LCORCHETE SENTS RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 22
+
+
+Estado 15
+
+    1 PROGRAMA: DECL_VARS DECL_FUNCIONES MAIN •
+
+    $default  reduce usando la regla 1 (PROGRAMA)
+
+
+Estado 16
+
+   30 DECL_FUNCIONES: DECL_FUNCIONES FUNC •
+
+    $default  reduce usando la regla 30 (DECL_FUNCIONES)
+
+
+Estado 17
+
+    9 DECL_TUPLA: LPAREN • TIPO COMA TIPO RPAREN
+
+    CHARACTER  desplazar e ir al estado 4
+    FLOAT      desplazar e ir al estado 5
+    ENTERO     desplazar e ir al estado 6
+    BOLEANO    desplazar e ir al estado 7
+    STRING     desplazar e ir al estado 8
+    TUPLA      desplazar e ir al estado 9
+
+    TIPO  ir al estado 23
+
+
+Estado 18
+
+    3 DECL_VARS: DECL_VARS TIPO ID DECL_ESP • ASIGN PUNTOCOMA
+
+    ASIGNACION  desplazar e ir al estado 24
+
+    ASIGN  ir al estado 25
+
+
+Estado 19
+
+    5 DECL_ESP: DECL_ARRAY •
+    7 DECL_ARRAY: DECL_ARRAY • LCORCHETE RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 26
+
+    $default  reduce usando la regla 5 (DECL_ESP)
+
+
+Estado 20
+
+    6 DECL_ESP: DECL_TUPLA •
+
+    $default  reduce usando la regla 6 (DECL_ESP)
+
+
+Estado 21
+
+   27 FUNC: FUNCION TIPO • TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    $default  reduce usando la regla 29 (TIPO_ARR)
+
+    TIPO_ARR  ir al estado 27
+
+
+Estado 22
+
+    2 MAIN: EJECUTAR LCORCHETE • SENTS RCORCHETE
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 28
+
+
+Estado 23
+
+    9 DECL_TUPLA: LPAREN TIPO • COMA TIPO RPAREN
+
+    COMA  desplazar e ir al estado 29
+
+
+Estado 24
+
+   10 ASIGN: ASIGNACION • T_ASIGN
+
+    NOT      desplazar e ir al estado 30
+    NEW      desplazar e ir al estado 31
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    T_ASIGN         ir al estado 38
+    ASIGN_NORMAL    ir al estado 39
+    ASIGN_ARRAY     ir al estado 40
+    ASIGN_TUPLA     ir al estado 41
+    EXPRESION       ir al estado 42
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 25
+
+    3 DECL_VARS: DECL_VARS TIPO ID DECL_ESP ASIGN • PUNTOCOMA
+
+    PUNTOCOMA  desplazar e ir al estado 46
+
+
+Estado 26
+
+    7 DECL_ARRAY: DECL_ARRAY LCORCHETE • RCORCHETE
+
+    RCORCHETE  desplazar e ir al estado 47
+
+
+Estado 27
+
+   27 FUNC: FUNCION TIPO TIPO_ARR • ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+   28 TIPO_ARR: TIPO_ARR • LCORCHETE RCORCHETE
+
+    ID         desplazar e ir al estado 48
+    LCORCHETE  desplazar e ir al estado 49
+
+
+Estado 28
+
+    2 MAIN: EJECUTAR LCORCHETE SENTS • RCORCHETE
+   32 SENTS: SENTS • SENT
+
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+    RCORCHETE    desplazar e ir al estado 55
+
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    RCORCHETE    [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 29
+
+    9 DECL_TUPLA: LPAREN TIPO COMA • TIPO RPAREN
+
+    CHARACTER  desplazar e ir al estado 4
+    FLOAT      desplazar e ir al estado 5
+    ENTERO     desplazar e ir al estado 6
+    BOLEANO    desplazar e ir al estado 7
+    STRING     desplazar e ir al estado 8
+    TUPLA      desplazar e ir al estado 9
+
+    TIPO  ir al estado 60
+
+
+Estado 30
+
+   66 EXPRESION: NOT • EXPRESION
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 61
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 31
+
+   15 ASIGN_ARRAY: NEW • TIPO DIM_ARRAY
+   18 ASIGN_TUPLA: NEW • TUPLA DIM_TUPLA
+
+    CHARACTER  desplazar e ir al estado 4
+    FLOAT      desplazar e ir al estado 5
+    ENTERO     desplazar e ir al estado 6
+    BOLEANO    desplazar e ir al estado 7
+    STRING     desplazar e ir al estado 8
+    TUPLA      desplazar e ir al estado 62
+
+    TIPO  ir al estado 63
+
+
+Estado 32
+
+   72 EXPRESION: STR •
+
+    $default  reduce usando la regla 72 (EXPRESION)
+
+
+Estado 33
+
+   71 EXPRESION: CHAR •
+
+    $default  reduce usando la regla 71 (EXPRESION)
+
+
+Estado 34
+
+   70 EXPRESION: DECIMAL •
+
+    $default  reduce usando la regla 70 (EXPRESION)
+
+
+Estado 35
+
+   68 EXPRESION: ID •
+   76 LLAMADA_FUNC: ID • LPAREN PARAMETROS RPAREN PUNTOCOMA
+
+    LPAREN  desplazar e ir al estado 64
+
+    $default  reduce usando la regla 68 (EXPRESION)
+
+
+Estado 36
+
+   69 EXPRESION: NUMERO •
+
+    $default  reduce usando la regla 69 (EXPRESION)
+
+
+Estado 37
+
+   64 EXPRESION: LPAREN • EXPRESION RPAREN
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 65
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 38
+
+   10 ASIGN: ASIGNACION T_ASIGN •
+
+    $default  reduce usando la regla 10 (ASIGN)
+
+
+Estado 39
+
+   11 T_ASIGN: ASIGN_NORMAL •
+
+    $default  reduce usando la regla 11 (T_ASIGN)
+
+
+Estado 40
+
+   12 T_ASIGN: ASIGN_ARRAY •
+
+    $default  reduce usando la regla 12 (T_ASIGN)
+
+
+Estado 41
+
+   13 T_ASIGN: ASIGN_TUPLA •
+
+    $default  reduce usando la regla 13 (T_ASIGN)
+
+
+Estado 42
+
+   14 ASIGN_NORMAL: EXPRESION •
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+
+    $default  reduce usando la regla 14 (ASIGN_NORMAL)
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 43
+
+   65 EXPRESION: EXPRESION_ARIT •
+
+    $default  reduce usando la regla 65 (EXPRESION)
+
+
+Estado 44
+
+   67 EXPRESION: EXPRESION_LOG •
+
+    $default  reduce usando la regla 67 (EXPRESION)
+
+
+Estado 45
+
+   73 EXPRESION: LLAMADA_FUNC •
+
+    $default  reduce usando la regla 73 (EXPRESION)
+
+
+Estado 46
+
+    3 DECL_VARS: DECL_VARS TIPO ID DECL_ESP ASIGN PUNTOCOMA •
+
+    $default  reduce usando la regla 3 (DECL_VARS)
+
+
+Estado 47
+
+    7 DECL_ARRAY: DECL_ARRAY LCORCHETE RCORCHETE •
+
+    $default  reduce usando la regla 7 (DECL_ARRAY)
+
+
+Estado 48
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID • LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    LPAREN  desplazar e ir al estado 80
+
+
+Estado 49
+
+   28 TIPO_ARR: TIPO_ARR LCORCHETE • RCORCHETE
+
+    RCORCHETE  desplazar e ir al estado 81
+
+
+Estado 50
+
+   37 OTRAS_SENTS: CONDICIONAL • LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    LPAREN  desplazar e ir al estado 82
+
+
+Estado 51
+
+   38 OTRAS_SENTS: BUCLE • LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    LPAREN  desplazar e ir al estado 83
+
+
+Estado 52
+
+   39 OTRAS_SENTS: ITERATIVO • LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+
+    LPAREN  desplazar e ir al estado 84
+
+
+Estado 53
+
+   40 OTRAS_SENTS: MULTIPLE • LPAREN ID RPAREN LCORCHETE CASOS RCORCHETE
+
+    LPAREN  desplazar e ir al estado 85
+
+
+Estado 54
+
+   20 REAL_ASIGN: ID • ASIGNACION EXPRESION PUNTOCOMA
+
+    ASIGNACION  desplazar e ir al estado 86
+
+
+Estado 55
+
+    2 MAIN: EJECUTAR LCORCHETE SENTS RCORCHETE •
+
+    $default  reduce usando la regla 2 (MAIN)
+
+
+Estado 56
+
+    3 DECL_VARS: DECL_VARS • TIPO ID DECL_ESP ASIGN PUNTOCOMA
+   35 SENT: DECL_VARS •
+
+    CHARACTER  desplazar e ir al estado 4
+    FLOAT      desplazar e ir al estado 5
+    ENTERO     desplazar e ir al estado 6
+    BOLEANO    desplazar e ir al estado 7
+    STRING     desplazar e ir al estado 8
+    TUPLA      desplazar e ir al estado 9
+
+    CHARACTER  [reduce usando la regla 35 (SENT)]
+    FLOAT      [reduce usando la regla 35 (SENT)]
+    ENTERO     [reduce usando la regla 35 (SENT)]
+    BOLEANO    [reduce usando la regla 35 (SENT)]
+    STRING     [reduce usando la regla 35 (SENT)]
+    TUPLA      [reduce usando la regla 35 (SENT)]
+    $default   reduce usando la regla 35 (SENT)
+
+    TIPO  ir al estado 10
+
+
+Estado 57
+
+   36 SENT: REAL_ASIGN •
+
+    $default  reduce usando la regla 36 (SENT)
+
+
+Estado 58
+
+   32 SENTS: SENTS SENT •
+
+    $default  reduce usando la regla 32 (SENTS)
+
+
+Estado 59
+
+   34 SENT: OTRAS_SENTS •
+
+    $default  reduce usando la regla 34 (SENT)
+
+
+Estado 60
+
+    9 DECL_TUPLA: LPAREN TIPO COMA TIPO • RPAREN
+
+    RPAREN  desplazar e ir al estado 87
+
+
+Estado 61
+
+   66 EXPRESION: NOT EXPRESION •
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+
+    AND       [reduce usando la regla 66 (EXPRESION)]
+    OR        [reduce usando la regla 66 (EXPRESION)]
+    SUMA      [reduce usando la regla 66 (EXPRESION)]
+    RESTA     [reduce usando la regla 66 (EXPRESION)]
+    MULTI     [reduce usando la regla 66 (EXPRESION)]
+    DIV       [reduce usando la regla 66 (EXPRESION)]
+    MODULO    [reduce usando la regla 66 (EXPRESION)]
+    MAYOR     [reduce usando la regla 66 (EXPRESION)]
+    MENOR     [reduce usando la regla 66 (EXPRESION)]
+    IGUALMAY  [reduce usando la regla 66 (EXPRESION)]
+    IGUALMEN  [reduce usando la regla 66 (EXPRESION)]
+    IGUAL     [reduce usando la regla 66 (EXPRESION)]
+    $default  reduce usando la regla 66 (EXPRESION)
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 62
+
+   18 ASIGN_TUPLA: NEW TUPLA • DIM_TUPLA
+   25 TIPO: TUPLA •
+
+    LPAREN  desplazar e ir al estado 88
+
+    $default  reduce usando la regla 25 (TIPO)
+
+    DIM_TUPLA  ir al estado 89
+
+
+Estado 63
+
+   15 ASIGN_ARRAY: NEW TIPO • DIM_ARRAY
+
+    $default  reduce usando la regla 17 (DIM_ARRAY)
+
+    DIM_ARRAY  ir al estado 90
+
+
+Estado 64
+
+   76 LLAMADA_FUNC: ID LPAREN • PARAMETROS RPAREN PUNTOCOMA
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION        ir al estado 91
+    EXPRESION_ARIT   ir al estado 43
+    EXPRESION_LOG    ir al estado 44
+    LLAMADA_FUNC     ir al estado 45
+    PARAMETROS       ir al estado 92
+    PARAM_SIMPLE     ir al estado 93
+    PARAM_COMPUESTO  ir al estado 94
+
+
+Estado 65
+
+   64 EXPRESION: LPAREN EXPRESION • RPAREN
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+    RPAREN    desplazar e ir al estado 95
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 66
+
+   48 OP_LOG: AND •
+
+    $default  reduce usando la regla 48 (OP_LOG)
+
+
+Estado 67
+
+   49 OP_LOG: OR •
+
+    $default  reduce usando la regla 49 (OP_LOG)
+
+
+Estado 68
+
+   55 OP_ARIT: SUMA •
+
+    $default  reduce usando la regla 55 (OP_ARIT)
+
+
+Estado 69
+
+   56 OP_ARIT: RESTA •
+
+    $default  reduce usando la regla 56 (OP_ARIT)
+
+
+Estado 70
+
+   57 OP_ARIT: MULTI •
+
+    $default  reduce usando la regla 57 (OP_ARIT)
+
+
+Estado 71
+
+   58 OP_ARIT: DIV •
+
+    $default  reduce usando la regla 58 (OP_ARIT)
+
+
+Estado 72
+
+   59 OP_ARIT: MODULO •
+
+    $default  reduce usando la regla 59 (OP_ARIT)
+
+
+Estado 73
+
+   50 OP_LOG: MAYOR •
+
+    $default  reduce usando la regla 50 (OP_LOG)
+
+
+Estado 74
+
+   51 OP_LOG: MENOR •
+
+    $default  reduce usando la regla 51 (OP_LOG)
+
+
+Estado 75
+
+   52 OP_LOG: IGUALMAY •
+
+    $default  reduce usando la regla 52 (OP_LOG)
+
+
+Estado 76
+
+   53 OP_LOG: IGUALMEN •
+
+    $default  reduce usando la regla 53 (OP_LOG)
+
+
+Estado 77
+
+   54 OP_LOG: IGUAL •
+
+    $default  reduce usando la regla 54 (OP_LOG)
+
+
+Estado 78
+
+   75 EXPRESION_LOG: EXPRESION OP_LOG • EXPRESION
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 96
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 79
+
+   74 EXPRESION_ARIT: EXPRESION OP_ARIT • EXPRESION
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 97
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 80
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN • PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION        ir al estado 91
+    EXPRESION_ARIT   ir al estado 43
+    EXPRESION_LOG    ir al estado 44
+    LLAMADA_FUNC     ir al estado 45
+    PARAMETROS       ir al estado 98
+    PARAM_SIMPLE     ir al estado 93
+    PARAM_COMPUESTO  ir al estado 94
+
+
+Estado 81
+
+   28 TIPO_ARR: TIPO_ARR LCORCHETE RCORCHETE •
+
+    $default  reduce usando la regla 28 (TIPO_ARR)
+
+
+Estado 82
+
+   37 OTRAS_SENTS: CONDICIONAL LPAREN • PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION        ir al estado 91
+    EXPRESION_ARIT   ir al estado 43
+    EXPRESION_LOG    ir al estado 44
+    LLAMADA_FUNC     ir al estado 45
+    PARAMETROS       ir al estado 99
+    PARAM_SIMPLE     ir al estado 93
+    PARAM_COMPUESTO  ir al estado 94
+
+
+Estado 83
+
+   38 OTRAS_SENTS: BUCLE LPAREN • PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION        ir al estado 91
+    EXPRESION_ARIT   ir al estado 43
+    EXPRESION_LOG    ir al estado 44
+    LLAMADA_FUNC     ir al estado 45
+    PARAMETROS       ir al estado 100
+    PARAM_SIMPLE     ir al estado 93
+    PARAM_COMPUESTO  ir al estado 94
+
+
+Estado 84
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN • ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+
+    ID  desplazar e ir al estado 101
+
+
+Estado 85
+
+   40 OTRAS_SENTS: MULTIPLE LPAREN • ID RPAREN LCORCHETE CASOS RCORCHETE
+
+    ID  desplazar e ir al estado 102
+
+
+Estado 86
+
+   20 REAL_ASIGN: ID ASIGNACION • EXPRESION PUNTOCOMA
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 103
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 87
+
+    9 DECL_TUPLA: LPAREN TIPO COMA TIPO RPAREN •
+
+    $default  reduce usando la regla 9 (DECL_TUPLA)
+
+
+Estado 88
+
+   19 DIM_TUPLA: LPAREN • EXPRESION COMA EXPRESION RPAREN
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 104
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 89
+
+   18 ASIGN_TUPLA: NEW TUPLA DIM_TUPLA •
+
+    $default  reduce usando la regla 18 (ASIGN_TUPLA)
+
+
+Estado 90
+
+   15 ASIGN_ARRAY: NEW TIPO DIM_ARRAY •
+   16 DIM_ARRAY: DIM_ARRAY • LCORCHETE EXPRESION RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 105
+
+    $default  reduce usando la regla 15 (ASIGN_ARRAY)
+
+
+Estado 91
+
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+   79 PARAM_SIMPLE: EXPRESION •
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+
+    $default  reduce usando la regla 79 (PARAM_SIMPLE)
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 92
+
+   76 LLAMADA_FUNC: ID LPAREN PARAMETROS • RPAREN PUNTOCOMA
+   80 PARAM_COMPUESTO: PARAMETROS • COMA EXPRESION
+
+    RPAREN  desplazar e ir al estado 106
+    COMA    desplazar e ir al estado 107
+
+
+Estado 93
+
+   77 PARAMETROS: PARAM_SIMPLE •
+
+    $default  reduce usando la regla 77 (PARAMETROS)
+
+
+Estado 94
+
+   78 PARAMETROS: PARAM_COMPUESTO •
+
+    $default  reduce usando la regla 78 (PARAMETROS)
+
+
+Estado 95
+
+   64 EXPRESION: LPAREN EXPRESION RPAREN •
+
+    $default  reduce usando la regla 64 (EXPRESION)
+
+
+Estado 96
+
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+   75              | EXPRESION OP_LOG EXPRESION •
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+
+    AND       [reduce usando la regla 75 (EXPRESION_LOG)]
+    OR        [reduce usando la regla 75 (EXPRESION_LOG)]
+    SUMA      [reduce usando la regla 75 (EXPRESION_LOG)]
+    RESTA     [reduce usando la regla 75 (EXPRESION_LOG)]
+    MULTI     [reduce usando la regla 75 (EXPRESION_LOG)]
+    DIV       [reduce usando la regla 75 (EXPRESION_LOG)]
+    MODULO    [reduce usando la regla 75 (EXPRESION_LOG)]
+    MAYOR     [reduce usando la regla 75 (EXPRESION_LOG)]
+    MENOR     [reduce usando la regla 75 (EXPRESION_LOG)]
+    IGUALMAY  [reduce usando la regla 75 (EXPRESION_LOG)]
+    IGUALMEN  [reduce usando la regla 75 (EXPRESION_LOG)]
+    IGUAL     [reduce usando la regla 75 (EXPRESION_LOG)]
+    $default  reduce usando la regla 75 (EXPRESION_LOG)
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 97
+
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   74               | EXPRESION OP_ARIT EXPRESION •
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+
+    AND       [reduce usando la regla 74 (EXPRESION_ARIT)]
+    OR        [reduce usando la regla 74 (EXPRESION_ARIT)]
+    SUMA      [reduce usando la regla 74 (EXPRESION_ARIT)]
+    RESTA     [reduce usando la regla 74 (EXPRESION_ARIT)]
+    MULTI     [reduce usando la regla 74 (EXPRESION_ARIT)]
+    DIV       [reduce usando la regla 74 (EXPRESION_ARIT)]
+    MODULO    [reduce usando la regla 74 (EXPRESION_ARIT)]
+    MAYOR     [reduce usando la regla 74 (EXPRESION_ARIT)]
+    MENOR     [reduce usando la regla 74 (EXPRESION_ARIT)]
+    IGUALMAY  [reduce usando la regla 74 (EXPRESION_ARIT)]
+    IGUALMEN  [reduce usando la regla 74 (EXPRESION_ARIT)]
+    IGUAL     [reduce usando la regla 74 (EXPRESION_ARIT)]
+    $default  reduce usando la regla 74 (EXPRESION_ARIT)
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 98
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS • RPAREN LCORCHETE SENTS RCORCHETE
+   80 PARAM_COMPUESTO: PARAMETROS • COMA EXPRESION
+
+    RPAREN  desplazar e ir al estado 108
+    COMA    desplazar e ir al estado 107
+
+
+Estado 99
+
+   37 OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS • RPAREN LCORCHETE SENTS RCORCHETE
+   80 PARAM_COMPUESTO: PARAMETROS • COMA EXPRESION
+
+    RPAREN  desplazar e ir al estado 109
+    COMA    desplazar e ir al estado 107
+
+
+Estado 100
+
+   38 OTRAS_SENTS: BUCLE LPAREN PARAMETROS • RPAREN LCORCHETE SENTS RCORCHETE
+   80 PARAM_COMPUESTO: PARAMETROS • COMA EXPRESION
+
+    RPAREN  desplazar e ir al estado 110
+    COMA    desplazar e ir al estado 107
+
+
+Estado 101
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID • PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+
+    PUNTOCOMA  desplazar e ir al estado 111
+
+
+Estado 102
+
+   40 OTRAS_SENTS: MULTIPLE LPAREN ID • RPAREN LCORCHETE CASOS RCORCHETE
+
+    RPAREN  desplazar e ir al estado 112
+
+
+Estado 103
+
+   20 REAL_ASIGN: ID ASIGNACION EXPRESION • PUNTOCOMA
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND        desplazar e ir al estado 66
+    OR         desplazar e ir al estado 67
+    SUMA       desplazar e ir al estado 68
+    RESTA      desplazar e ir al estado 69
+    MULTI      desplazar e ir al estado 70
+    DIV        desplazar e ir al estado 71
+    MODULO     desplazar e ir al estado 72
+    MAYOR      desplazar e ir al estado 73
+    MENOR      desplazar e ir al estado 74
+    IGUALMAY   desplazar e ir al estado 75
+    IGUALMEN   desplazar e ir al estado 76
+    IGUAL      desplazar e ir al estado 77
+    PUNTOCOMA  desplazar e ir al estado 113
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 104
+
+   19 DIM_TUPLA: LPAREN EXPRESION • COMA EXPRESION RPAREN
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+    COMA      desplazar e ir al estado 114
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 105
+
+   16 DIM_ARRAY: DIM_ARRAY LCORCHETE • EXPRESION RCORCHETE
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 115
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 106
+
+   76 LLAMADA_FUNC: ID LPAREN PARAMETROS RPAREN • PUNTOCOMA
+
+    PUNTOCOMA  desplazar e ir al estado 116
+
+
+Estado 107
+
+   80 PARAM_COMPUESTO: PARAMETROS COMA • EXPRESION
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 117
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 108
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN • LCORCHETE SENTS RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 118
+
+
+Estado 109
+
+   37 OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS RPAREN • LCORCHETE SENTS RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 119
+
+
+Estado 110
+
+   38 OTRAS_SENTS: BUCLE LPAREN PARAMETROS RPAREN • LCORCHETE SENTS RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 120
+
+
+Estado 111
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA • EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 121
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 112
+
+   40 OTRAS_SENTS: MULTIPLE LPAREN ID RPAREN • LCORCHETE CASOS RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 122
+
+
+Estado 113
+
+   20 REAL_ASIGN: ID ASIGNACION EXPRESION PUNTOCOMA •
+
+    $default  reduce usando la regla 20 (REAL_ASIGN)
+
+
+Estado 114
+
+   19 DIM_TUPLA: LPAREN EXPRESION COMA • EXPRESION RPAREN
+
+    NOT      desplazar e ir al estado 30
+    STR      desplazar e ir al estado 32
+    CHAR     desplazar e ir al estado 33
+    DECIMAL  desplazar e ir al estado 34
+    ID       desplazar e ir al estado 35
+    NUMERO   desplazar e ir al estado 36
+    LPAREN   desplazar e ir al estado 37
+
+    EXPRESION       ir al estado 123
+    EXPRESION_ARIT  ir al estado 43
+    EXPRESION_LOG   ir al estado 44
+    LLAMADA_FUNC    ir al estado 45
+
+
+Estado 115
+
+   16 DIM_ARRAY: DIM_ARRAY LCORCHETE EXPRESION • RCORCHETE
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND        desplazar e ir al estado 66
+    OR         desplazar e ir al estado 67
+    SUMA       desplazar e ir al estado 68
+    RESTA      desplazar e ir al estado 69
+    MULTI      desplazar e ir al estado 70
+    DIV        desplazar e ir al estado 71
+    MODULO     desplazar e ir al estado 72
+    MAYOR      desplazar e ir al estado 73
+    MENOR      desplazar e ir al estado 74
+    IGUALMAY   desplazar e ir al estado 75
+    IGUALMEN   desplazar e ir al estado 76
+    IGUAL      desplazar e ir al estado 77
+    RCORCHETE  desplazar e ir al estado 124
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 116
+
+   76 LLAMADA_FUNC: ID LPAREN PARAMETROS RPAREN PUNTOCOMA •
+
+    $default  reduce usando la regla 76 (LLAMADA_FUNC)
+
+
+Estado 117
+
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+   80 PARAM_COMPUESTO: PARAMETROS COMA EXPRESION •
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+
+    $default  reduce usando la regla 80 (PARAM_COMPUESTO)
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 118
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE • SENTS RCORCHETE
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 125
+
+
+Estado 119
+
+   37 OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS RPAREN LCORCHETE • SENTS RCORCHETE
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 126
+
+
+Estado 120
+
+   38 OTRAS_SENTS: BUCLE LPAREN PARAMETROS RPAREN LCORCHETE • SENTS RCORCHETE
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 127
+
+
+Estado 121
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION • PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND        desplazar e ir al estado 66
+    OR         desplazar e ir al estado 67
+    SUMA       desplazar e ir al estado 68
+    RESTA      desplazar e ir al estado 69
+    MULTI      desplazar e ir al estado 70
+    DIV        desplazar e ir al estado 71
+    MODULO     desplazar e ir al estado 72
+    MAYOR      desplazar e ir al estado 73
+    MENOR      desplazar e ir al estado 74
+    IGUALMAY   desplazar e ir al estado 75
+    IGUALMEN   desplazar e ir al estado 76
+    IGUAL      desplazar e ir al estado 77
+    PUNTOCOMA  desplazar e ir al estado 128
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 122
+
+   40 OTRAS_SENTS: MULTIPLE LPAREN ID RPAREN LCORCHETE • CASOS RCORCHETE
+
+    DEFAULT  desplazar e ir al estado 129
+
+    $default  reduce usando la regla 43 (CASOS)
+
+    CASOS         ir al estado 130
+    CASO_DEFAULT  ir al estado 131
+
+
+Estado 123
+
+   19 DIM_TUPLA: LPAREN EXPRESION COMA EXPRESION • RPAREN
+   74 EXPRESION_ARIT: EXPRESION • OP_ARIT EXPRESION
+   75 EXPRESION_LOG: EXPRESION • OP_LOG EXPRESION
+
+    AND       desplazar e ir al estado 66
+    OR        desplazar e ir al estado 67
+    SUMA      desplazar e ir al estado 68
+    RESTA     desplazar e ir al estado 69
+    MULTI     desplazar e ir al estado 70
+    DIV       desplazar e ir al estado 71
+    MODULO    desplazar e ir al estado 72
+    MAYOR     desplazar e ir al estado 73
+    MENOR     desplazar e ir al estado 74
+    IGUALMAY  desplazar e ir al estado 75
+    IGUALMEN  desplazar e ir al estado 76
+    IGUAL     desplazar e ir al estado 77
+    RPAREN    desplazar e ir al estado 132
+
+    OP_LOG   ir al estado 78
+    OP_ARIT  ir al estado 79
+
+
+Estado 124
+
+   16 DIM_ARRAY: DIM_ARRAY LCORCHETE EXPRESION RCORCHETE •
+
+    $default  reduce usando la regla 16 (DIM_ARRAY)
+
+
+Estado 125
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS • RCORCHETE
+   32 SENTS: SENTS • SENT
+
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+    RCORCHETE    desplazar e ir al estado 133
+
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    RCORCHETE    [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 126
+
+   32 SENTS: SENTS • SENT
+   37 OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS RPAREN LCORCHETE SENTS • RCORCHETE
+
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+    RCORCHETE    desplazar e ir al estado 134
+
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    RCORCHETE    [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 127
+
+   32 SENTS: SENTS • SENT
+   38 OTRAS_SENTS: BUCLE LPAREN PARAMETROS RPAREN LCORCHETE SENTS • RCORCHETE
+
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+    RCORCHETE    desplazar e ir al estado 135
+
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    RCORCHETE    [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 128
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA • OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+
+    ID  desplazar e ir al estado 136
+
+    OP_RAPIDOS   ir al estado 137
+    OP_RAPIDO_S  ir al estado 138
+    OP_RAPIDO_R  ir al estado 139
+
+
+Estado 129
+
+   44 CASO_DEFAULT: DEFAULT • DOSPUNTOS SENTS BREAK PUNTOCOMA
+
+    DOSPUNTOS  desplazar e ir al estado 140
+
+
+Estado 130
+
+   40 OTRAS_SENTS: MULTIPLE LPAREN ID RPAREN LCORCHETE CASOS • RCORCHETE
+   41 CASOS: CASOS • CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA
+
+    CASE       desplazar e ir al estado 141
+    RCORCHETE  desplazar e ir al estado 142
+
+
+Estado 131
+
+   42 CASOS: CASO_DEFAULT •
+
+    $default  reduce usando la regla 42 (CASOS)
+
+
+Estado 132
+
+   19 DIM_TUPLA: LPAREN EXPRESION COMA EXPRESION RPAREN •
+
+    $default  reduce usando la regla 19 (DIM_TUPLA)
+
+
+Estado 133
+
+   27 FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE •
+
+    $default  reduce usando la regla 27 (FUNC)
+
+
+Estado 134
+
+   37 OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE •
+
+    $default  reduce usando la regla 37 (OTRAS_SENTS)
+
+
+Estado 135
+
+   38 OTRAS_SENTS: BUCLE LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE •
+
+    $default  reduce usando la regla 38 (OTRAS_SENTS)
+
+
+Estado 136
+
+   62 OP_RAPIDO_S: ID • SUMA SUMA
+   63 OP_RAPIDO_R: ID • RESTA RESTA
+
+    SUMA   desplazar e ir al estado 143
+    RESTA  desplazar e ir al estado 144
+
+
+Estado 137
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS • RPAREN LCORCHETE SENTS RCORCHETE
+
+    RPAREN  desplazar e ir al estado 145
+
+
+Estado 138
+
+   60 OP_RAPIDOS: OP_RAPIDO_S •
+
+    $default  reduce usando la regla 60 (OP_RAPIDOS)
+
+
+Estado 139
+
+   61 OP_RAPIDOS: OP_RAPIDO_R •
+
+    $default  reduce usando la regla 61 (OP_RAPIDOS)
+
+
+Estado 140
+
+   44 CASO_DEFAULT: DEFAULT DOSPUNTOS • SENTS BREAK PUNTOCOMA
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 146
+
+
+Estado 141
+
+   41 CASOS: CASOS CASE • INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA
+
+    STR     desplazar e ir al estado 147
+    CHAR    desplazar e ir al estado 148
+    NUMERO  desplazar e ir al estado 149
+
+    INIT_CASES  ir al estado 150
+
+
+Estado 142
+
+   40 OTRAS_SENTS: MULTIPLE LPAREN ID RPAREN LCORCHETE CASOS RCORCHETE •
+
+    $default  reduce usando la regla 40 (OTRAS_SENTS)
+
+
+Estado 143
+
+   62 OP_RAPIDO_S: ID SUMA • SUMA
+
+    SUMA  desplazar e ir al estado 151
+
+
+Estado 144
+
+   63 OP_RAPIDO_R: ID RESTA • RESTA
+
+    RESTA  desplazar e ir al estado 152
+
+
+Estado 145
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN • LCORCHETE SENTS RCORCHETE
+
+    LCORCHETE  desplazar e ir al estado 153
+
+
+Estado 146
+
+   32 SENTS: SENTS • SENT
+   44 CASO_DEFAULT: DEFAULT DOSPUNTOS SENTS • BREAK PUNTOCOMA
+
+    BREAK        desplazar e ir al estado 154
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+
+    BREAK        [reduce usando la regla 4 (DECL_VARS)]
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 147
+
+   46 INIT_CASES: STR •
+
+    $default  reduce usando la regla 46 (INIT_CASES)
+
+
+Estado 148
+
+   47 INIT_CASES: CHAR •
+
+    $default  reduce usando la regla 47 (INIT_CASES)
+
+
+Estado 149
+
+   45 INIT_CASES: NUMERO •
+
+    $default  reduce usando la regla 45 (INIT_CASES)
+
+
+Estado 150
+
+   41 CASOS: CASOS CASE INIT_CASES • DOSPUNTOS SENTS BREAK PUNTOCOMA
+
+    DOSPUNTOS  desplazar e ir al estado 155
+
+
+Estado 151
+
+   62 OP_RAPIDO_S: ID SUMA SUMA •
+
+    $default  reduce usando la regla 62 (OP_RAPIDO_S)
+
+
+Estado 152
+
+   63 OP_RAPIDO_R: ID RESTA RESTA •
+
+    $default  reduce usando la regla 63 (OP_RAPIDO_R)
+
+
+Estado 153
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE • SENTS RCORCHETE
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 156
+
+
+Estado 154
+
+   44 CASO_DEFAULT: DEFAULT DOSPUNTOS SENTS BREAK • PUNTOCOMA
+
+    PUNTOCOMA  desplazar e ir al estado 157
+
+
+Estado 155
+
+   41 CASOS: CASOS CASE INIT_CASES DOSPUNTOS • SENTS BREAK PUNTOCOMA
+
+    $default  reduce usando la regla 33 (SENTS)
+
+    SENTS  ir al estado 158
+
+
+Estado 156
+
+   32 SENTS: SENTS • SENT
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS • RCORCHETE
+
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+    RCORCHETE    desplazar e ir al estado 159
+
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    RCORCHETE    [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 157
+
+   44 CASO_DEFAULT: DEFAULT DOSPUNTOS SENTS BREAK PUNTOCOMA •
+
+    $default  reduce usando la regla 44 (CASO_DEFAULT)
+
+
+Estado 158
+
+   32 SENTS: SENTS • SENT
+   41 CASOS: CASOS CASE INIT_CASES DOSPUNTOS SENTS • BREAK PUNTOCOMA
+
+    BREAK        desplazar e ir al estado 160
+    CONDICIONAL  desplazar e ir al estado 50
+    BUCLE        desplazar e ir al estado 51
+    ITERATIVO    desplazar e ir al estado 52
+    MULTIPLE     desplazar e ir al estado 53
+    ID           desplazar e ir al estado 54
+
+    BREAK        [reduce usando la regla 4 (DECL_VARS)]
+    CONDICIONAL  [reduce usando la regla 4 (DECL_VARS)]
+    BUCLE        [reduce usando la regla 4 (DECL_VARS)]
+    ITERATIVO    [reduce usando la regla 4 (DECL_VARS)]
+    MULTIPLE     [reduce usando la regla 4 (DECL_VARS)]
+    ID           [reduce usando la regla 4 (DECL_VARS)]
+    $default     reduce usando la regla 4 (DECL_VARS)
+
+    DECL_VARS    ir al estado 56
+    REAL_ASIGN   ir al estado 57
+    SENT         ir al estado 58
+    OTRAS_SENTS  ir al estado 59
+
+
+Estado 159
+
+   39 OTRAS_SENTS: ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE •
+
+    $default  reduce usando la regla 39 (OTRAS_SENTS)
+
+
+Estado 160
+
+   41 CASOS: CASOS CASE INIT_CASES DOSPUNTOS SENTS BREAK • PUNTOCOMA
+
+    PUNTOCOMA  desplazar e ir al estado 161
+
+
+Estado 161
+
+   41 CASOS: CASOS CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA •
+
+    $default  reduce usando la regla 41 (CASOS)

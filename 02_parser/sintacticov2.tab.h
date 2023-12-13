@@ -109,9 +109,8 @@ extern int yydebug;
     PUNTOCOMA = 310,               /* PUNTOCOMA  */
     PUNTO = 311,                   /* PUNTO  */
     DOSPUNTOS = 312,               /* DOSPUNTOS  */
-    PROGRAM = 313,                 /* PROGRAM  */
-    RETORNO = 314,                 /* RETORNO  */
-    EJECUTAR = 315                 /* EJECUTAR  */
+    RETORNO = 313,                 /* RETORNO  */
+    EJECUTAR = 314                 /* EJECUTAR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -127,7 +126,7 @@ union YYSTYPE
     float real;
     char *string;
 
-#line 131 "sintacticov2.tab.h"
+#line 130 "sintacticov2.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
