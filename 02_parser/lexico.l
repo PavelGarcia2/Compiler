@@ -7,7 +7,6 @@ void muestraError();
 %}
 
 /* Expresiones Regulares */
-ejecutar    "exec"
 digito      [0-9]
 tilde       [ÁÀÉÈÍÓÒÚÏÜáàéèíóòúïü]
 letra       [A-Za-z]|{tilde}
@@ -84,8 +83,13 @@ multiCom    "/*"[^"*/"]*"*/"
 entrada     "in"
 sistema     "sys"
 
+ejecutar    "exec"
+
 /* Acciones */
 %%
+{programa}                             { return PROGRAM; } 
+{retorno}                              { return RETORNO; } 
+{ejecutar}                             { return EJECUTAR; }
 {espacios}                             { /* ignore */ }
 {funcion}                              { return FUNCION; }
 {multiCom}                             { /* ignore */ }
@@ -144,9 +148,6 @@ sistema     "sys"
 {puntoComa}                            { return PUNTOCOMA; }
 {punto}                                { return PUNTO;}
 {dosPuntos}                            { return DOSPUNTOS; }  
-{programa}                             { return PROGRAM; } 
-{retorno}                              { return RETORNO; } 
-{ejecutar}                             { return EJECUTAR; }
 .                                      { muestraError(); } 
 %%
 
