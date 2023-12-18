@@ -1,5 +1,6 @@
 %{
     /*definiciones*/
+
 %}
 
 %union{
@@ -9,7 +10,6 @@
     char *string;
 }
 
-
 %token FUNCION
 %token ENTRADA
 %token SISTEMA
@@ -17,16 +17,16 @@
 %token OR
 %token NOT
 %token ASIGNACION
-%token SUMA
-%token RESTA
-%token MULTI
-%token DIV
-%token MODULO
-%token MAYOR
-%token MENOR
-%token IGUALMAY
-%token IGUALMEN
-%token IGUAL
+%token <simbolo>SUMA
+%token <simbolo>RESTA
+%token <simbolo>MULTI
+%token <simbolo>DIV
+%token <simbolo>MODULO
+%token <simbolo>MAYOR
+%token <simbolo>MENOR
+%token <simbolo>IGUALMAY
+%token <simbolo>IGUALMEN
+%token <simbolo>IGUAL
 %token NEW
 %token CASE
 %token BREAK
@@ -53,7 +53,7 @@
 %token PRINT
 %token PRINTLN
 %token <string> ID
-%token <simbolo> NUMERO
+%token <entero> NUMERO
 %token SLNIEA
 %token RPAREN
 %token LPAREN
@@ -68,7 +68,13 @@
 %token RETORNO
 %token EJECUTAR
 
+/*   DECLARACIÓN DE TIPOS */
+%type <entero>EXPRESION_ARITM
+%type <entero>TERMINO_1
+%type <entero>TERMINO_2
+%type <simbolo>OP_ARIT
 /* Gramática */
+
 
 %%
 
@@ -167,10 +173,10 @@ OP_LOG: AND
       | IGUAL
 	  ;
 
-OP_ARIT: SUMA
+OP_ARIT: SUMA 
        | RESTA
        | MULTI
-       | DIV
+       | DIV 
        | MODULO
 	   ;
 
@@ -181,21 +187,33 @@ OP_RAPIDO_S: ID SUMA SUMA;
 
 OP_RAPIDO_R: ID RESTA RESTA;
 
-OP: OP_LOG | OP_ARIT;
-
 TERMINO_1: ID
          | NUMERO
-         | DECIMAL
-         | LLAMADA_FUNC;
-
+         | LLAMADA_FUNC
+         | DECIMAL;
+/* PREGUNTAR COMO SE PUEDE HACER PARA QUE UN TERMINO PUEDA SER UN ENTERO Y UN REAL*/
 TERMINO_2: ID
          | NUMERO
-         | DECIMAL
+         | LLAMADA_FUNC
+         | DECIMAL;
+
+TERMINOLOG_1: ID
+         | BOLEANO
          | LLAMADA_FUNC;
+
+TERMINOLOG_2: ID
+         | BOLEANO
+         | LLAMADA_FUNC;
+
+
+EXPRESION_ARITM: TERMINO_1 OP_ARIT TERMINO_2 {$$ = $1 $2 $3};       
+               
+EXPRESION_LOG: TERMINOLOG_1 OP_LOG TERMINOLOG_2;
 
 EXPRESION: LPAREN EXPRESION RPAREN
          | NOT EXPRESION
-         | TERMINO_1 OP TERMINO_2
+         | EXPRESION_LOG
+         | EXPRESION_ARITM
          | ID
          | NUMERO
          | DECIMAL

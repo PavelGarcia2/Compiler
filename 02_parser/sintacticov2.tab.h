@@ -119,7 +119,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 5 "sintacticov2.y"
+#line 6 "sintacticov2.y"
 
     int entero;
     char simbolo;
