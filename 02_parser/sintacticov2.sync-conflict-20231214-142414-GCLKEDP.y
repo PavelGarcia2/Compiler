@@ -1,0 +1,195 @@
+%{
+    /*definiciones*/
+%}
+
+%union{
+    int entero;
+    char simbolo;
+    float real;
+    char *string;
+}
+
+
+%token FUNCION
+%token ENTRADA
+%token SISTEMA
+%token AND
+%token OR
+%token NOT
+%token ASIGNACION
+%token SUMA
+%token RESTA
+%token MULTI
+%token DIV
+%token MODULO
+%token MAYOR
+%token MENOR
+%token IGUALMAY
+%token IGUALMEN
+%token IGUAL
+%token NEW
+%token CASE
+%token BREAK
+%token DEFAULT
+%token CONDICIONAL
+%token ELSE
+%token ELIF
+%token BUCLE
+%token ITERATIVO
+%token MULTIPLE
+%token CHARACTER
+%token FLOAT
+%token ENTERO
+%token BOLEANO
+%token STRING
+%token CONSTANTE
+%token TUPLA
+%token ARRAY
+%token <string> STR
+%token <simbolo> CHAR
+%token <real> DECIMAL
+%token T
+%token F
+%token PRINT
+%token PRINTLN
+%token <string> ID
+%token <simbolo> NUMERO
+%token SLNIEA
+%token RPAREN
+%token LPAREN
+%token RBRACKET
+%token LBRACKET
+%token RCORCHETE
+%token LCORCHETE
+%token COMA
+%token PUNTOCOMA
+%token PUNTO
+%token DOSPUNTOS
+%token PROGRAM
+%token RETORNO
+%token EJECUTAR
+
+
+/* Gramática */
+%%
+
+PROGRAMA: DECL_VARS DECL_FUNCIONES MAIN
+        | ;
+
+MAIN: EJECUTAR LCORCHETE SENTS RCORCHETE;
+
+DECL_VARS: TIPO ID DECL_ESP ASIGN PUNTOCOMA DECL_VARS
+         | ;
+
+DECL_ESP: DECL_ARRAY
+        | DECL_TUPLA
+        | ;
+
+DECL_ARRAY: LCORCHETE RCORCHETE DECL_ARRAY
+          | ;
+
+DECL_TUPLA: LPAREN TIPO COMA TIPO RPAREN;
+
+REAL_ASIGN: ID ASIGNACION EXPRESION PUNTOCOMA;
+
+ASIGN: ASIGNACION T_ASIGN
+     | ;
+
+T_ASIGN: ASIGN_NORMAL
+       | ASIGN_ARRAY
+       | ASIGN_TUPLA;
+
+ASIGN_NORMAL: EXPRESION;
+
+ASIGN_ARRAY: NEW TIPO DIM_ARRAY
+
+DIM_ARRAY: LCORCHETE EXPRESION RCORCHETE DIM_ARRAY;
+
+ASIGN_TUPLA: NEW TUPLA DIM_TUPLA
+
+DIM_TUPLA: LPAREN EXPRESION COMA EXPRESION RPAREN;
+
+ASGN: ASIGNACION EXPRESION
+    | ;
+
+TIPO: ENTERO
+    | CHARACTER
+    | FLOAT
+    | BOLEANO
+    | TUPLA
+    | ;
+
+TIPO_ARR: TIPO_ARR LCORCHETE RCORCHETE 
+        | ;
+
+DECL_FUNCIONES: FUNCION DECL_FUNCIONES
+              | ;
+
+FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE;
+
+SENTS: SENT SENTS
+     | ;
+
+SENT: CONDICIONAL LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+    | BUCLE LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
+    | ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
+    | MULTIPLE LPAREN ID RPAREN LCORCHETE CASOS RCORCHETE
+    | DECL_VARS
+    | REAL_ASIGN
+    | ;
+
+CASOS: CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA CASOS
+     | DEFAULT DOSPUNTOS SENTS BREAK PUNTOCOMA
+     | ;
+
+INIT_CASES: NUMERO
+          | STR
+          | CHAR;
+
+OP: OP_LOG | OP_ARIT;
+
+OP_LOG: AND
+      | OR
+      | MAYOR
+      | MENOR
+      | IGUALMAY
+      | IGUALMEN
+      | IGUAL;
+
+OP_ARIT: SUMA
+       | RESTA
+       | MULTI
+       | DIV
+       | MODULO;
+
+OP_RAPIDOS: ID SUMA SUMA
+          | ID RESTA RESTA
+
+EXPRESION: LPAREN EXPRESION RPAREN
+         | EXPRESION OP_ARIT EXPRESION
+         | NOT EXPRESION
+         | EXPRESION OP_LOG EXPRESION
+         | ID
+         | NUMERO
+         | DECIMAL
+         | LLAMADA_FUNC;
+
+LLAMADA_FUNC: ID LPAREN PARAMETROS RPAREN;
+
+PARAMETROS: EXPRESION
+          | EXPRESION COMA PARAMETROS;
+
+%%
+
+
+
+int main(){
+    yyparse();
+    return 0;
+
+}
+
+yyerror(char *error){
+    prinft("ERROR: %s\n", error);
+    return 0;
+}

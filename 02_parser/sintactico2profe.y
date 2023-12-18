@@ -124,13 +124,19 @@ TIPO: ENTERO
 /*******         las declaraciones iría antes que las instrucciones ----v----         *******/
 FUNC: FUNCION TIPO DECL_ARRAY ID LPAREN PARAMETROS RPAREN LCORCHETE DECL_VARS SENTS RCORCHETE;
 
-/* ** QUITAR ESTAS PRODUCCIONES (quitadas Pedro 18-12-23)
+/* ** QUITAR ESTAS PRODUCCIONES
+FUNC: FUNCION TIPO TIPO_ARR ID LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE;
+
+TIPO_ARR: TIPO_ARR LCORCHETE RCORCHETE
+        | 
+		;
  ** */
 
 DECL_FUNCIONES: DECL_FUNCIONES FUNC
               | 
 			  ;
 			  
+
 SENTS: SENTS SENT 
      | 
 	 ;
@@ -158,6 +164,8 @@ INIT_CASES: NUMERO
           | CHAR
 		  ;
 
+/* ******** *
+   esto es correcto, está comentado para que no dé errores el haber comentado a su vez EXPRESION_ARIT y EXPRESION_LOG
 OP_LOG: AND
       | OR
       | MAYOR
@@ -173,6 +181,8 @@ OP_ARIT: SUMA
        | DIV
        | MODULO
 	   ;
+    hasta aquí
+* ******* */
 
 OP_RAPIDOS: OP_RAPIDO_S
           | OP_RAPIDO_R;
@@ -181,21 +191,14 @@ OP_RAPIDO_S: ID SUMA SUMA;
 
 OP_RAPIDO_R: ID RESTA RESTA;
 
-OP: OP_LOG | OP_ARIT;
-
-TERMINO_1: ID
-         | NUMERO
-         | DECIMAL
-         | LLAMADA_FUNC;
-
-TERMINO_2: ID
-         | NUMERO
-         | DECIMAL
-         | LLAMADA_FUNC;
 
 EXPRESION: LPAREN EXPRESION RPAREN
          | NOT EXPRESION
-         | TERMINO_1 OP TERMINO_2
+/* ******* *
+   estas dos producciones deben arreglarse porque así como está no funcionará
+         | EXPRESION_ARIT
+         | EXPRESION_LOG 
+ * ******* */
          | ID
          | NUMERO
          | DECIMAL
@@ -204,16 +207,25 @@ EXPRESION: LPAREN EXPRESION RPAREN
          | LLAMADA_FUNC
 		 ;
 
+/****
+EXPRESION_ARIT: EXPRESION OP_ARIT EXPRESION;
+
+EXPRESION_LOG: EXPRESION OP_LOG EXPRESION;
+****/
+
 LLAMADA_FUNC: ID LPAREN PARAMETROS RPAREN PUNTOCOMA;
 
 PARAMETROS: PARAM_SIMPLE
           | PARAM_COMPUESTO
 		  ;
 
+
 PARAM_SIMPLE: EXPRESION;
 
 PARAM_COMPUESTO: PARAMETROS COMA EXPRESION;
 %%
+
+
 
 int main(){
     yyparse();
