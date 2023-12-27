@@ -41,11 +41,7 @@ terminal t_new,t_case,t_break,t_default;
 
 terminal t_if,t_else,t_elif,t_while,t_for,t_switch;
 
-terminal t_char,t_float,t_int,t_bool,t_str,t_const,t_tupla,t_array,t_lineaCaraceres,
-_caracter,
-_decimal,
-_true,
-_false,;
+terminal t_char,t_float,t_int,t_bool,t_str,t_const,t_tupla,t_array,t_lineaCaraceres,t_caracter,t_decimal,t_true,t_false;
 
 terminal t_print,t_println,t_id,t_numero,t_saltoLinea,t_rParentesis,t_lParentesis,t_rBracket,t_lBracket,t_rCorchete,t_lCorchete,t_coma,t_puntoComa,t_punto,t_dosPuntos,t_Error;
 
