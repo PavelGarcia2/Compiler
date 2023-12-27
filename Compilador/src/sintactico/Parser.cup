@@ -33,169 +33,234 @@ parser code {:
 scan with {:     next_token(); :}
 **/
 
-terminal                ADD, SUB, MUL, DIV, MOD, LPAREN, RPAREN;
-terminal      String    valor;
-non terminal  Integer   E, T, F;
+terminal t_program,t_return,t_exec,t_fun,t_in,t_sys,t_and,t_or,t_not,t_asignacion;
+
+terminal t_resta,t_multiplicacion,t_division,t_modulo,t_mayor,t_menor,t_igualMayor,t_igualMenor,t_igual;
+    
+terminal t_new,t_case,t_break,t_default;
+
+terminal t_if,t_else,t_elif,t_while,t_for,t_switch;
+
+terminal t_char,t_float,t_int,t_bool,t_str,t_const,t_tupla,t_array,t_lineaCaraceres,
+_caracter,
+_decimal,
+_true,
+_false,;
+
+terminal t_print,t_println,t_id,t_numero,t_saltoLinea,t_rParentesis,t_lParentesis,t_rBracket,t_lBracket,t_rCorchete,t_lCorchete,t_coma,t_puntoComa,t_punto,t_dosPuntos,t_Error;
 
 
-precedence left  ADD, SUB;
-precedence left  MUL, DIV, MOD;
+
+non terminal PROGRAMA;
+non terminal MAIN;
+non terminal DECL_VARS;
+non terminal DECL_VAR;
+non terminal DECL_ESP;
+non terminal DECL_ARRAY;
+non terminal DECL_TUPLA;
+non terminal ASIGN;
+non terminal T_ASIGN;
+non terminal ASIGN_NORMAL;
+non terminal ASIGN_ARRAY;
+non terminal DIM_ARRAY;
+non terminal ASIGN_TUPLA;
+non terminal DIM_TUPLA;
+non terminal REAL_ASIGN;
+non terminal TIPO;
+non terminal FUNC;
+non terminal DECL_FUNCIONES;
+non terminal SENTS;
+non terminal SENT;
+non terminal OTRAS_SENTS;
+non terminal CASOS;
+non terminal CASO_DEFAULT;
+non terminal INIT_CASES;
+non terminal OP_LOG;
+non terminal OP_ARIT;
+non terminal OP_RAPIDOS;
+non terminal OP_RAPIDO_S;
+non terminal OP_RAPIDO_R;
+non terminal TERMINO_1;
+non terminal TERMINO_2;
+non terminal TERMINOLOG_1;
+non terminal TERMINOLOG_2;
+non terminal EXPRESION_ARITM;
+non terminal EXPRESION_LOG;
+non terminal EXPRESION;
+non terminal LLAMADA_FUNC;
+non terminal PARAMETROS;
+non terminal PARAM_SIMPLE;
+non terminal PARAM_COMPUESTO;
+
 
 start with PROGRAMA;
 
-PROGRAMA ::= DECL_VARS MAIN DECL_FUNCIONES                            {::}
-          ;
+PROGRAMA ::= DECL_VARS MAIN DECL_FUNCIONES                                                                                              {::}
+           ;
 
 
-MAIN ::= EJECUTAR LCORCHETE SENTS RCORCHETE                           {::}
-          ;
+MAIN ::= t_exec t_lBracket SENTS t_rBracket                                                                                           {::}
+        ;
  
  
-DECL_VARS ::= DECL_VAR DECL_VARS                                      {::}
-          |                                                           {::}
-		;
+DECL_VARS ::= DECL_VAR DECL_VARS                                                                                                        {::}
+             |                                                                                                                          {::}
+		     ;
 
-DECL_VAR ::= TIPO ID DECL_ESP ASIGN  PUNTOCOMA                        {::}
+DECL_VAR ::= TIPO t_id DECL_ESP ASIGN  t_puntoComa                                                                                          {::}
           ; 
 
-DECL_ESP ::= DECL_ARRAY
-         | DECL_TUPLA;
+DECL_ESP ::= DECL_ARRAY                                                                                                                 {::}
+            | DECL_TUPLA                                                                                                                {::}
+            ;
 
-DECL_ARRAY ::= DECL_ARRAY LCORCHETE RCORCHETE
-          |
-		  ;
+DECL_ARRAY ::= DECL_ARRAY t_lCorchete t_rCorchete                                                                                           {::}
+               |                                                                                                                        {::}
+		       ;
 
-DECL_TUPLA ::= LPAREN TIPO COMA TIPO RPAREN;
+DECL_TUPLA ::= t_lParentesis TIPO t_coma TIPO t_rParentesis                                                                                             {::}
+            ;
 
-ASIGN ::= ASIGNACION T_ASIGN;
+ASIGN ::= t_asignacion T_ASIGN                                                                                                            {::} 
+            ; 
 
-T_ASIGN ::= ASIGN_NORMAL
-       | ASIGN_ARRAY
-       | ASIGN_TUPLA;
+T_ASIGN ::= ASIGN_NORMAL                                                                                                                {::}
+            | ASIGN_ARRAY                                                                                                               {::}
+            | ASIGN_TUPLA                                                                                                               {::}                
+            ;
 
-ASIGN_NORMAL ::= EXPRESION;
+ASIGN_NORMAL ::= EXPRESION                                                                                                              {::}
+                ;
 
-ASIGN_ARRAY ::= NEW TIPO DIM_ARRAY;
+ASIGN_ARRAY ::= t_new TIPO DIM_ARRAY                                                                                                      {::}
+                ;
 
-DIM_ARRAY ::= DIM_ARRAY LCORCHETE EXPRESION RCORCHETE 
-         | 
-		 ;
+DIM_ARRAY ::= DIM_ARRAY t_lCorchete EXPRESION t_rCorchete                                                                                   {::}
+            |                                                                                                                           {::}
+		    ;
 
-ASIGN_TUPLA ::= NEW TUPLA DIM_TUPLA;
+ASIGN_TUPLA ::= t_new t_tupla DIM_TUPLA                                                                                                     {::}
+                ;
 
-DIM_TUPLA ::= LPAREN EXPRESION COMA EXPRESION RPAREN;
+DIM_TUPLA ::= t_lParentesis EXPRESION t_coma EXPRESION t_rParentesis                                                                                    {::}
+            ;
 
-REAL_ASIGN ::= ID ASIGNACION EXPRESION PUNTOCOMA;
+REAL_ASIGN ::= t_id t_asignacion EXPRESION t_puntoComa                                                                                        {::}
+            ;
 
-TIPO ::= ENTERO
-    | CHARACTER
-    | FLOAT
-    | BOLEANO
-    | TUPLA
-    | STRING
+TIPO ::= t_int                                                                                                                         {::}
+    | t_char                                                                                                                         {::}
+    | t_float                                                                                                                             {::}                                     
+    | t_bool                                                                                                                           {::}                            
+    | t_tupla                                                                                                                             {::}    
+    | t_str                                                                                                                            {::}                     
 	;
 
 /*******         las declaraciones iría antes que las instrucciones ----v----         *******/
-FUNC: FUNCION TIPO DECL_ARRAY ID LPAREN PARAMETROS RPAREN LCORCHETE DECL_VARS SENTS RCORCHETE;
+FUNC ::= t_fun TIPO DECL_ARRAY t_id t_lParentesis PARAMETROS t_rParentesis t_lCorchete DECL_VARS SENTS t_rCorchete                                        {::}
+    ;
 
 /* ** QUITAR ESTAS PRODUCCIONES (quitadas Pedro 18-12-23)
  ** */
 
-DECL_FUNCIONES ::= DECL_FUNCIONES FUNC
-              | 
+DECL_FUNCIONES ::= DECL_FUNCIONES FUNC                                                                                                  {::}
+              |                                                                                                                         {::}
 			  ;
 			  
-SENTS: SENTS SENT 
-     | 
+SENTS ::= SENTS SENT                                                                                                                    {::}
+        |                                                                                                                               {::}
+	    ;
+
+SENT ::= OTRAS_SENTS                                                                                                                    {::}
+        | REAL_ASIGN                                                                                                                    {::}
+        ;
+
+
+OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                          {::} 
+           | t_while t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::}                      
+           | t_for t_lParentesis t_id t_puntoComa EXPRESION t_puntoComa OP_RAPIDOS t_rParentesis t_lCorchete SENTS t_rCorchete                              {::}
+           | t_switch t_lParentesis t_id t_rParentesis t_lCorchete CASOS t_rCorchete                                                                        {::}    
+           ;
+
+
+CASOS ::= CASOS t_case INIT_CASES t_dosPuntos SENTS t_break t_puntoComa                                                                         {::}    
+     | CASO_DEFAULT                                                                                                                                     {::}
+     |                                                                                                                                              {::}                                                
 	 ;
 
-SENT ::= OTRAS_SENTS
- /* | DECL_VARS       <--  esto lía*/
-    | REAL_ASIGN;
+CASO_DEFAULT ::= t_default t SENTS BREAK t_puntoComa;
 
-
-OTRAS_SENTS: CONDICIONAL LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
-           | BUCLE LPAREN PARAMETROS RPAREN LCORCHETE SENTS RCORCHETE
-           | ITERATIVO LPAREN ID PUNTOCOMA EXPRESION PUNTOCOMA OP_RAPIDOS RPAREN LCORCHETE SENTS RCORCHETE
-           | MULTIPLE LPAREN ID RPAREN LCORCHETE CASOS RCORCHETE;
-
-
-CASOS: CASOS CASE INIT_CASES DOSPUNTOS SENTS BREAK PUNTOCOMA
-     | CASO_DEFAULT
-     | 
-	 ;
-
-CASO_DEFAULT: DEFAULT DOSPUNTOS SENTS BREAK PUNTOCOMA;
-
-INIT_CASES: NUMERO
-          | STR
-          | CHAR
+INIT_CASES ::= t_numero
+          | t_lineaCaracteres
+          | t_caracter
 		  ;
 
-OP_LOG: AND
-      | OR
-      | MAYOR
-      | MENOR
-      | IGUALMAY
-      | IGUALMEN
-      | IGUAL
+OP_LOG ::= t_and
+      | t_or
+      | t_mayor
+      | t_menor
+      | t_igualMayor
+      | t_igualMenor
+      | t_igual
 	  ;
 
-OP_ARIT: SUMA 
-       | RESTA
-       | MULTI
-       | DIV 
-       | MODULO
+OP_ARIT ::= t_suma 
+       | t_resta
+       | t_multiplicacion
+       | t_division 
+       | t_modulo
 	   ;
 
-OP_RAPIDOS: OP_RAPIDO_S
+OP_RAPIDOS ::= OP_RAPIDO_S
           | OP_RAPIDO_R;
 
-OP_RAPIDO_S: ID SUMA SUMA;
+OP_RAPIDO_S ::= t_id t_suma  t_suma ;
 
-OP_RAPIDO_R: ID RESTA RESTA;
+OP_RAPIDO_R ::= t_id t_resta t_resta;
 
-TERMINO_1: ID
-         | NUMERO
+TERMINO_1 ::= t_id
+         | t_numero
          | LLAMADA_FUNC
-         | DECIMAL;
+         | t_decimal;
 /* PREGUNTAR COMO SE PUEDE HACER PARA QUE UN TERMINO PUEDA SER UN ENTERO Y UN REAL*/
-TERMINO_2: ID
-         | NUMERO
-         | LLAMADA_FUNC
-         | DECIMAL;
+TERMINO_2 ::= t_id
+         | t_numero
+         | LLAMADA_FUNC 
+         | t_decimal;
 
-TERMINOLOG_1: ID
-         | BOLEANO
+TERMINOLOG_1 ::= t_id
+         | t_bool
          | LLAMADA_FUNC;
 
-TERMINOLOG_2: ID
-         | BOLEANO
+TERMINOLOG_2 ::= t_id
+         | t_bool
          | LLAMADA_FUNC;
 
 
-EXPRESION_ARITM: TERMINO_1 OP_ARIT TERMINO_2 {$$ = $1 $2 $3};       
+EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2 {:$$ = $1 $2 $3:}
+                ;       
                
-EXPRESION_LOG: TERMINOLOG_1 OP_LOG TERMINOLOG_2;
+EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2  {::}
+                ;
 
-EXPRESION: LPAREN EXPRESION RPAREN
-         | NOT EXPRESION
-         | EXPRESION_LOG
-         | EXPRESION_ARITM
-         | ID
-         | NUMERO
-         | DECIMAL
-         | CHAR
-         | STR
-         | LLAMADA_FUNC
+EXPRESION ::= t_lParentesis EXPRESION t_rParentesis  {::}
+         | t_not EXPRESION  {::}
+         | EXPRESION_LOG  {::}
+         | EXPRESION_ARITM  {::}
+         | t_id  {::}
+         | t_numero  {::}
+         | t_decimal  {::}
+         | t_char {::}
+         | t_lineaCaracteres  {::}
+         | LLAMADA_FUNC  {::}
 		 ;
 
-LLAMADA_FUNC: ID LPAREN PARAMETROS RPAREN PUNTOCOMA;
+LLAMADA_FUNC ::= t_id t_lParentesis PARAMETROS t_rParentesis t_puntoComa;
 
-PARAMETROS: PARAM_SIMPLE
+PARAMETROS ::= PARAM_SIMPLE
           | PARAM_COMPUESTO
 		  ;
 
-PARAM_SIMPLE: EXPRESION;
+PARAM_SIMPLE ::= EXPRESION;
 
-PARAM_COMPUESTO: PARAMETROS COMA EXPRESION;
+PARAM_COMPUESTO ::= PARAMETROS t_coma EXPRESION;

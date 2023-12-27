@@ -7,6 +7,7 @@ import static lexico.Tokens.*;
 
 %public                 // Indicamos que la clase será pública
 %class Scanner          // Indicamos el nombre de la clase que se generará
+%standalone
 
 
 // Elementos del codigo
@@ -87,25 +88,9 @@ w_exec      = "exec"
 %{
 // Este codigo se copiara en la clase generada Scanner
 public String lexeme;
-public static void main(String []args) {
-    if (args.length < 1) {
-        System.err.println("Indica un fitxer amb les dades d'entrada");
-        System.exit(0);
-    }
-    try {
-        FileReader in = new FileReader(args[0]);
-        Scanner parser = new Scanner(in);
-        parser.yylex(); // <- El mètode d'invocació per començar
-                        // a parsejar el document
-    } catch (FileNotFoundException e) {
-        System.err.println("El fitxer d'entrada '"+args[0]+"' no existeix");
-    } catch (IOException e) {
-        System.err.println("Error processant el fitxer d'entrada");
-    }
-}
 
-public void muestraError(String lexema){
-    System.out.println("Error: No esta permitido "+lexema);
+public String muestraError(String lexema){
+    return "Error: No esta permitido "+lexema;
 }
 %}
 
