@@ -39,13 +39,13 @@ De los terminales capaz falte definir cual es un int, char, string, etc.
 
 terminal t_program,t_return,t_exec,t_fun,t_in,t_sys,t_and,t_or,t_not,t_asignacion;
 
-terminal t_resta,t_multiplicacion,t_division,t_modulo,t_mayor,t_menor,t_igualMayor,t_igualMenor,t_igual;
+terminal t_suma,t_resta,t_multiplicacion,t_division,t_modulo,t_mayor,t_menor,t_igualMayor,t_igualMenor,t_igual;
     
 terminal t_new,t_case,t_break,t_default;
 
 terminal t_if,t_else,t_elif,t_while,t_for,t_switch;
 
-terminal t_char,t_float,t_int,t_bool,t_str,t_const,t_tupla,t_array,t_lineaCaraceres,t_caracter,t_decimal,t_true,t_false;
+terminal t_char,t_float,t_int,t_bool,t_str,t_const,t_tupla,t_array,t_lineaCaracteres,t_caracter,t_decimal,t_true,t_false;
 
 terminal t_print,t_println,t_id,t_numero,t_saltoLinea,t_rParentesis,t_lParentesis,t_rBracket,t_lBracket,t_rCorchete,t_lCorchete,t_coma,t_puntoComa,t_punto,t_dosPuntos,t_Error;
 
@@ -176,7 +176,7 @@ SENT ::= OTRAS_SENTS                                                            
         ;
 
 
-OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::} 
+OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::}                                                 
            | t_while t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::}                      
            | t_for t_lParentesis t_id t_puntoComa EXPRESION t_puntoComa OP_RAPIDOS t_rParentesis t_lCorchete SENTS t_rCorchete                              {::}
            | t_switch t_lParentesis t_id t_rParentesis t_lCorchete CASOS t_rCorchete                                                                        {::}    
@@ -188,7 +188,7 @@ CASOS ::= CASOS t_case INIT_CASES t_dosPuntos SENTS t_break t_puntoComa         
      |                                                                                                                                                      {::}                                                
 	 ;
 
-CASO_DEFAULT ::= t_default t SENTS BREAK t_puntoComa                                                                                                        {::}
+CASO_DEFAULT ::= t_default t_dosPuntos SENTS t_break t_puntoComa                                                                                            {::}
                 ;
 
 INIT_CASES ::= t_numero                                                                                                                                     {::}
@@ -236,12 +236,14 @@ TERMINO_2 ::= t_id                                                              
          ;
 
 TERMINOLOG_1 ::= t_id                                                                                                                                       {::}
-         | t_bool                                                                                                                                           {::}
+         | t_true                                                                                                                                           {::}
+         | t_false                                                                                                                                          {::}
          | LLAMADA_FUNC                                                                                                                                     {::}
          ;
  
 TERMINOLOG_2 ::= t_id                                                                                                                                       {::}
-         | t_bool                                                                                                                                           {::}
+         | t_true                                                                                                                                           {::}
+         | t_false                                                                                                                                          {::}
          | LLAMADA_FUNC                                                                                                                                     {::}
          ;
 
