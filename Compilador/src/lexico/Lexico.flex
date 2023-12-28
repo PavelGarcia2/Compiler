@@ -1,25 +1,90 @@
 package lexico;
+
 import java.io.*;
-import static lexico.Tokens.*;
+
+import java_cup.runtime.*;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java_cup.runtime.ComplexSymbolFactory.Location;
+
+import sintactico.ParserSym;
 
 %%
 // Declaraciones
 
 %public                 // Indicamos que la clase será pública
 %class Scanner          // Indicamos el nombre de la clase que se generará
-%standalone
+%line
+%column
+%cup
+%char
+%int
+
+%eofval{
+  return symbol(ParserSym.EOF);
+%eofval}
+
+//============================//
+//   ESTRUCTURA DE PROGRAMA   //
+//============================//
+
+w_main      = "main"
+w_fun       = "fun"
+w_return    = "return"
+w_new       = "new"
+w_const     = "const"
+
+//============================//
+//     CONTROL DE FLUJO       //
+//============================//
+
+w_switch    = "switch"
+w_if        = "if"
+w_else      = "else"
+w_elif      = "elif"
+w_while     = "while"
+w_for       = "for"
+w_case      = "case"
+w_break     = "break"
+w_default   = "default"
 
 
-// Elementos del codigo
+//============================//
+//         TIPOS              //
+//============================//
 
-digito      = [0-9]
-tilde       = [ÁÀÉÈÍÓÒÚÏÜáàéèíóòúïü]
-letra       = [A-Za-z]|{tilde}
-id          = {letra}({letra}|{digito})*
-slinea      = [\n\r]+
-espacios    = [ \t]+
-numero      = {digito}+
-decimal     = {digito}*{punto}{digito}+
+w_char      = "char"
+w_float     = "float"
+w_int       = "int"
+w_bool      = "bool"
+w_str       = "str"
+w_true      = ("true"|"True")
+w_false     = ("false"|"False")
+w_tupla       = "tup"
+
+//============================//
+//         OPERADORES         //
+//============================//
+
+and         = \&
+or          = \|
+not         = \!
+suma        = \+
+resta       = \-
+multi       = \*
+div         = \/
+modulo      = "mod"
+mayor       = \>
+menor       = \<
+igualMay    = "=>" 
+igualMen    = "=<"
+asignacion  = "="
+igual       = "=="
+
+
+//============================//
+//         SIMBOLOS           //
+//============================//
+
 lparen	    = \(
 rparen	    = \)
 lbracket	= \{
@@ -31,133 +96,136 @@ puntoComa   = \;
 dosPuntos   = \:
 punto       = \.
 array       = {lcorchete}{rcorchete}({lcorchete}{rcorchete})*
-str         = "\""[^"\""]*"\""
-char        = "\'"[^"\'"]"\'"
+
+
+//============================//
+//        FUNCIONES           //
+//============================//
+
+w_print     = "print"
+w_println   = "println"
+w_in        = "in"
+w_sys       = "sys"
+
+
+//============================//
+//        COMENTARIOS         //
+//============================//
+
 comLinea    = "//"([^\n\r])*
 multiCom    = "/*"[^"*/"]*"*/"
 
 
-// Operadores
+//============================//
+//        TEXTO               //
+//============================//
 
-and         = \&
-or          = \|
-not         = \!
-suma        = \+
-resta       = \-
-multi       = \*
-div         = \/
-modulo      = "mod"
-tupla       = "tup"
-mayor       = \>
-menor       = \<
-igualMay    = "=>" 
-igualMen    = "=<"
-asignacion  = "="
-igual       = "=="
+tilde       = [ÁÀÉÈÍÓÒÚÏÜáàéèíóòúïü]
+letra       = [A-Za-z]|{tilde}
+id          = {letra}({letra}|{digito})*
+slinea      = [\n\r]+
+espacios    = [ \t]+
+str         = "\""[^"\""]*"\""
+char        = "\'"[^"\'"]"\'"
 
 
-// Palabras reservadadas
+//============================//
+//         NUMERO             //
+//============================//
+digito      = [0-9]
+numero      = {digito}+
+decimal     = {digito}*{punto}{digito}+
 
-w_true      = ("true"|"True")
-w_false     = ("false"|"False")
-w_program   = "program"
-w_fun       = "fun"
-w_switch    = "switch"
-w_if        = "if"
-w_else      = "else"
-w_elif      = "elif"
-w_while     = "while"
-w_for       = "for"
-w_const     = "const"
-w_return    = "return"
-w_print     = "print"
-w_println   = "println"
-w_new       = "new"
-w_case      = "case"
-w_break     = "break"
-w_default   = "default"
-w_char      = "char"
-w_float     = "float"
-w_int       = "int"
-w_bool      = "bool"
-w_str       = "str"
-w_in        = "in"
-w_sys       = "sys"
-w_exec      = "exec"
+
 
 %{
-// Este codigo se copiara en la clase generada Scanner
-public String lexeme;
 
-public String muestraError(String lexema){
-    return "Error: No esta permitido "+lexema;
-}
+    // Construcció d'un symbol sense atribut associat.
+    private ComplexSymbol symbol(int type) {
+        // Sumar 1 per a que la primera línia i columna no sigui 0.
+        Location esquerra = new Location(yyline+1, yycolumn+1);
+        Location dreta = new Location(yyline+1, yycolumn+yytext().length()+1);
+
+        return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta);
+    }
+
+    // Construcció d'un symbol amb un atribut associat.
+    private Symbol symbol(int type, Object value) {
+        // Sumar 1 per a que la primera línia i columna no sigui 0.
+        Location esquerra = new Location(yyline+1, yycolumn+1);
+        Location dreta = new Location(yyline+1, yycolumn+yytext().length()+1);
+
+        return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta, value);
+    }
+
+    private void muestraError(String lexema, int linea){
+        System.out.println("ERROR: no reconocemos " + lexema + "en la linea " + linea );
+    }
+
 %}
-
 
 
 %%
 //Reglas
 
-{w_program}                            { return t_program; } 
-{w_return}                             { return t_return; } 
-{w_exec}                               { return t_exec; }
+{w_main}                               { return symbol(ParserSym.tMain); } 
+{w_return}                             { return symbol(ParserSym.tReturn); } 
 {espacios}                             { /* ignore */ }
-{w_fun}                                { return t_fun; }
+{w_fun}                                { return symbol(ParserSym.tFun); }
 {multiCom}                             { /* ignore */ }
 {comLinea}                             { /* ignore */ }
-{w_in}                                 { return t_in; }
-{w_sys}                                { return t_sys; }
-{and}                                  { return t_and; }
-{or}                                   { return t_or; }
-{not}                                  { return t_not; }
-{asignacion}                           { return t_asignacion; }
-{suma}                                 { return t_suma; }
-{resta}                                { return t_resta; }
-{multi}                                { return t_multiplicacion; }
-{div}                                  { return t_division; }
-{modulo}                               { return t_modulo; }
-{mayor}                                { return t_mayor; }
-{menor}                                { return t_menor; }
-{igualMay}                             { return t_igualMayor; }
-{igualMen}                             { return t_igualMenor; }
-{igual}                                { return t_igual; }
-{w_new}                                { return t_new; }
-{w_case}                               { return t_case; }
-{w_break}                              { return t_break; }
-{w_default}                            { return t_default; }
-{w_if}                                 { return t_if; }
-{w_else}                               { return t_else; }
-{w_elif}                               { return t_elif; }
-{w_while}                              { return t_while; }
-{w_for}                                { return t_for; }
-{w_switch}                             { return t_switch; }
-{w_char}                               { return t_char; }
-{w_float}                              { return t_float; }
-{w_int}                                { return t_int; }
-{w_bool}                               { return t_bool; }
-{w_str}                                { return t_str; }
-{w_const}                              { return t_const; }
-{tupla}                                { return t_tupla; }
-{array}                                { return t_array; }
-{str}                                  { lexeme=yytext(); return t_lineaCaracteres; }
-{char}                                 { lexeme=yytext(); return t_caracter; }
-{decimal}                              { lexeme=yytext(); return t_decimal; }
-{w_true}                               { return t_true; }
-{w_false}                              { return t_false; }
-{w_print}                              { return t_print; }
-{w_println}                            { return t_println; }
-{id}                                   { lexeme=yytext(); return t_id; }
-{numero}                               { lexeme=yytext(); return t_numero; }
-{slinea}                               { return t_saltoLinea; }
-{rparen}                               { return t_rParentesis; }
-{lparen}                               { return t_lParentesis; }
-{rbracket}                             { return t_rBracket; } 
-{lbracket}                             { return t_lBracket; }
-{rcorchete}                            { return t_rCorchete; } 
-{lcorchete}                            { return t_lCorchete; }
-{coma}                                 { return t_coma; }
-{puntoComa}                            { return t_puntoComa; }
-{punto}                                { return t_punto;}
-{dosPuntos}                            { return t_dosPuntos; }  
-.                                      { return muestraError(yytext()); } 
+{w_in}                                 { return symbol(ParserSym.tIn); }
+{w_sys}                                { return symbol(ParserSym.tSys); }
+{and}                                  { return symbol(ParserSym.tAnd); }
+{or}                                   { return symbol(ParserSym.tOr); }
+{not}                                  { return symbol(ParserSym.tNot); }
+{asignacion}                           { return symbol(ParserSym.tIgual); }
+{suma}                                 { return symbol(ParserSym.tSuma); }
+{resta}                                { return symbol(ParserSym.tResta); }
+{multi}                                { return symbol(ParserSym.tMult); }
+{div}                                  { return symbol(ParserSym.tDiv); }
+{modulo}                               { return symbol(ParserSym.tMod); }
+{mayor}                                { return symbol(ParserSym.tMayor); }
+{menor}                                { return symbol(ParserSym.tMenor); }
+{igualMay}                             { return symbol(ParserSym.tIgualMay); }
+{igualMen}                             { return symbol(ParserSym.tMenor); }
+{igual}                                { return symbol(ParserSym.tIgualIgual); }
+{w_new}                                { return symbol(ParserSym.tNew); }
+{w_case}                               { return symbol(ParserSym.tCase); }
+{w_break}                              { return symbol(ParserSym.tBreak); }
+{w_default}                            { return symbol(ParserSym.tDefault); }
+{w_if}                                 { return symbol(ParserSym.tIf); }
+{w_else}                               { return symbol(ParserSym.tElse); }
+{w_elif}                               { return symbol(ParserSym.tElif); }
+{w_while}                              { return symbol(ParserSym.tWhile); }
+{w_for}                                { return symbol(ParserSym.tFor); }
+{w_switch}                             { return symbol(ParserSym.tSwitch); }
+{w_char}                               { return symbol(ParserSym.tChar); }
+{w_float}                              { return symbol(ParserSym.tFloat); }
+{w_int}                                { return symbol(ParserSym.tInt); }
+{w_bool}                               { return symbol(ParserSym.tBool); }
+{w_str}                                { return symbol(ParserSym.tStr); }
+{w_const}                              { return symbol(ParserSym.tConst); }
+{w_tupla}                              { return symbol(ParserSym.tTupla); }
+{array}                                { return symbol(ParserSym.tArray); }
+{str}                                  { return symbol(ParserSym.tLinea, yytext()); }
+{char}                                 { return symbol(ParserSym.tCaracter, yytext()); }
+{decimal}                              { return symbol(ParserSym.tDecimal, yytext()); }
+{w_true}                               { return symbol(ParserSym.tTrue); }
+{w_false}                              { return symbol(ParserSym.tFalse); }
+{w_print}                              { return symbol(ParserSym.tPrint); }
+{w_println}                            { return symbol(ParserSym.tPrintln); }
+{id}                                   { return symbol(ParserSym.tId, yytext()); }
+{numero}                               { return symbol(ParserSym.tEntero, yytext()); }
+{slinea}                               { return symbol(ParserSym.tSlinea); }
+{rparen}                               { return symbol(ParserSym.tRparen); }
+{lparen}                               { return symbol(ParserSym.tLparen); }
+{rbracket}                             { return symbol(ParserSym.tRbracket); } 
+{lbracket}                             { return symbol(ParserSym.lRbracket); }
+{rcorchete}                            { return symbol(ParserSym.tRcorchete); } 
+{lcorchete}                            { return symbol(ParserSym.lRcorchete); }
+{coma}                                 { return symbol(ParserSym.tComa);}
+{puntoComa}                            { return symbol(ParserSym.tPuntocoma); }
+{punto}                                { return symbol(ParserSym.tPunto); }
+{dosPuntos}                            { return symbol(ParserSym.tDospuntos); }  
+.                                      { return muestraError(yytext(), yyline); } 

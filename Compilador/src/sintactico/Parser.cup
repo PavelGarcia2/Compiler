@@ -20,13 +20,15 @@ class Parser;
 
 /**
  ** Aquí es podria posar un codi 'ad hoc' però en aquest cas no és necessari.
+ **/
 parser code {:
+/*
     private Scanner scanner;
     public Parser(Scanner scanner) { 
         this.scanner = scanner;
     }
+*/
 :}
-**/
 
 /**
  ** També aquí es poden afegir accions a realitzar quan es requereix un token.
