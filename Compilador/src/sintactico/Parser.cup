@@ -91,6 +91,7 @@ non terminal LLAMADA_FUNC;
 non terminal PARAMETROS;
 non terminal PARAM_SIMPLE;
 non terminal PARAM_COMPUESTO;
+non terminal ELSE_COND;
 
 
 start with PROGRAMA;
@@ -176,12 +177,17 @@ SENT ::= OTRAS_SENTS                                                            
         ;
 
 
-OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::}                                                 
+OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete ELSE_COND                                                         {::}                                                 
            | t_while t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::}                      
            | t_for t_lParentesis t_id t_puntoComa EXPRESION t_puntoComa OP_RAPIDOS t_rParentesis t_lCorchete SENTS t_rCorchete                              {::}
            | t_switch t_lParentesis t_id t_rParentesis t_lCorchete CASOS t_rCorchete                                                                        {::}    
            ;
 
+
+ELSE_COND ::= t_elif t_lParentesis EXPRESION t_rParentesis t_lBracket SENTS t_rBracket  ELSE_COND                                                              {::}
+          | t_else t_lBracket SENTS t_rBracket                                                                                                              {::}                                      
+          |                                                                                                                                                 {::}                   
+          ; 
 
 CASOS ::= CASOS t_case INIT_CASES t_dosPuntos SENTS t_break t_puntoComa                                                                                     {::}    
      | CASO_DEFAULT                                                                                                                                         {::}
