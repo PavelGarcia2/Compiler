@@ -159,12 +159,9 @@ TIPO ::= t_int                                                                  
     | t_str                                                                                                                                                 {::}                     
 	;
 
-/*******         las declaraciones iría antes que las instrucciones ----v----         *******/
+
 FUNC ::= t_fun TIPO DECL_ARRAY t_id t_lParentesis PARAMETROS t_rParentesis t_lCorchete DECL_VARS SENTS t_rCorchete                                          {::}
     ;
-
-/* ** QUITAR ESTAS PRODUCCIONES (quitadas Pedro 18-12-23)
- ** */
 
 DECL_FUNCIONES ::= DECL_FUNCIONES FUNC                                                                                                                      {::}
               |                                                                                                                                             {::}
@@ -186,7 +183,7 @@ OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_
            ;
 
 
-ELSE_COND ::= t_elif t_lParentesis EXPRESION t_rParentesis t_lBracket SENTS t_rBracket  ELSE_COND                                                              {::}
+ELSE_COND ::= t_elif t_lParentesis EXPRESION t_rParentesis t_lBracket SENTS t_rBracket  ELSE_COND                                                           {::}
           | t_else t_lBracket SENTS t_rBracket                                                                                                              {::}                                      
           |                                                                                                                                                 {::}                   
           ; 
