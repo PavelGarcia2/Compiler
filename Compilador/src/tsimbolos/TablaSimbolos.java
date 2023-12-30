@@ -133,6 +133,7 @@ public class TablaSimbolos {
 
         if (d.getTDescripcion() != "dproc") {
             throw new UnsupportedOperationException("No existe el procedimiento/función con este nombre: " + idPr);
+            asd
         }
         
     }
