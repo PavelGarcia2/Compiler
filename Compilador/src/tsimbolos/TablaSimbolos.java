@@ -127,15 +127,33 @@ public class TablaSimbolos {
         }
     }
 
-    //checked
-    public void ponerParam(String idPr, String idParam, Descripcion d) {
-        d = td.getElemento(idPr).getDescripcion();
 
+    public void ponerParam(String idPr, String idParam, Descripcion d) {
         if (d.getTDescripcion() != "dproc") {
-            throw new UnsupportedOperationException("No existe el procedimiento/función con este nombre: " + idPr);
-            asd
+            throw new UnsupportedOperationException("No existe el procedimiento/función con este nombre: " + idPr);   
         }
-        
+        int idxe = td.getElemento(idPr).getFirst();
+        // idxep és l’element anterior a idxe
+        int idxep = 0;
+        while (idxe != 0) {
+            idxep = idxe;
+            idxe = te.get(idxep).getNext();
+        }
+        if(idxep != 0){  throw new UnsupportedOperationException("Ya hay un parametro con este id: " + idxep); }
+        idxep = ta.getAmbito(n);
+        idxep++;
+        ta.setAmbito(n, idxep);
+        te.get(idxe).setIdcamp(idParam);
+        te.get(idxe).setNp(-1);
+        te.get(idxe).setD(d);
+        te.get(idxe).setNext(0); 
+        // És el primer índex?      
+        if (idxep == 0){
+            td.getElemento(idPr).setFirst(idxe);
+        }else{
+            // L’índex anterior s’enllaça
+            te.get(idxep).setNext(idxe);
+        }
     }
         
 
