@@ -2,19 +2,21 @@ package tsimbolos.descripciones;
 
 public class Descripcion {
 
-
-    private final TipoDescripcion desc;
-
-    public enum TipoDescripcion {
-        dnula, dvar, dconst, dtipus, dproc, dfunc, dindex, dargin, darg, darray, dstring, dtupel, dcampo
+    public enum TDesc {
+        darg,dargin,dcamp,dconst,dindex,dnula,dproc,dtipus,dvar,darray
     }
 
-    public Descripcion(TipoDescripcion desc) {
-        this.desc = desc;
+    TDesc tipoDescripcion;
+
+    public Descripcion (TDesc tipoDescripcion){
+        this.tipoDescripcion = tipoDescripcion;
     }
 
-    public TipoDescripcion getTipoDescripcion() {
-        return desc;
+    public String toString(){
+        return tipoDescripcion.toString();
     }
 
+    public String getTDescripcion(){
+        return tipoDescripcion.toString();
+    }
 }

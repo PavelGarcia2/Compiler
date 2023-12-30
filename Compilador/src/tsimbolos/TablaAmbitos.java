@@ -17,6 +17,7 @@ public class TablaAmbitos {
         this.ta = new int[maxCap];
     }
 
+    //Metodo que indica que hay un nuevo bloque
     public void nuevoAmbito(int apuntadorTE) {
         if(ind==maxCap){
             aumentarArray();
@@ -53,12 +54,12 @@ public class TablaAmbitos {
 
     @Override
     public String toString() {
-        String data = "\n";
+        String data = "Tabla de ambitos \n.............................................\n";
         for(int i=0;i<ind;i++){
-            data+="["+i+"]->"+ta[i]+"\n";
+            data+="["+i+"]->"+ta[i]+",";
 
         }
-        return "{"+ data +"}";
+        return "{"+ data +"}\n";
     }
 
 
