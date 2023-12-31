@@ -1,0 +1,11 @@
+
+int noNum;
+
+main{
+
+    //if que mira si el numero es par
+    int numero = 24;
+    if(numero mod 2){
+        println("Es par");
+    }
+}

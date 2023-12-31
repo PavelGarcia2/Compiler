@@ -59,7 +59,8 @@ w_bool      = "bool"
 w_str       = "str"
 w_true      = ("true"|"True")
 w_false     = ("false"|"False")
-w_tupla       = "tup"
+//w_tupla       = "tup"
+w_void      = "void"
 
 //============================//
 //         OPERADORES         //
@@ -170,6 +171,7 @@ decimal     = {digito}*{punto}{digito}+
 
 {w_main}                               { return symbol(ParserSym.tMain); } 
 {w_return}                             { return symbol(ParserSym.tReturn); } 
+{w_void}                               { return symbol(ParserSym.tVoid); }
 {espacios}                             { /* ignore */ }
 {w_fun}                                { return symbol(ParserSym.tFun); }
 {multiCom}                             { /* ignore */ }
@@ -206,7 +208,7 @@ decimal     = {digito}*{punto}{digito}+
 {w_bool}                               { return symbol(ParserSym.tBool); }
 {w_str}                                { return symbol(ParserSym.tStr); }
 {w_const}                              { return symbol(ParserSym.tConst); }
-{w_tupla}                              { return symbol(ParserSym.tTupla); }
+//{w_tupla}                              { return symbol(ParserSym.tTupla); }
 {array}                                { return symbol(ParserSym.tArray); }
 {str}                                  { return symbol(ParserSym.tLinea, yytext()); }
 {char}                                 { return symbol(ParserSym.tCaracter, yytext()); }
@@ -217,15 +219,15 @@ decimal     = {digito}*{punto}{digito}+
 {w_println}                            { return symbol(ParserSym.tPrintln); }
 {id}                                   { return symbol(ParserSym.tId, yytext()); }
 {numero}                               { return symbol(ParserSym.tEntero, yytext()); }
-{slinea}                               { return symbol(ParserSym.tSlinea); }
+{slinea}                               { /* ignore */ }
 {rparen}                               { return symbol(ParserSym.tRparen); }
 {lparen}                               { return symbol(ParserSym.tLparen); }
 {rbracket}                             { return symbol(ParserSym.tRbracket); } 
-{lbracket}                             { return symbol(ParserSym.lRbracket); }
+{lbracket}                             { return symbol(ParserSym.tLbracket); }
 {rcorchete}                            { return symbol(ParserSym.tRcorchete); } 
-{lcorchete}                            { return symbol(ParserSym.lRcorchete); }
+{lcorchete}                            { return symbol(ParserSym.tLcorchete); }
 {coma}                                 { return symbol(ParserSym.tComa);}
 {puntoComa}                            { return symbol(ParserSym.tPuntocoma); }
 {punto}                                { return symbol(ParserSym.tPunto); }
 {dosPuntos}                            { return symbol(ParserSym.tDospuntos); }  
-.                                      { return muestraError(yytext(), yyline); } 
+.                                      { return symbol(ParserSym.tError); } 

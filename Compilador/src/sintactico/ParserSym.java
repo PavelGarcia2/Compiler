@@ -8,129 +8,125 @@ package sintactico;
 /** CUP generated class containing symbol constants. */
 public class ParserSym {
   /* terminals */
-  public static final int t_for = 30;
-  public static final int t_float = 33;
-  public static final int t_igualMenor = 20;
-  public static final int t_true = 43;
-  public static final int t_coma = 56;
-  public static final int t_puntoComa = 57;
-  public static final int t_not = 10;
-  public static final int t_and = 8;
-  public static final int t_rParentesis = 50;
-  public static final int t_lineaCaracteres = 40;
-  public static final int t_fun = 5;
-  public static final int t_igualMayor = 19;
-  public static final int t_false = 44;
-  public static final int t_default = 25;
-  public static final int t_print = 45;
-  public static final int t_in = 6;
-  public static final int t_or = 9;
-  public static final int t_return = 3;
-  public static final int t_else = 27;
-  public static final int t_sys = 7;
-  public static final int t_modulo = 16;
-  public static final int t_if = 26;
-  public static final int t_id = 47;
-  public static final int t_new = 22;
-  public static final int t_rCorchete = 54;
-  public static final int t_const = 37;
-  public static final int t_switch = 31;
-  public static final int t_tupla = 38;
-  public static final int t_resta = 13;
-  public static final int t_exec = 4;
-  public static final int t_array = 39;
-  public static final int t_lParentesis = 51;
-  public static final int t_division = 15;
-  public static final int t_elif = 28;
+  public static final int tInt = 33;
+  public static final int tIgualMenor = 19;
+  public static final int tFor = 29;
+  public static final int tMenor = 17;
+  public static final int tDospuntos = 56;
+  public static final int tBreak = 23;
+  public static final int tBool = 34;
+  public static final int tNot = 9;
+  public static final int tAnd = 7;
+  public static final int tError = 57;
+  public static final int tMayor = 16;
+  public static final int tFun = 4;
+  public static final int tSuma = 11;
+  public static final int tMain = 3;
+  public static final int tPunto = 55;
+  public static final int tDiv = 14;
+  public static final int tCaracter = 39;
+  public static final int tDefault = 24;
+  public static final int tWhile = 28;
+  public static final int tTrue = 41;
+  public static final int tPuntocoma = 54;
+  public static final int tComa = 53;
+  public static final int tSys = 6;
+  public static final int tFloat = 32;
+  public static final int tLcorchete = 52;
+  public static final int tEntero = 46;
+  public static final int tLparen = 48;
+  public static final int tNew = 21;
+  public static final int tVoid = 58;
+  public static final int tRbracket = 49;
+  public static final int tFalse = 42;
+  public static final int tMod = 15;
+  public static final int tLinea = 38;
+  public static final int tRparen = 47;
+  public static final int tElse = 26;
+  public static final int tPrint = 43;
   public static final int EOF = 0;
-  public static final int t_dosPuntos = 59;
-  public static final int t_lBracket = 53;
   public static final int error = 1;
-  public static final int t_igual = 21;
-  public static final int t_println = 46;
-  public static final int t_char = 32;
-  public static final int t_Error = 60;
-  public static final int t_case = 23;
-  public static final int t_numero = 48;
-  public static final int t_lCorchete = 55;
-  public static final int t_menor = 18;
-  public static final int t_saltoLinea = 49;
-  public static final int t_multiplicacion = 14;
-  public static final int t_break = 24;
-  public static final int t_decimal = 42;
-  public static final int t_str = 36;
-  public static final int t_bool = 35;
-  public static final int t_program = 2;
-  public static final int t_mayor = 17;
-  public static final int t_caracter = 41;
-  public static final int t_suma = 12;
-  public static final int t_asignacion = 11;
-  public static final int t_punto = 58;
-  public static final int t_int = 34;
-  public static final int t_while = 29;
-  public static final int t_rBracket = 52;
+  public static final int tIn = 5;
+  public static final int tOr = 8;
+  public static final int tConst = 36;
+  public static final int tIf = 25;
+  public static final int tId = 45;
+  public static final int tPrintln = 44;
+  public static final int tResta = 12;
+  public static final int tReturn = 2;
+  public static final int tIgualMay = 18;
+  public static final int tElif = 27;
+  public static final int tArray = 37;
+  public static final int tIgualIgual = 20;
+  public static final int tIgual = 10;
+  public static final int tSwitch = 30;
+  public static final int tMult = 13;
+  public static final int tChar = 31;
+  public static final int tRcorchete = 51;
+  public static final int tCase = 22;
+  public static final int tStr = 35;
+  public static final int tDecimal = 40;
+  public static final int tLbracket = 50;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "t_program",
-  "t_return",
-  "t_exec",
-  "t_fun",
-  "t_in",
-  "t_sys",
-  "t_and",
-  "t_or",
-  "t_not",
-  "t_asignacion",
-  "t_suma",
-  "t_resta",
-  "t_multiplicacion",
-  "t_division",
-  "t_modulo",
-  "t_mayor",
-  "t_menor",
-  "t_igualMayor",
-  "t_igualMenor",
-  "t_igual",
-  "t_new",
-  "t_case",
-  "t_break",
-  "t_default",
-  "t_if",
-  "t_else",
-  "t_elif",
-  "t_while",
-  "t_for",
-  "t_switch",
-  "t_char",
-  "t_float",
-  "t_int",
-  "t_bool",
-  "t_str",
-  "t_const",
-  "t_tupla",
-  "t_array",
-  "t_lineaCaracteres",
-  "t_caracter",
-  "t_decimal",
-  "t_true",
-  "t_false",
-  "t_print",
-  "t_println",
-  "t_id",
-  "t_numero",
-  "t_saltoLinea",
-  "t_rParentesis",
-  "t_lParentesis",
-  "t_rBracket",
-  "t_lBracket",
-  "t_rCorchete",
-  "t_lCorchete",
-  "t_coma",
-  "t_puntoComa",
-  "t_punto",
-  "t_dosPuntos",
-  "t_Error"
+  "tReturn",
+  "tMain",
+  "tFun",
+  "tIn",
+  "tSys",
+  "tAnd",
+  "tOr",
+  "tNot",
+  "tIgual",
+  "tSuma",
+  "tResta",
+  "tMult",
+  "tDiv",
+  "tMod",
+  "tMayor",
+  "tMenor",
+  "tIgualMay",
+  "tIgualMenor",
+  "tIgualIgual",
+  "tNew",
+  "tCase",
+  "tBreak",
+  "tDefault",
+  "tIf",
+  "tElse",
+  "tElif",
+  "tWhile",
+  "tFor",
+  "tSwitch",
+  "tChar",
+  "tFloat",
+  "tInt",
+  "tBool",
+  "tStr",
+  "tConst",
+  "tArray",
+  "tLinea",
+  "tCaracter",
+  "tDecimal",
+  "tTrue",
+  "tFalse",
+  "tPrint",
+  "tPrintln",
+  "tId",
+  "tEntero",
+  "tRparen",
+  "tLparen",
+  "tRbracket",
+  "tLbracket",
+  "tRcorchete",
+  "tLcorchete",
+  "tComa",
+  "tPuntocoma",
+  "tPunto",
+  "tDospuntos",
+  "tError",
+  "tVoid"
   };
 }
 

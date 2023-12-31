@@ -39,17 +39,17 @@ scan with {:     next_token(); :}
 De los terminales capaz falte definir cual es un int, char, string, etc.
 */
 
-terminal t_program,t_return,t_exec,t_fun,t_in,t_sys,t_and,t_or,t_not,t_asignacion;
+terminal ComplexSymbol tReturn,tMain,tFun,tIn,tSys,tAnd,tOr,tNot,tIgual;
 
-terminal t_suma,t_resta,t_multiplicacion,t_division,t_modulo,t_mayor,t_menor,t_igualMayor,t_igualMenor,t_igual;
+terminal ComplexSymbol tSuma,tResta,tMult,tDiv,tMod,tMayor,tMenor,tIgualMay,tIgualMenor,tIgualIgual;
     
-terminal t_new,t_case,t_break,t_default;
+terminal ComplexSymbol tNew,tCase,tBreak,tDefault;
 
-terminal t_if,t_else,t_elif,t_while,t_for,t_switch;
+terminal ComplexSymbol tIf,tElse,tElif,tWhile,tFor,tSwitch;
 
-terminal t_char,t_float,t_int,t_bool,t_str,t_const,t_tupla,t_array,t_lineaCaracteres,t_caracter,t_decimal,t_true,t_false;
+terminal ComplexSymbol tChar,tFloat,tInt,tBool,tStr,tConst,tArray,tLinea,tCaracter,tDecimal,tTrue,tFalse;
 
-terminal t_print,t_println,t_id,t_numero,t_saltoLinea,t_rParentesis,t_lParentesis,t_rBracket,t_lBracket,t_rCorchete,t_lCorchete,t_coma,t_puntoComa,t_punto,t_dosPuntos,t_Error;
+terminal ComplexSymbol tPrint,tPrintln,tId,tEntero,tRparen,tLparen,tRbracket,tLbracket,tRcorchete,tLcorchete,tComa,tPuntocoma,tPunto,tDospuntos,tError,tVoid;
 
 
 
@@ -57,16 +57,12 @@ non terminal PROGRAMA;
 non terminal MAIN;
 non terminal DECL_VARS;
 non terminal DECL_VAR;
-non terminal DECL_ESP;
 non terminal DECL_ARRAY;
-non terminal DECL_TUPLA;
 non terminal ASIGN;
 non terminal T_ASIGN;
 non terminal ASIGN_NORMAL;
 non terminal ASIGN_ARRAY;
 non terminal DIM_ARRAY;
-non terminal ASIGN_TUPLA;
-non terminal DIM_TUPLA;
 non terminal REAL_ASIGN;
 non terminal TIPO;
 non terminal FUNC;
@@ -94,192 +90,207 @@ non terminal PARAMETROS;
 non terminal PARAM_SIMPLE;
 non terminal PARAM_COMPUESTO;
 non terminal ELSE_COND;
+non terminal DECL_FUNCP;
+non terminal DECL_FUNCPARAMS;
+non terminal DECL_FUNCPARAM;
+non terminal RETURN;
+non terminal DECLVAR;
+non terminal TIPOINSENTENCES;
+
+
 
 
 start with PROGRAMA;
 
-PROGRAMA ::= DECL_VARS MAIN DECL_FUNCIONES                                                                                                                  {::}
+PROGRAMA ::= DECL_VARS MAIN DECL_FUNCIONES                                                                                                                 {::}
            ;
 
 
-MAIN ::= t_exec t_lBracket SENTS t_rBracket                                                                                                                 {::}
+MAIN ::= tMain tLbracket DECL_VARS SENTS tRbracket                                                                                                         {::}
         ;
  
  
-DECL_VARS ::= DECL_VAR DECL_VARS                                                                                                                            {::}
-             |                                                                                                                                              {::}
+DECL_VARS ::= DECL_VAR DECL_VARS                                                                                                                           {::}
+             |                                                                                                                                             {::}
 		     ;
 
-DECL_VAR ::= TIPO t_id DECL_ESP ASIGN  t_puntoComa                                                                                                          {::}
+DECL_VAR ::= TIPO tId DECL_ARRAY ASIGN  tPuntocoma                                                                                                         {::}
           ; 
 
-DECL_ESP ::= DECL_ARRAY                                                                                                                                     {::}
-            | DECL_TUPLA                                                                                                                                    {::}
-            ;
-
-DECL_ARRAY ::= DECL_ARRAY t_lCorchete t_rCorchete                                                                                                           {::}
-               |                                                                                                                                            {::}
+DECL_ARRAY ::= DECL_ARRAY tLcorchete tRcorchete                                                                                                            {::}
+               |                                                                                                                                           {::}
 		       ;
 
-DECL_TUPLA ::= t_lParentesis TIPO t_coma TIPO t_rParentesis                                                                                                 {::}
+ASIGN ::= tIgual T_ASIGN                                                                                                                                   {::} 
+          |                                                                                                                                                {::} 
+          ; 
+
+T_ASIGN ::= ASIGN_NORMAL                                                                                                                                   {::}
+            | ASIGN_ARRAY                                                                                                                                  {::}         
             ;
 
-ASIGN ::= t_asignacion T_ASIGN                                                                                                                              {::} 
-            ; 
-
-T_ASIGN ::= ASIGN_NORMAL                                                                                                                                    {::}
-            | ASIGN_ARRAY                                                                                                                                   {::}
-            | ASIGN_TUPLA                                                                                                                                   {::}                
-            ;
-
-ASIGN_NORMAL ::= EXPRESION                                                                                                                                  {::}
+ASIGN_NORMAL ::= EXPRESION                                                                                                                                 {::}
                 ;
 
-ASIGN_ARRAY ::= t_new TIPO DIM_ARRAY                                                                                                                        {::}
+ASIGN_ARRAY ::= tNew TIPO DIM_ARRAY                                                                                                                        {::}
                 ;
 
-DIM_ARRAY ::= DIM_ARRAY t_lCorchete EXPRESION t_rCorchete                                                                                                   {::}
-            |                                                                                                                                               {::}
+DIM_ARRAY ::= DIM_ARRAY tLcorchete EXPRESION tRcorchete                                                                                                    {::}
+            |                                                                                                                                              {::}
 		    ;
 
-ASIGN_TUPLA ::= t_new t_tupla DIM_TUPLA                                                                                                                     {::}
-                ;
-
-DIM_TUPLA ::= t_lParentesis EXPRESION t_coma EXPRESION t_rParentesis                                                                                        {::}
+REAL_ASIGN ::= tId tIgual EXPRESION tPuntocoma                                                                                                             {::}
             ;
 
-REAL_ASIGN ::= t_id t_asignacion EXPRESION t_puntoComa                                                                                                      {::}
-            ;
-
-TIPO ::= t_int                                                                                                                                              {::}
-    | t_char                                                                                                                                                {::}
-    | t_float                                                                                                                                               {::}                                     
-    | t_bool                                                                                                                                                {::}                            
-    | t_tupla                                                                                                                                               {::}    
-    | t_str                                                                                                                                                 {::}                     
+TIPO ::= tInt                                                                                                                                              {::}
+    | tCaracter                                                                                                                                            {::}
+    | tFloat                                                                                                                                               {::}                                     
+    | tBool                                                                                                                                                {::}                               
+    | tStr                                                                                                                                                 {::}                                       
+    | tVoid                                                                                                                                                {::}                     
 	;
 
 
-FUNC ::= t_fun TIPO DECL_ARRAY t_id t_lParentesis PARAMETROS t_rParentesis t_lCorchete DECL_VARS SENTS t_rCorchete                                          {::}
+FUNC ::= tFun TIPO DECL_ARRAY tId tLparen DECL_FUNCP tRparen tLbracket DECL_VARS SENTS RETURN tRbracket                                                    {::}
     ;
 
-DECL_FUNCIONES ::= DECL_FUNCIONES FUNC                                                                                                                      {::}
-              |                                                                                                                                             {::}
+RETURN ::= tReturn EXPRESION tPuntocoma                                                                                                                    {::}                                                                                                                           
+        |                                                                                                                                                  {::} 
+        ;
+
+DECL_FUNCP ::= DECL_FUNCPARAMS                                                                                                                             {::}
+               |                                                                                                                                           {::}
+               ;
+
+DECL_FUNCPARAMS ::= DECL_FUNCPARAM 
+                    |DECL_FUNCPARAM tComa DECL_FUNCPARAMS 
+                    ;
+
+DECL_FUNCPARAM ::= TIPO tId DECL_ARRAY;
+
+DECL_FUNCIONES ::= DECL_FUNCIONES FUNC                                                                                                                     {::}
+              |                                                                                                                                            {::}
 			  ;
 			  
-SENTS ::= SENTS SENT                                                                                                                                        {::}
-        |                                                                                                                                                   {::}
+SENTS ::= SENTS SENT                                                                                                                                       {::}
+        |                                                                                                                                                  {::}
 	    ;
 
-SENT ::= OTRAS_SENTS                                                                                                                                        {::}
-        | REAL_ASIGN                                                                                                                                        {::}
+SENT ::= OTRAS_SENTS                                                                                                                                       {::}
+        | REAL_ASIGN                                                                                                                                       {::}
         ;
 
 
-OTRAS_SENTS ::= t_if t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete ELSE_COND                                                         {::}                                                 
-           | t_while t_lParentesis PARAMETROS t_rParentesis t_lCorchete SENTS t_rCorchete                                                                   {::}                      
-           | t_for t_lParentesis t_id t_puntoComa EXPRESION t_puntoComa OP_RAPIDOS t_rParentesis t_lCorchete SENTS t_rCorchete                              {::}
-           | t_switch t_lParentesis t_id t_rParentesis t_lCorchete CASOS t_rCorchete                                                                        {::}    
+OTRAS_SENTS ::= tIf tLparen PARAMETROS tRparen tLbracket SENTS tRbracket ELSE_COND                                                                         {::}                                                 
+           | tWhile tLparen PARAMETROS tRparen tLbracket SENTS tRbracket                                                                                   {::}                      
+           | tFor tLparen tId tPuntocoma EXPRESION tPuntocoma OP_RAPIDOS tRparen tLbracket SENTS tRbracket                                                 {::}
+           | tSwitch tLparen tId tRparen tLbracket CASOS tRbracket                                                                                         {::}    
+           | tPrint tLparen EXPRESION tRparen tPuntocoma                                                                                                   {::}
+           | tPrintln tLparen EXPRESION tRparen tPuntocoma                                                                                                 {::}  
+           | LLAMADA_FUNC tPuntocoma                                                                                                                       {::}
            ;
 
 
-ELSE_COND ::= t_elif t_lParentesis EXPRESION t_rParentesis t_lBracket SENTS t_rBracket  ELSE_COND                                                           {::}
-          | t_else t_lBracket SENTS t_rBracket                                                                                                              {::}                                      
-          |                                                                                                                                                 {::}                   
+
+ELSE_COND ::= tElif tLparen EXPRESION tRparen tLbracket SENTS tRbracket  ELSE_COND                                                                         {::}
+          | tElse tLbracket SENTS tRbracket                                                                                                                {::}                                      
+          |                                                                                                                                                {::}                   
           ; 
 
-CASOS ::= CASOS t_case INIT_CASES t_dosPuntos SENTS t_break t_puntoComa                                                                                     {::}    
-     | CASO_DEFAULT                                                                                                                                         {::}
-     |                                                                                                                                                      {::}                                                
+CASOS ::= CASOS tCase INIT_CASES tDospuntos SENTS tBreak tPuntocoma                                                                                        {::}    
+     | CASO_DEFAULT                                                                                                                                        {::}
+     |                                                                                                                                                     {::}                                                
 	 ;
 
-CASO_DEFAULT ::= t_default t_dosPuntos SENTS t_break t_puntoComa                                                                                            {::}
+CASO_DEFAULT ::= tDefault tDospuntos SENTS tBreak tPuntocoma                                                                                               {::}
                 ;
 
-INIT_CASES ::= t_numero                                                                                                                                     {::}
-          | t_lineaCaracteres                                                                                                                               {::}
-          | t_caracter                                                                                                                                      {::}
+INIT_CASES ::= tEntero                                                                                                                                     {::}
+          | tLinea                                                                                                                                         {::}
+          | tCaracter                                                                                                                                      {::}
 		  ;
 
-OP_LOG ::= t_and                                                                                                                                            {::}
-      | t_or                                                                                                                                                {::}
-      | t_mayor                                                                                                                                             {::}
-      | t_menor                                                                                                                                             {::}
-      | t_igualMayor                                                                                                                                        {::}
-      | t_igualMenor                                                                                                                                        {::}
-      | t_igual                                                                                                                                             {::}
+OP_LOG ::= tAnd                                                                                                                                            {::}
+      | tOr                                                                                                                                                {::}
+      | tMayor                                                                                                                                             {::}
+      | tMenor                                                                                                                                             {::}
+      | tIgualMay                                                                                                                                          {::}
+      | tIgualMenor                                                                                                                                        {::}
+      | tIgualIgual                                                                                                                                        {::}
 	  ;
 
-OP_ARIT ::= t_suma                                                                                                                                          {::}
-       | t_resta                                                                                                                                            {::}
-       | t_multiplicacion                                                                                                                                   {::}
-       | t_division                                                                                                                                         {::}
-       | t_modulo                                                                                                                                           {::}
+OP_ARIT ::= tSuma                                                                                                                                          {::}
+       | tResta                                                                                                                                            {::}
+       | tMult                                                                                                                                             {::}
+       | tDiv                                                                                                                                              {::}
+       | tMod                                                                                                                                              {::}
 	   ;
 
-OP_RAPIDOS ::= OP_RAPIDO_S                                                                                                                                  {::}
-          | OP_RAPIDO_R                                                                                                                                     {::}
+OP_RAPIDOS ::= OP_RAPIDO_S                                                                                                                                 {::}
+          | OP_RAPIDO_R                                                                                                                                    {::}
           ;
 
-OP_RAPIDO_S ::= t_id t_suma  t_suma                                                                                                                         {::}
+OP_RAPIDO_S ::= tId tSuma tSuma                                                                                                                            {::}
             ;
 
-OP_RAPIDO_R ::= t_id t_resta t_resta                                                                                                                        {::}
+OP_RAPIDO_R ::= tId tResta tResta                                                                                                                          {::}
             ;
 
-TERMINO_1 ::= t_id                                                                                                                                          {::}
-         | t_numero                                                                                                                                         {::}
-         | LLAMADA_FUNC                                                                                                                                     {::}
-         | t_decimal                                                                                                                                        {::}
+TERMINO_1 ::= tId                                                                                                                                          {::}
+         | tEntero                                                                                                                                         {::}
+         | LLAMADA_FUNC                                                                                                                                    {::}
+         | tDecimal                                                                                                                                        {::}
          ;
 
 /* PREGUNTAR COMO SE PUEDE HACER PARA QUE UN TERMINO PUEDA SER UN ENTERO Y UN REAL*/
-TERMINO_2 ::= t_id                                                                                                                                          {::}
-         | t_numero                                                                                                                                         {::}
-         | LLAMADA_FUNC                                                                                                                                     {::}
-         | t_decimal                                                                                                                                        {::}
+TERMINO_2 ::= tId                                                                                                                                          {::}
+         | tEntero                                                                                                                                         {::}
+         | LLAMADA_FUNC                                                                                                                                    {::}
+         | tDecimal                                                                                                                                        {::}
          ;
 
-TERMINOLOG_1 ::= t_id                                                                                                                                       {::}
-         | t_true                                                                                                                                           {::}
-         | t_false                                                                                                                                          {::}
-         | LLAMADA_FUNC                                                                                                                                     {::}
+TERMINOLOG_1 ::= tId                                                                                                                                       {::}
+         | tTrue                                                                                                                                           {::}
+         | tFalse                                                                                                                                          {::}
+         | LLAMADA_FUNC                                                                                                                                    {::}
          ;
  
-TERMINOLOG_2 ::= t_id                                                                                                                                       {::}
-         | t_true                                                                                                                                           {::}
-         | t_false                                                                                                                                          {::}
-         | LLAMADA_FUNC                                                                                                                                     {::}
+TERMINOLOG_2 ::= tId                                                                                                                                       {::}
+         | tTrue                                                                                                                                           {::}
+         | tFalse                                                                                                                                          {::}
+         | LLAMADA_FUNC                                                                                                                                    {::}
          ;
 
 
-EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2                                                                                                             {:$$ = $1 $2 $3:}
+EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2                                                                                                            {::}
                 ;       
                
-EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2                                                                                                          {::}
+EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2                                                                                                         {::}
                 ;
 
-EXPRESION ::= t_lParentesis EXPRESION t_rParentesis                                                                                                         {::}
-         | t_not EXPRESION                                                                                                                                  {::}
-         | EXPRESION_LOG                                                                                                                                    {::}
-         | EXPRESION_ARITM                                                                                                                                  {::}
-         | t_id                                                                                                                                             {::}
-         | t_numero                                                                                                                                         {::}
-         | t_decimal                                                                                                                                        {::}
-         | t_char                                                                                                                                           {::}
-         | t_lineaCaracteres                                                                                                                                {::}
-         | LLAMADA_FUNC                                                                                                                                     {::}
-		 ;
+EXPRESION ::= tLparen EXPRESION tRparen                                                                                                                    {::}
+         | tNot EXPRESION                                                                                                                                  {::}
+         | EXPRESION_LOG                                                                                                                                   {::}
+         | EXPRESION_ARITM                                                                                                                                 {::}
+         | tId                                                                                                                                             {::}
+         | tEntero                                                                                                                                         {::}
+         | tDecimal                                                                                                                                        {::}
+         | tChar                                                                                                                                           {::}
+         | tLinea
+         | tTrue
+         | tFalse                                                                                                                                          {::}
+         | LLAMADA_FUNC                                                                                                                                    {::}
+		 
 
-LLAMADA_FUNC ::= t_id t_lParentesis PARAMETROS t_rParentesis t_puntoComa                                                                                    {::}
+LLAMADA_FUNC ::= tId tLparen PARAMETROS tRparen                                                                                                            {::}
                 ;
 
-PARAMETROS ::= PARAM_SIMPLE                                                                                                                                 {::}
-          | PARAM_COMPUESTO                                                                                                                                 {::}
+PARAMETROS ::= PARAM_SIMPLE                                                                                                                                {::}
+          | PARAM_COMPUESTO                                                                                                                                {::}
 		  ;
 
-PARAM_SIMPLE ::= EXPRESION                                                                                                                                  {::}
+PARAM_SIMPLE ::= EXPRESION                                                                                                                                 {::}
         ;
 
-PARAM_COMPUESTO ::= PARAMETROS t_coma EXPRESION                                                                                                             {::}
+PARAM_COMPUESTO ::= PARAMETROS tComa EXPRESION                                                                                                             {::}
     ;

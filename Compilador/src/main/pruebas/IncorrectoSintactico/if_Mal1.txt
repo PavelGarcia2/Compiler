@@ -1,0 +1,10 @@
+//if incorrecto al que le falta un corchete
+
+
+main{
+
+    int numero = 24;
+    if(numero%2)
+        println("Es par");
+    }
+}
