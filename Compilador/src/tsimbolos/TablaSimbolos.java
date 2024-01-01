@@ -10,6 +10,7 @@ public class TablaSimbolos {
     int n; // Nivel actual (indicador de ambito) apunta al nivel de la tabla de ambitos
     TablaAmbitos ta;
     TablaExpansion te;
+   
     TablaDescripcion td;
     private final Parser parser;
 
@@ -24,6 +25,17 @@ public class TablaSimbolos {
         te = new TablaExpansion();
         td = new TablaDescripcion();
         this.parser = parser;
+        ta.setAmbito(n, 0);
+        n++;
+        ta.setAmbito(n, -1);
+    }
+
+    public TablaSimbolos() {
+        n = 0;
+        ta = new TablaAmbitos();
+        te = new TablaExpansion();
+        td = new TablaDescripcion();
+        this.parser = null;
         ta.setAmbito(n, 0);
         n++;
         ta.setAmbito(n, -1);
@@ -193,4 +205,13 @@ public class TablaSimbolos {
         return tabla;
 
     }
+
+    public TablaExpansion getTe() {
+        return te;
+    }
+
+    public void setTe(TablaExpansion te) {
+        this.te = te;
+    }
+
 }

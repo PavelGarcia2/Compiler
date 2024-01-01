@@ -30,4 +30,8 @@ public class TablaExpansion {
         }
         return teS+'\n';
     }
+
+    public int getSize(){
+        return te.size();
+    }
 }
