@@ -1,10 +1,10 @@
 package sintactico.arbol;
 
-public class Nodotermino1 extends Nodo {
+public class NodoTermino2 extends Nodo {
 
 NodoSimbolos opLog;
 
-    public Nodotermino1(NodoSimbolo opLog){
+    public NodoTermino2(NodoSimbolo opLog){
         super("TERMINO1", false, l, c);
         this.opLog = opLog;
     }

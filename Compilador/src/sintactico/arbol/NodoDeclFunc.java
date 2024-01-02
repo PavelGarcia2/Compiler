@@ -19,6 +19,5 @@ public class NodoDeclFunc extends Nodo {
 
     public NodoDeclFunc() {
         super("DECLFUNC", true);
-    }
-    
+    } 
 }
