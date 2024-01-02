@@ -24,9 +24,28 @@ class Parser;
 parser code {:
 /*
     private Scanner scanner;
+    int errores = 0;
+
     public Parser(Scanner scanner) { 
         this.scanner = scanner;
     }
+
+    private int getLineaToken(ComplexSymbol sym){
+        Location l = sym.getLeft();
+        if(l!=null){
+            return l.getLine();
+        }
+        return 0;
+    }
+
+    private int getColumnaToken(ComplexSymbol sym){
+        Location l = sym.getLeft();
+        if(l!=null){
+            return l.getColumn();
+        }
+        return 0;
+    }
+
 */
 :}
 
@@ -102,85 +121,85 @@ non terminal TIPOINSENTENCES;
 
 start with PROGRAMA;
 
-PROGRAMA ::= DECL_VARS MAIN DECL_FUNCIONES                                                                                                                 {::}
+PROGRAMA ::= DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs  {RETURN = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());Semantico semantico = new Semantico(RETURN, parser); if(errores == 0){semantico.runProgram();}}
            ;
 
-
+// TODO
 MAIN ::= tMain tLbracket DECL_VARS SENTS tRbracket                                                                                                         {::}
         ;
  
  
-DECL_VARS ::= DECL_VAR DECL_VARS                                                                                                                           {::}
-             |                                                                                                                                             {::}
+DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars      {RETURN = new NodoDeclVars(dvars,dvar,dvar.getLine(),dvar.getColumn());}
+             |                                   {RETURN = new NodoDeclVars();}
 		     ;
 
-DECL_VAR ::= TIPO tId DECL_ARRAY ASIGN  tPuntocoma                                                                                                         {::}
+DECL_VAR ::= TIPO:t tId:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma:pC   {RETURN = new NodoVar(t,id,darr,asign,pC,t.getLine(),t.getColumn());}
           ; 
 
-DECL_ARRAY ::= DECL_ARRAY tLcorchete tRcorchete                                                                                                            {::}
-               |                                                                                                                                           {::}
+DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor   {RETURN = new NodoDeclArray(dArr,lCor,rCor,dArr.getLine(),dArr.getColumn());}
+               |                                                 {RETURN = new NodoDeclArray();}
 		       ;
 
-ASIGN ::= tIgual T_ASIGN                                                                                                                                   {::} 
-          |                                                                                                                                                {::} 
+ASIGN ::= tIgual:igual T_ASIGN:tAsign     {RETURN = new NodoAsignacion(tigual,tAsign,tAsign.getLine(),tAsign.getColumn());} 
+          |                               {RETURN = new NodoAsignacion();} 
           ; 
 
-T_ASIGN ::= ASIGN_NORMAL                                                                                                                                   {::}
-            | ASIGN_ARRAY                                                                                                                                  {::}         
+T_ASIGN ::= ASIGN_NORMAL:asignNormal     {RETURN = asignNormal;}
+            | ASIGN_ARRAY:asignArray     {RETURN = asignArray;}         
             ;
 
-ASIGN_NORMAL ::= EXPRESION                                                                                                                                 {::}
+ASIGN_NORMAL ::= EXPRESION:expr  {RETURN = new NodoAsignacionNormal(expr, expr.getLine(), expr.getColumn());}
                 ;
 
-ASIGN_ARRAY ::= tNew TIPO DIM_ARRAY                                                                                                                        {::}
+ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray   {RETURN = new NodoAsignacionArray(n,tipo,dimArray,dimArray.getLine(),dimArray.getColumn());}
                 ;
 
-DIM_ARRAY ::= DIM_ARRAY tLcorchete EXPRESION tRcorchete                                                                                                    {::}
-            |                                                                                                                                              {::}
+DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor {RETURN = new NodoDimArray(dimArr,lCor,expr,rCor,dimArr.getLine(),dimArr.getColumn());}                                                                                                   {::}
+            |                                                                 {RETURN = new NodoDimArray();}
 		    ;
-
+// TODO
 REAL_ASIGN ::= tId tIgual EXPRESION tPuntocoma                                                                                                             {::}
             ;
 
-TIPO ::= tInt                                                                                                                                              {::}
-    | tCaracter                                                                                                                                            {::}
-    | tFloat                                                                                                                                               {::}                                     
-    | tBool                                                                                                                                                {::}                               
-    | tStr                                                                                                                                                 {::}                                       
-    | tVoid                                                                                                                                                {::}                     
+TIPO ::= tInt:i      {RETURN = new NodoTipo("int",i.getLine(),i.getColumn());}
+    | tCaracter:c    {RETURN = new NodoTipo("char",c.getLine(),c.getColumn());}
+    | tFloat:f       {RETURN = new NodoTipo("float",f.getLine(),f.getColumn());}                                     
+    | tBool:b        {RETURN = new NodoTipo("bool",b.getLine(),b.getColumn());}                               
+    | tStr:s         {RETURN = new NodoTipo("str",s.getLine(),s.getColumn());}                                       
+    | tVoid:v        {RETURN = new NodoTipo("void",v.getLine(),v.getColumn());}                     
 	;
 
-
+// TODO
 FUNC ::= tFun TIPO DECL_ARRAY tId tLparen DECL_FUNCP tRparen tLbracket DECL_VARS SENTS RETURN tRbracket                                                    {::}
     ;
-
+// TODO
 RETURN ::= tReturn EXPRESION tPuntocoma                                                                                                                    {::}                                                                                                                           
         |                                                                                                                                                  {::} 
         ;
-
+// TODO
 DECL_FUNCP ::= DECL_FUNCPARAMS                                                                                                                             {::}
                |                                                                                                                                           {::}
                ;
-
+// TODO
 DECL_FUNCPARAMS ::= DECL_FUNCPARAM 
                     |DECL_FUNCPARAM tComa DECL_FUNCPARAMS 
                     ;
-
+// TODO
 DECL_FUNCPARAM ::= TIPO tId DECL_ARRAY;
-
+// TODO
 DECL_FUNCIONES ::= DECL_FUNCIONES FUNC                                                                                                                     {::}
               |                                                                                                                                            {::}
 			  ;
-			  
+// TODO			  
 SENTS ::= SENTS SENT                                                                                                                                       {::}
         |                                                                                                                                                  {::}
 	    ;
-
+// TODO
 SENT ::= OTRAS_SENTS                                                                                                                                       {::}
         | REAL_ASIGN                                                                                                                                       {::}
         ;
 
-
+// TODO
 OTRAS_SENTS ::= tIf tLparen PARAMETROS tRparen tLbracket SENTS tRbracket ELSE_COND                                                                         {::}                                                 
            | tWhile tLparen PARAMETROS tRparen tLbracket SENTS tRbracket                                                                                   {::}                      
            | tFor tLparen tId tPuntocoma EXPRESION tPuntocoma OP_RAPIDOS tRparen tLbracket SENTS tRbracket                                                 {::}
@@ -191,25 +210,29 @@ OTRAS_SENTS ::= tIf tLparen PARAMETROS tRparen tLbracket SENTS tRbracket ELSE_CO
            ;
 
 
-
+// TODO
 ELSE_COND ::= tElif tLparen EXPRESION tRparen tLbracket SENTS tRbracket  ELSE_COND                                                                         {::}
           | tElse tLbracket SENTS tRbracket                                                                                                                {::}                                      
           |                                                                                                                                                {::}                   
           ; 
 
+// TODO
 CASOS ::= CASOS tCase INIT_CASES tDospuntos SENTS tBreak tPuntocoma                                                                                        {::}    
      | CASO_DEFAULT                                                                                                                                        {::}
      |                                                                                                                                                     {::}                                                
 	 ;
 
+// TODO
 CASO_DEFAULT ::= tDefault tDospuntos SENTS tBreak tPuntocoma                                                                                               {::}
                 ;
 
+// TODO
 INIT_CASES ::= tEntero                                                                                                                                     {::}
           | tLinea                                                                                                                                         {::}
           | tCaracter                                                                                                                                      {::}
 		  ;
 
+// TODO
 OP_LOG ::= tAnd                                                                                                                                            {::}
       | tOr                                                                                                                                                {::}
       | tMayor                                                                                                                                             {::}
@@ -219,6 +242,7 @@ OP_LOG ::= tAnd                                                                 
       | tIgualIgual                                                                                                                                        {::}
 	  ;
 
+// TODO
 OP_ARIT ::= tSuma                                                                                                                                          {::}
        | tResta                                                                                                                                            {::}
        | tMult                                                                                                                                             {::}
@@ -226,71 +250,79 @@ OP_ARIT ::= tSuma                                                               
        | tMod                                                                                                                                              {::}
 	   ;
 
+// TODO
 OP_RAPIDOS ::= OP_RAPIDO_S                                                                                                                                 {::}
           | OP_RAPIDO_R                                                                                                                                    {::}
           ;
 
+// TODO
 OP_RAPIDO_S ::= tId tSuma tSuma                                                                                                                            {::}
             ;
 
+// TODO
 OP_RAPIDO_R ::= tId tResta tResta                                                                                                                          {::}
             ;
 
+// TODO
 TERMINO_1 ::= tId                                                                                                                                          {::}
          | tEntero                                                                                                                                         {::}
          | LLAMADA_FUNC                                                                                                                                    {::}
          | tDecimal                                                                                                                                        {::}
          ;
 
-/* PREGUNTAR COMO SE PUEDE HACER PARA QUE UN TERMINO PUEDA SER UN ENTERO Y UN REAL*/
+
+// TODO
 TERMINO_2 ::= tId                                                                                                                                          {::}
          | tEntero                                                                                                                                         {::}
          | LLAMADA_FUNC                                                                                                                                    {::}
          | tDecimal                                                                                                                                        {::}
          ;
 
-TERMINOLOG_1 ::= tId                                                                                                                                       {::}
+
+// TODO
+TERMINOLOG_1 ::= tId                                                                                                                                                {::}
          | tTrue                                                                                                                                           {::}
          | tFalse                                                                                                                                          {::}
          | LLAMADA_FUNC                                                                                                                                    {::}
          ;
  
-TERMINOLOG_2 ::= tId                                                                                                                                       {::}
+// TODO
+TERMINOLOG_2 ::= tId                                                                                                                                                           {::}
          | tTrue                                                                                                                                           {::}
          | tFalse                                                                                                                                          {::}
          | LLAMADA_FUNC                                                                                                                                    {::}
          ;
 
 
-EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2                                                                                                            {::}
+EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2     // PEDRO                                                                                                       {::}
                 ;       
                
-EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2                                                                                                         {::}
+EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2    // PEDRO                                                                                                     {::}
                 ;
 
-EXPRESION ::= tLparen EXPRESION tRparen                                                                                                                    {::}
-         | tNot EXPRESION                                                                                                                                  {::}
-         | EXPRESION_LOG                                                                                                                                   {::}
-         | EXPRESION_ARITM                                                                                                                                 {::}
-         | tId                                                                                                                                             {::}
-         | tEntero                                                                                                                                         {::}
-         | tDecimal                                                                                                                                        {::}
-         | tChar                                                                                                                                           {::}
-         | tLinea
-         | tTrue
-         | tFalse                                                                                                                                          {::}
-         | LLAMADA_FUNC                                                                                                                                    {::}
+EXPRESION ::= tLparen EXPRESION tRparen      {RETURN = new NodoExpresion();}        //PEDRO
+         | tNot EXPRESION                    {RETURN = new NodoExpresion();}
+         | EXPRESION_LOG                     {RETURN = new NodoExpresion();}
+         | EXPRESION_ARITM                   {RETURN = new NodoExpresion();}
+         | tId:id                            {RETURN = new NodoExpresion();}
+         | tEntero:i                         {RETURN = new NodoExpresion();}
+         | tDecimal                          {RETURN = new NodoExpresion();}
+         | tChar                             {RETURN = new NodoExpresion();}
+         | tLinea                            {RETURN = new NodoExpresion();}
+         | tTrue                             {RETURN = new NodoExpresion();}
+         | tFalse                            {RETURN = new NodoExpresion();}
+         | LLAMADA_FUNC                      {RETURN = new NodoExpresion();}
 		 
-
+// TODO
 LLAMADA_FUNC ::= tId tLparen PARAMETROS tRparen                                                                                                            {::}
                 ;
-
+// TODO
 PARAMETROS ::= PARAM_SIMPLE                                                                                                                                {::}
           | PARAM_COMPUESTO                                                                                                                                {::}
 		  ;
-
+// TODO
 PARAM_SIMPLE ::= EXPRESION                                                                                                                                 {::}
         ;
-
+// TODO
 PARAM_COMPUESTO ::= PARAMETROS tComa EXPRESION                                                                                                             {::}
     ;

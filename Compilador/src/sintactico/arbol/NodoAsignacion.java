@@ -11,5 +11,7 @@ public class NodoAsignacion extends Nodo{
         nodoTipoAsignacion = ntAsign;
     }
     
-    
+    public NodoAsignacion(){
+        super("NODOASIGN",true);
+    }
 }

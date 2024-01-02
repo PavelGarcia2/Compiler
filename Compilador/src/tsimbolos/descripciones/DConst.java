@@ -3,16 +3,16 @@ package tsimbolos.descripciones;
 
 public class DConst extends Descripcion{
 
-    private Object valor;
+    private int valor;
     private String tipo;
 
-    public DConst (String tipo, Object valor){
+    public DConst (String tipo, int valor){
         super(TDesc.dconst);
         this.tipo = tipo;
         this.valor = valor;
     }
 
-    public Object getValor(){
+    public int getValor(){
         return this.valor;
     }
 

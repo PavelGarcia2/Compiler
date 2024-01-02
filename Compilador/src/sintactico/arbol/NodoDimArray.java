@@ -16,6 +16,10 @@ public class NodoDimArray extends Nodo{
         nodoRCorchete = nSim2;
     }
 
+    public NodoDimArray(){
+        super("DIMARRAY",true);
+    }
+
     public NodoDimArray getNodoDimArray() {
         return nodoDimArray;
     }

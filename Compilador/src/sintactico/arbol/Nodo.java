@@ -21,4 +21,8 @@ public class Nodo extends ComplexSymbol {
         vacio = v;
     }
 
+    public boolean isEmpty() {
+        return vacio;
+    }
+
 }

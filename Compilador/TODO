@@ -1,0 +1,14 @@
+TRABAJO POR HACER:
+
+  - Completar arbol sintactico explicito la rama de declaracion de variables ya esta hecha (Hacer rama MAIN y DECL_FUNC) (package sintactico.arbol)
+  - Una vez completado el arbol sintactico crear los nodos en Parser.cup (package sintactico)
+  - Implementar funciones Semantico.java (package semantico) control de declaraciones
+
+
+# Implementar en un futuro
+PENDIENTES:
+
+  - implementar el null
+  - implementar begin Declarations y end declaration dentro de los sub progr
+
+

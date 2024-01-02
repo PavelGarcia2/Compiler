@@ -15,6 +15,11 @@ public class NodoDeclVars extends Nodo {
 
     }
 
+    public NodoDeclVars(){
+        //LAMBDA
+        super("DeclVars", true);
+    }
+
     public NodoVar getNodoDeclaracionVariable() {
         return nodoDeclaracionVariable;
     }

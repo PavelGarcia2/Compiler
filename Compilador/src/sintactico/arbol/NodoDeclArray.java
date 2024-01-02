@@ -12,4 +12,8 @@ public class NodoDeclArray extends Nodo{
         lCorchete = lC;
         rCorchete = rC;
     }
+
+    public NodoDeclArray(){
+        super("DECLARRAY", true);
+    }
 }
