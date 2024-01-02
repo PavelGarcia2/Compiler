@@ -121,82 +121,83 @@ non terminal NodoReturn RETURN;
 
 start with PROGRAMA;
 
-PROGRAMA ::= DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs  {: RETURN = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());Semantico semantico = new Semantico(RETURN, parser); if(errores == 0){semantico.runProgram();} :}                                                                                                 {::
+PROGRAMA ::= DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs                                                                                                                            {: RETURN = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());
+                                                                                                                                                                                        Semantico semantico = new Semantico(RETURN, parser); if(errores == 0){semantico.runProgram();} :}                                                                                           
            ;
 
 // TODO
-MAIN ::= tMain:main tLbracket:lbr DECL_VARS:dvars SENTS:sents tRbracket:rbr                                        {:RETURN= new NodoMain(main,lbr,dvars,sents,rbr,main.getLine(),main.getColumn());:}
+MAIN ::= tMain:main tLbracket:lbr DECL_VARS:dvars SENTS:sents tRbracket:rbr                                                                                                             {: RETURN= new NodoMain(main,lbr,dvars,sents,rbr,main.getLine(),main.getColumn()); :}
         ;
  
  
-DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars      {: RETURN = new NodoDeclVars(dvars,dvar,dvar.getLine(),dvar.getColumn()); :}
-             |                                   {: RETURN = new NodoDeclVars(); :}
+DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars                                                                                                                                             {: RETURN = new NodoDeclVars(dvars,dvar,dvar.getLine(),dvar.getColumn()); :}
+             |                                                                                                                                                                          {: RETURN = new NodoDeclVars(); :}
 		     ;
 
-DECL_VAR ::= TIPO:t tId:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma:pC   {: RETURN = new NodoVar(t,id,darr,asign,pC,t.getLine(),t.getColumn()); :}
+DECL_VAR ::= TIPO:t tId:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma:pC                                                                                                                   {: RETURN = new NodoVar(t,id,darr,asign,pC,t.getLine(),t.getColumn()); :}
           ; 
 
-DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor   {RETURN = new NodoDeclArray(dArr,lCor,rCor,dArr.getLine(),dArr.getColumn());}
-               |                                                 {RETURN = new NodoDeclArray();}
+DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor                                                                                                                          {: RETURN = new NodoDeclArray(dArr,lCor,rCor,dArr.getLine(),dArr.getColumn()); :}
+               |                                                                                                                                                                        {: RETURN = new NodoDeclArray(); :}
 		       ;
 
-ASIGN ::= tIgual:igual T_ASIGN:tAsign     {RETURN = new NodoAsignacion(tigual,tAsign,tAsign.getLine(),tAsign.getColumn());} 
-          |                               {RETURN = new NodoAsignacion();} 
+ASIGN ::= tIgual:igual T_ASIGN:tAsign                                                                                                                                                   {: RETURN = new NodoAsignacion(tigual,tAsign,tAsign.getLine(),tAsign.getColumn()); :} 
+          |                                                                                                                                                                             {: RETURN = new NodoAsignacion(); :} 
           ; 
 
-T_ASIGN ::= ASIGN_NORMAL:asignNormal     {RETURN = asignNormal;}
-            | ASIGN_ARRAY:asignArray     {RETURN = asignArray;}         
+T_ASIGN ::= ASIGN_NORMAL:asignNormal                                                                                                                                                    {: RETURN = asignNormal; :}
+            | ASIGN_ARRAY:asignArray                                                                                                                                                    {: RETURN = asignArray; :}         
             ;
 
-ASIGN_NORMAL ::= EXPRESION:expr  {RETURN = new NodoAsignacionNormal(expr, expr.getLine(), expr.getColumn());}
+ASIGN_NORMAL ::= EXPRESION:expr                                                                                                                                                         {: RETURN = new NodoAsignacionNormal(expr, expr.getLine(), expr.getColumn()); :}
                 ;
 
-ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray   {RETURN = new NodoAsignacionArray(n,tipo,dimArray,dimArray.getLine(),dimArray.getColumn());}
+ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray                                                                                                                                     {: RETURN = new NodoAsignacionArray(n,tipo,dimArray,dimArray.getLine(),dimArray.getColumn()); :}
                 ;
 
-DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor {RETURN = new NodoDimArray(dimArr,lCor,expr,rCor,dimArr.getLine(),dimArr.getColumn());}                                                                                                   {::}
-            |                                                                 {RETURN = new NodoDimArray();}
+DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor                                                                                                           {: RETURN = new NodoDimArray(dimArr,lCor,expr,rCor,dimArr.getLine(),dimArr.getColumn()); :}                                                                                                
+            |                                                                                                                                                                           {: RETURN = new NodoDimArray(); :}
 		    ;
 // TODO
-REAL_ASIGN ::= tId tIgual EXPRESION tPuntocoma                                                                                                             {::}
+REAL_ASIGN ::= tId:id tIgual:igual EXPRESION:exp tPuntocoma:pcoma                                                                                                                       {: RETURN= new NodoRealAsign(id,igual,exp,pcoma,id.getLine(),id.getColumn()); :}
             ;
 
-TIPO ::= tInt:i      {RETURN = new NodoTipo("int",i.getLine(),i.getColumn());}
-    | tCaracter:c    {RETURN = new NodoTipo("char",c.getLine(),c.getColumn());}
-    | tFloat:f       {RETURN = new NodoTipo("float",f.getLine(),f.getColumn());}                                     
-    | tBool:b        {RETURN = new NodoTipo("bool",b.getLine(),b.getColumn());}                               
-    | tStr:s         {RETURN = new NodoTipo("str",s.getLine(),s.getColumn());}                                       
-    | tVoid:v        {RETURN = new NodoTipo("void",v.getLine(),v.getColumn());}                     
+TIPO ::= tInt:i                                                                                                                                                                         {: RETURN = new NodoTipo("int",i.getLine(),i.getColumn()); :}
+    | tCaracter:c                                                                                                                                                                       {: RETURN = new NodoTipo("char",c.getLine(),c.getColumn()); :}
+    | tFloat:f                                                                                                                                                                          {: RETURN = new NodoTipo("float",f.getLine(),f.getColumn()); :}                                     
+    | tBool:b                                                                                                                                                                           {: RETURN = new NodoTipo("bool",b.getLine(),b.getColumn()); :}                               
+    | tStr:s                                                                                                                                                                            {: RETURN = new NodoTipo("str",s.getLine(),s.getColumn()); :}                                       
+    | tVoid:v                                                                                                                                                                           {: RETURN = new NodoTipo("void",v.getLine(),v.getColumn()); :}                     
 	;
 
 // TODO
-FUNC ::= tFun TIPO DECL_ARRAY tId tLparen DECL_FUNCP tRparen tLbracket DECL_VARS SENTS RETURN tRbracket                                                    {::}
+FUNC ::= tFun:func TIPO:tipo DECL_ARRAY:decarr tId:id tLparen:lparen DECL_FUNCP:decfuncp tRparen:trpaen tLbracket:lbr DECL_VARS:declvars SENTS:sents RETURN:retorno tRbracket:rbr       {:RETURN= new NodoFunc(func,tipo,decarr,id,lparen,id,lparen,decfuncp,trpaen,lbr,declvars,sents,retorno,rbr); :}
     ;
 // TODO
-RETURN ::= tReturn EXPRESION tPuntocoma                                                                                                                    {::}                                                                                                                           
-        |                                                                                                                                                  {::} 
+RETURN ::= tReturn:retorno EXPRESION:exp tPuntocoma:pcoma                                                                                                                               {: RETURN= new NodoReturn(retorno,exp,pcoma,retorno.getLine(),retorno.getColumn()); :}                                                                                                                           
+        |                                                                                                                                                                               {: RETURN= new NodoReturn(); :} 
         ;
 // TODO
-DECL_FUNCP ::= DECL_FUNCPARAMS                                                                                                                             {::}
-               |                                                                                                                                           {::}
+DECL_FUNCP ::= DECL_FUNCPARAMS:funcpa                                                                                                                                                   {: RETURN= new NodoDeclFuncP(funcpa, funcpa.getLine(),funcpa.getColumn()); :}
+               |                                                                                                                                                                        {: RETURN= new NodoDeclFuncP(); :}
                ;
 // TODO
-DECL_FUNCPARAMS ::= DECL_FUNCPARAM 
-                    |DECL_FUNCPARAM tComa DECL_FUNCPARAMS 
+DECL_FUNCPARAMS ::= DECL_FUNCPARAM:declparam                                                                                                                                            {:RETURN= new NodoDeclFuncParams(declparam,declparam.getLine(),declparam.getColumn());:}
+                    |DECL_FUNCPARAM:declparam tComa:coma DECL_FUNCPARAMS:declparams                                                                                                     {: RETURN= new NodoDeclFuncParams(declparam,coma,declparams,declparam.getLine(),declparam.getColumn());:}
                     ;
 // TODO
-DECL_FUNCPARAM ::= TIPO tId DECL_ARRAY;
+DECL_FUNCPARAM ::= TIPO:tipo tId:id DECL_ARRAY:declarr;                                                                                                                                 {: RETURN= new NodoDeclFuncParam(tipo,id,declarr,tipo.getLine(),tipo.getColumn()); :}
 // TODO
-DECL_FUNCIONES ::= DECL_FUNCIONES FUNC                                                                                                                     {::}
-              |                                                                                                                                            {::}
+DECL_FUNCIONES ::= DECL_FUNCIONES:declfunc FUNC:func                                                                                                                                    {: RETURN = new NodoDeclFunc(declfunc,func,declfunc.getLine(),declfunc.getColumn()); :}
+              |                                                                                                                                                                         {: RETURN = new NodoDeclFunc(); :}
 			  ;
 // TODO			  
-SENTS ::= SENTS SENT                                                                                                                                       {::}
-        |                                                                                                                                                  {::}
+SENTS ::= SENTS:sents SENT:sent                                                                                                                                                         {: RETURN= new NodoSents(sents,sent,sents.getLine(),sents.getColumn()); :}
+        |                                                                                                                                                                               {: RETURN= new NodoSents() :}
 	    ;
 // TODO
-SENT ::= OTRAS_SENTS                                                                                                                                       {::}
-        | REAL_ASIGN                                                                                                                                       {::}
+SENT ::= OTRAS_SENTS:otras                                                                                                                                                              {: RETURN= new NodoSent(otras,otras.getLine(),otras.getColumn()); :}
+        | REAL_ASIGN:real                                                                                                                                                               {: RETURN= new NodoSent(real,real.getLine(),real.getColumn()); :}
         ;
 
 // TODO
@@ -211,15 +212,15 @@ OTRAS_SENTS ::= tIf tLparen PARAMETROS tRparen tLbracket SENTS tRbracket ELSE_CO
 
 
 // TODO
-ELSE_COND ::= tElif tLparen EXPRESION tRparen tLbracket SENTS tRbracket  ELSE_COND                                                                         {::}
-          | tElse tLbracket SENTS tRbracket                                                                                                                {::}                                      
-          |                                                                                                                                                {::}                   
+ELSE_COND ::= tElif:elif tLparen:lparen EXPRESION:exp tRparen:rparen tLbracket:lbr SENTS:sents tRbracket:rbr  ELSE_COND:elsecond                                                        {: RETURN= new NodoElse(elif,lparen,exp,rparen,lbr,sents,rbr,elsecond,elif.getLine(),elif.getColumn()); :}
+          | tElse:telse tLbracket:lbr SENTS:sents tRbracket:rbr                                                                                                                         {: RETURN= new NodoElse(telse,lbr,sents,rbr,telse.getLine(),telse.getColumn()); :}                                      
+          |                                                                                                                                                                             {: RETURN= new NodoElse(); :}                   
           ; 
 
 // TODO
-CASOS ::= CASOS tCase INIT_CASES tDospuntos SENTS tBreak tPuntocoma                                                                                        {::}    
-     | CASO_DEFAULT                                                                                                                                        {::}
-     |                                                                                                                                                     {::}                                                
+CASOS ::= CASOS:casos tCase:tcase INIT_CASES:icase tDospuntos:dosp SENTS:sents tBreak:tbreak tPuntocoma:pco                                                                             {: RETURN= new NodoCase(casos,tcase,icase,dosp,sents,tbreak,pco,casos.getLine(), casos.getColumn()); :}    
+     | CASO_DEFAULT:def                                                                                                                                                                 {: RETURN= new NodoCase(def,def.getLine(),def.getColumn()); :}
+     |                                                                                                                                                                                  {: RETURN= new NodoCase(); :}                                                
 	 ;
 
 // TODO
@@ -300,18 +301,18 @@ EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2     // PEDRO                    
 EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2    // PEDRO                                                                                                     {::}
                 ;
 
-EXPRESION ::= tLparen EXPRESION tRparen      {RETURN = new NodoExpresion();}        //PEDRO
-         | tNot EXPRESION                    {RETURN = new NodoExpresion();}
-         | EXPRESION_LOG                     {RETURN = new NodoExpresion();}
-         | EXPRESION_ARITM                   {RETURN = new NodoExpresion();}
-         | tId:id                            {RETURN = new NodoExpresion();}
-         | tEntero:i                         {RETURN = new NodoExpresion();}
-         | tDecimal                          {RETURN = new NodoExpresion();}
-         | tChar                             {RETURN = new NodoExpresion();}
-         | tLinea                            {RETURN = new NodoExpresion();}
-         | tTrue                             {RETURN = new NodoExpresion();}
-         | tFalse                            {RETURN = new NodoExpresion();}
-         | LLAMADA_FUNC                      {RETURN = new NodoExpresion();}
+EXPRESION ::= tLparen EXPRESION tRparen      {: RETURN = new NodoExpresion(); :}        //PEDRO
+         | tNot EXPRESION                    {: RETURN = new NodoExpresion(); :}
+         | EXPRESION_LOG                     {: RETURN = new NodoExpresion(); :}
+         | EXPRESION_ARITM                   {: RETURN = new NodoExpresion(); :}
+         | tId:id                            {: RETURN = new NodoExpresion(); :}
+         | tEntero:i                         {: RETURN = new NodoExpresion(); :}
+         | tDecimal                          {: RETURN = new NodoExpresion(); :}
+         | tChar                             {: RETURN = new NodoExpresion(); :}
+         | tLinea                            {: RETURN = new NodoExpresion(); :}
+         | tTrue                             {: RETURN = new NodoExpresion(); :}
+         | tFalse                            {: RETURN = new NodoExpresion(); :}
+         | LLAMADA_FUNC                      {: RETURN = new NodoExpresion(); :}
 		 
 // TODO
 LLAMADA_FUNC ::= tId tLparen PARAMETROS tRparen                                                                                                            {::}
