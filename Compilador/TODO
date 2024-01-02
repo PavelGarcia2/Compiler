@@ -12,3 +12,28 @@ PENDIENTES:
   - implementar begin Declarations y end declaration dentro de los sub progr
 
 
+
+Hecho por Constantino:
+
+  - Nodo sents
+  - nodo sent
+  - Nodo otras_sent (hay que revisarlo, y capaz modificarlo)
+  - Nodo RealAsign
+  - nodo main
+  - nodo return
+  - nodo func
+  - nodo declfuncP
+  - nodo declfuncparams
+  - nodo declfuncparam
+  - nodo declfunc
+  - nodo parametros
+  - nodo paramSimple
+  - nodo paramCompuesto
+  - nodo else
+  - nodo case
+  - nodo case default
+  - nodo InitCases (no se como meter la definicion de un string, nuemro o char)
+  - nodo OpRapidos
+  - nodo OpRapidosSuma 
+  - nodo OpRapidosResta 
+

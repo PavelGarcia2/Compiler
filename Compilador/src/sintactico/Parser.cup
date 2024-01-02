@@ -72,56 +72,56 @@ terminal ComplexSymbol tPrint,tPrintln,tId,tEntero,tRparen,tLparen,tRbracket,tLb
 
 
 
-non terminal PROGRAMA;
-non terminal MAIN;
-non terminal DECL_VARS;
-non terminal DECL_VAR;
-non terminal DECL_ARRAY;
-non terminal ASIGN;
-non terminal T_ASIGN;
-non terminal ASIGN_NORMAL;
-non terminal ASIGN_ARRAY;
-non terminal DIM_ARRAY;
-non terminal REAL_ASIGN;
-non terminal TIPO;
-non terminal FUNC;
-non terminal DECL_FUNCIONES;
-non terminal SENTS;
-non terminal SENT;
-non terminal OTRAS_SENTS;
-non terminal CASOS;
-non terminal CASO_DEFAULT;
-non terminal INIT_CASES;
+non terminal NodoPrograma PROGRAMA;
+non terminal NodoMain MAIN;
+non terminal NodoDeclVars DECL_VARS;
+non terminal NodoVar DECL_VAR;
+non terminal NodoDeclArray DECL_ARRAY;
+non terminal NodoAsignacion ASIGN;
+non terminal NodoTipoAsignacion T_ASIGN;
+non terminal NodoAsignacionNormal ASIGN_NORMAL;
+non terminal NodoAsignacionArray ASIGN_ARRAY;
+non terminal NodoDimArray DIM_ARRAY;
+non terminal NodoRealAsign REAL_ASIGN;
+non terminal NodoTipo TIPO;
+non terminal NodFunc FUNC;
+non terminal NodoDeclFunc DECL_FUNCIONES;
+non terminal NodoSents SENTS;
+non terminal NodoSent SENT;
+non terminal NodoOtrasSent OTRAS_SENTS;
+non terminal NodoCase CASOS;
+non terminal NodoCaseDefault CASO_DEFAULT;
+non terminal NodoInitCases INIT_CASES;
 non terminal OP_LOG;
 non terminal OP_ARIT;
-non terminal OP_RAPIDOS;
-non terminal OP_RAPIDO_S;
-non terminal OP_RAPIDO_R;
+non terminal NodoOpRapidos OP_RAPIDOS;
+non terminal NodoOpRapidosSuma OP_RAPIDO_S;
+non terminal NodoOpRapidosResta OP_RAPIDO_R;
 non terminal TERMINO_1;
 non terminal TERMINO_2;
 non terminal TERMINOLOG_1;
 non terminal TERMINOLOG_2;
 non terminal EXPRESION_ARITM;
 non terminal EXPRESION_LOG;
-non terminal EXPRESION;
-non terminal LLAMADA_FUNC;
-non terminal PARAMETROS;
-non terminal PARAM_SIMPLE;
-non terminal PARAM_COMPUESTO;
-non terminal ELSE_COND;
-non terminal DECL_FUNCP;
-non terminal DECL_FUNCPARAMS;
-non terminal DECL_FUNCPARAM;
-non terminal RETURN;
-non terminal DECLVAR;
-non terminal TIPOINSENTENCES;
+non terminal NodoExpresion EXPRESION;
+non terminal NodoLlamadaFunc LLAMADA_FUNC;
+non terminal NodoParametros PARAMETROS;
+non terminal NodoParamSimple PARAM_SIMPLE;
+non terminal NodoParamCompuesto PARAM_COMPUESTO;
+non terminal NodoElse ELSE_COND;
+non terminal NodoDeclFuncP DECL_FUNCP;
+non terminal NodoDeclFuncParams DECL_FUNCPARAMS;
+non terminal NodoDeclFuncParam DECL_FUNCPARAM;
+non terminal NodoReturn RETURN;
+
+
 
 
 
 
 start with PROGRAMA;
 
-PROGRAMA ::= DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs  {RETURN = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());Semantico semantico = new Semantico(RETURN, parser); if(errores == 0){semantico.runProgram();}}
+PROGRAMA ::= DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs  {: RETURN = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());Semantico semantico = new Semantico(RETURN, parser); if(errores == 0){semantico.runProgram();} :}                                                                                                 {::
            ;
 
 // TODO
@@ -129,11 +129,11 @@ MAIN ::= tMain tLbracket DECL_VARS SENTS tRbracket                              
         ;
  
  
-DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars      {RETURN = new NodoDeclVars(dvars,dvar,dvar.getLine(),dvar.getColumn());}
-             |                                   {RETURN = new NodoDeclVars();}
+DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars      {: RETURN = new NodoDeclVars(dvars,dvar,dvar.getLine(),dvar.getColumn()); :}
+             |                                   {: RETURN = new NodoDeclVars(); :}
 		     ;
 
-DECL_VAR ::= TIPO:t tId:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma:pC   {RETURN = new NodoVar(t,id,darr,asign,pC,t.getLine(),t.getColumn());}
+DECL_VAR ::= TIPO:t tId:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma:pC   {: RETURN = new NodoVar(t,id,darr,asign,pC,t.getLine(),t.getColumn()); :}
           ; 
 
 DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor   {RETURN = new NodoDeclArray(dArr,lCor,rCor,dArr.getLine(),dArr.getColumn());}
