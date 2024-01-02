@@ -92,8 +92,8 @@ non terminal NodoOtrasSent OTRAS_SENTS;
 non terminal NodoCase CASOS;
 non terminal NodoCaseDefault CASO_DEFAULT;
 non terminal NodoInitCases INIT_CASES;
-non terminal OP_LOG;
-non terminal OP_ARIT;
+non terminal NodoOpLog OP_LOG;
+non terminal NodoOpArit OP_ARIT;
 non terminal NodoOpRapidos OP_RAPIDOS;
 non terminal NodoOpRapidosSuma OP_RAPIDO_S;
 non terminal NodoOpRapidosResta OP_RAPIDO_R;
@@ -171,7 +171,7 @@ TIPO ::= tInt:i                                                                 
 	;
 
 // TODO
-FUNC ::= tFun:func TIPO:tipo DECL_ARRAY:decarr tId:id tLparen:lparen DECL_FUNCP:decfuncp tRparen:trpaen tLbracket:lbr DECL_VARS:declvars SENTS:sents RETURN:retorno tRbracket:rbr       {:RETURN= new NodoFunc(func,tipo,decarr,id,lparen,id,lparen,decfuncp,trpaen,lbr,declvars,sents,retorno,rbr); :}
+FUNC ::= tFun:func TIPO:tipo DECL_ARRAY:decarr tId:id tLparen:lparen DECL_FUNCP:decfuncp tRparen:trpaen tLbracket:lbr DECL_VARS:declvars SENTS:sents RETURN:retorno tRbracket:rbr       {:RETURN= new NodoFunc(func,tipo,decarr,id,lparen,id,lparen,decfuncp,trpaen,lbr,declvars,sents,retorno,rbr,func.getLine(),func.getColumn()); :}
     ;
 // TODO
 RETURN ::= tReturn:retorno EXPRESION:exp tPuntocoma:pcoma                                                                                                                               {: RETURN= new NodoReturn(retorno,exp,pcoma,retorno.getLine(),retorno.getColumn()); :}                                                                                                                           
@@ -201,13 +201,13 @@ SENT ::= OTRAS_SENTS:otras                                                      
         ;
 
 // TODO
-OTRAS_SENTS ::= tIf tLparen PARAMETROS tRparen tLbracket SENTS tRbracket ELSE_COND                                                                         {::}                                                 
-           | tWhile tLparen PARAMETROS tRparen tLbracket SENTS tRbracket                                                                                   {::}                      
-           | tFor tLparen tId tPuntocoma EXPRESION tPuntocoma OP_RAPIDOS tRparen tLbracket SENTS tRbracket                                                 {::}
-           | tSwitch tLparen tId tRparen tLbracket CASOS tRbracket                                                                                         {::}    
-           | tPrint tLparen EXPRESION tRparen tPuntocoma                                                                                                   {::}
-           | tPrintln tLparen EXPRESION tRparen tPuntocoma                                                                                                 {::}  
-           | LLAMADA_FUNC tPuntocoma                                                                                                                       {::}
+OTRAS_SENTS ::= tIf:tif tLparen:tlparen PARAMETROS:parametros tRparen:trparen tLbracket:tlbracket SENTS:sents tRbracket:trbracket ELSE_COND:elsecond                                    {: RETURN= new NodoOtrasSents(tif,tlparen,parametros,trparen,tlbracket,sents,trbracket,elsecond,tif.getLine(), tif.getColumn()); :}                                                 
+           | tWhile:twhile tLparen:tlparen PARAMETROS:parametros tRparen:trparen tLbracket:tlbracket SENTS:sents tRbracket:trbracket                                                    {: RETURN= new NodoOtrasSents(twhile,tlparen,parametros,trparen,tlbracket,sents,trbracket,twhile.getLine(), twhile.getColumn()); :}                      
+           | tFor:tfor tLparen:tlparen tId:tid tPuntocoma:tpuntocoma EXPRESION:exp tPuntocoma:tpuntocoma OP_RAPIDOS:oprapidos tRparen:trparen tLbracket:tlbracket SENTS:sents tRbracket:trbracket  {: RETURN= new NodoOtrasSents(tfor,tlparen,tid,tpuntocoma,exp,tpuntocoma,oprapidos,trparen,tlbracket,sents, trbracket, tfor.getLine(), tfor.getColumn());:}
+           | tSwitch:tswitch tLparen:tlparen tId:tid tRparen:trparen tLbracket:tlbracket CASOS:casos tRbracket:trbracket                                                                {: RETURN= new NodoOtrasSents(tswitch,tlparen,tid,trparen,tlbracket,casos,trbracket,tswitch.getLine(), tswitch.getColumn());:}    
+           | tPrint:tprint tLparen:tlparen EXPRESION:exp tRparen:trparen tPuntocoma:tpuntocoma                                                                                          {: RETURN= new NodoOtrasSents(tprint,tlparen,exp,trparen,tpuntocoma,tprint.getLine(),tprint.getColumn());:}
+           | tPrintln:tprintln tLparen:tlparen EXPRESION:exp tRparen:trparen tPuntocoma:tpuntocoma                                                                                      {: RETURN= new NodoOtrasSents(tprintln,tlparen,exp,trparen,tpuntocoma,tprintln.getLine(),tprintln.getColumn());:}  
+           | LLAMADA_FUNC:llamFunc tPuntocoma:pcoma                                                                                                                                     {: RETURN= new NodoOtrasSents(llamFunc,pcoma,llamFunc.getLine(),llamFunc.getColumn()); :}
            ;
 
 
@@ -224,44 +224,44 @@ CASOS ::= CASOS:casos tCase:tcase INIT_CASES:icase tDospuntos:dosp SENTS:sents t
 	 ;
 
 // TODO
-CASO_DEFAULT ::= tDefault tDospuntos SENTS tBreak tPuntocoma                                                                                               {::}
+CASO_DEFAULT ::= tDefault:tbreak tDospuntos:tdospuntos SENTS:sents tBreak:tbreak tPuntocoma:tpuntocoma                                                                                  {: RETURN= new NodoCaseDefault(tbreak, tdospuntos,sents,tbreak,tpuntocoma,tbreak.getLine(),t.break.getColumn()); :}
                 ;
 
 // TODO
-INIT_CASES ::= tEntero                                                                                                                                     {::}
-          | tLinea                                                                                                                                         {::}
-          | tCaracter                                                                                                                                      {::}
+INIT_CASES ::= tEntero                                                                                                                                     {: RETURN= new NodoInitCases(tEntero, tEntero.getLine(), tEntero.getColumn()) ;:}
+          | tLinea                                                                                                                                         {: RETURN= new NodoInitCases(tLinea, tLinea.getLine(), tLinea.getColumn()) ;:}
+          | tCaracter                                                                                                                                      {: RETURN= new NodoInitCases(tCaracter, tCaracter.getLine(), tCaracter.getColumn()) ;:}
 		  ;
 
 // TODO
-OP_LOG ::= tAnd                                                                                                                                            {::}
-      | tOr                                                                                                                                                {::}
-      | tMayor                                                                                                                                             {::}
-      | tMenor                                                                                                                                             {::}
-      | tIgualMay                                                                                                                                          {::}
-      | tIgualMenor                                                                                                                                        {::}
-      | tIgualIgual                                                                                                                                        {::}
+OP_LOG ::= tAnd                                                                                                                                            {: RETURN= new NodoOpLog(tAnd, tAnd.getLine(), tAnd.getColumn()); :}
+      | tOr                                                                                                                                                {: RETURN= new NodoOpLog(tOr,tOr.getLine(), tOr.getColumn());:}
+      | tMayor                                                                                                                                             {: RETURN= new NodoOpLog(tMayor,tMayor.getLine(), tMayor.getColumn());:}
+      | tMenor                                                                                                                                             {: RETURN= new NodoOpLog(tMenor, tMenor.getLine(), tMenor.getColumn());:}
+      | tIgualMay                                                                                                                                          {: RETURN= new NodoOpLog(tIgualMay, tIgualMay.getLine(), tIgualMay.getColumn());:}
+      | tIgualMenor                                                                                                                                        {: RETURN= new NodoOpLog(tIgualMenor,tIgualMenor.getLine(), tIgualMenor.getColumn());:}
+      | tIgualIgual                                                                                                                                        {: RETURN= new NodoOpLog(tIgualIgual,tIgualIgual.getLine(), tIgualIgual.getColumn());:}
 	  ;
 
 // TODO
-OP_ARIT ::= tSuma                                                                                                                                          {::}
-       | tResta                                                                                                                                            {::}
-       | tMult                                                                                                                                             {::}
-       | tDiv                                                                                                                                              {::}
-       | tMod                                                                                                                                              {::}
+OP_ARIT ::= tSuma                                                                                                                                          {:RETURN= new NodoOpArit(tSuma, tSuma.getLine(), tSuma.getColumn()); :}
+       | tResta                                                                                                                                            {:RETURN= new NodoOpArit(tResta, tAnd.getLine(), tResta.getColumn());:}
+       | tMult                                                                                                                                             {:RETURN= new NodoOpArit(tMult, tAnd.getLine(), tMult.getColumn());:}
+       | tDiv                                                                                                                                              {:RETURN= new NodoOpArit(tDiv, tAnd.getLine(), tDiv.getColumn());:}
+       | tMod                                                                                                                                              {:RETURN= new NodoOpArit(tMod, tAnd.getLine(), tMod.getColumn());:}
 	   ;
 
 // TODO
-OP_RAPIDOS ::= OP_RAPIDO_S                                                                                                                                 {::}
-          | OP_RAPIDO_R                                                                                                                                    {::}
+OP_RAPIDOS ::= OP_RAPIDO_S:rapidossuma                                                                                                                     {: RETURN= new NodoOpRapidos(rapidossuma, rapidossuma.getFila(), rapidossuma.getColumn()); :}
+          | OP_RAPIDO_R:rapidosresta                                                                                                                       {: RETURN= new NodoOpRapidos(rapidosresta ,rapidosresta.getFila(), rapidosresta.getColumn());:}
           ;
 
 // TODO
-OP_RAPIDO_S ::= tId tSuma tSuma                                                                                                                            {::}
+OP_RAPIDO_S ::= tId tSuma tSuma                                                                                                                            {:RETURN= new NodoOpRapidosSuma(tId,tSuma,tSuma, tId.getFila(), tId.getColumn());:}
             ;
 
 // TODO
-OP_RAPIDO_R ::= tId tResta tResta                                                                                                                          {::}
+OP_RAPIDO_R ::= tId tResta tResta                                                                                                                          {:RETURN= new NodoOpRapidosResta(tId,tResta,tResta, tId.getFila(), tId.getColumn());:}
             ;
 
 // TODO
@@ -281,49 +281,50 @@ TERMINO_2 ::= tId                                                               
 
 
 // TODO
-TERMINOLOG_1 ::= tId                                                                                                                                                {::}
+TERMINOLOG_1 ::= tId                                                                                                                                       {::}
          | tTrue                                                                                                                                           {::}
          | tFalse                                                                                                                                          {::}
          | LLAMADA_FUNC                                                                                                                                    {::}
          ;
  
 // TODO
-TERMINOLOG_2 ::= tId                                                                                                                                                           {::}
+TERMINOLOG_2 ::= tId                                                                                                                                       {::}
          | tTrue                                                                                                                                           {::}
          | tFalse                                                                                                                                          {::}
          | LLAMADA_FUNC                                                                                                                                    {::}
          ;
 
-
-EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2     // PEDRO                                                                                                       {::}
+// PEDRO   
+EXPRESION_ARITM ::= TERMINO_1 OP_ARIT TERMINO_2                                                                                                            {::}
                 ;       
-               
-EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2    // PEDRO                                                                                                     {::}
-                ;
 
-EXPRESION ::= tLparen EXPRESION tRparen      {: RETURN = new NodoExpresion(); :}        //PEDRO
-         | tNot EXPRESION                    {: RETURN = new NodoExpresion(); :}
-         | EXPRESION_LOG                     {: RETURN = new NodoExpresion(); :}
-         | EXPRESION_ARITM                   {: RETURN = new NodoExpresion(); :}
-         | tId:id                            {: RETURN = new NodoExpresion(); :}
-         | tEntero:i                         {: RETURN = new NodoExpresion(); :}
-         | tDecimal                          {: RETURN = new NodoExpresion(); :}
-         | tChar                             {: RETURN = new NodoExpresion(); :}
-         | tLinea                            {: RETURN = new NodoExpresion(); :}
-         | tTrue                             {: RETURN = new NodoExpresion(); :}
-         | tFalse                            {: RETURN = new NodoExpresion(); :}
-         | LLAMADA_FUNC                      {: RETURN = new NodoExpresion(); :}
+ // PEDRO                 
+EXPRESION_LOG ::= TERMINOLOG_1 OP_LOG TERMINOLOG_2                                                                                                         {::}
+                ;
+//PEDRO
+EXPRESION ::= tLparen EXPRESION tRparen                                                                                                                    {: RETURN = new NodoExpresion(); :}        
+         | tNot EXPRESION                                                                                                                                  {: RETURN = new NodoExpresion(); :}
+         | EXPRESION_LOG                                                                                                                                   {: RETURN = new NodoExpresion(); :}
+         | EXPRESION_ARITM                                                                                                                                 {: RETURN = new NodoExpresion(); :}
+         | tId:id                                                                                                                                          {: RETURN = new NodoExpresion(); :}
+         | tEntero:i                                                                                                                                       {: RETURN = new NodoExpresion(); :}
+         | tDecimal                                                                                                                                        {: RETURN = new NodoExpresion(); :}
+         | tChar                                                                                                                                           {: RETURN = new NodoExpresion(); :}
+         | tLinea                                                                                                                                          {: RETURN = new NodoExpresion(); :}
+         | tTrue                                                                                                                                           {: RETURN = new NodoExpresion(); :}
+         | tFalse                                                                                                                                          {: RETURN = new NodoExpresion(); :}
+         | LLAMADA_FUNC                                                                                                                                    {: RETURN = new NodoExpresion(); :}
 		 
 // TODO
-LLAMADA_FUNC ::= tId tLparen PARAMETROS tRparen                                                                                                            {::}
+LLAMADA_FUNC ::= tId:id tLparen:lparen PARAMETROS:param tRparen:rparen                                                                                     {: RETURN= new NodoLlamadaFunc(id,lparen,param,rparen,id.getLine(),id.getColumn()); :}
                 ;
 // TODO
-PARAMETROS ::= PARAM_SIMPLE                                                                                                                                {::}
-          | PARAM_COMPUESTO                                                                                                                                {::}
+PARAMETROS ::= PARAM_SIMPLE:simple                                                                                                                         {: RETURN= new NodoParametros(simple,simple.getLine(),simple.getColumn());:}
+          | PARAM_COMPUESTO:compuesto                                                                                                                      {: RETURN= new NodoParametros(compuesto, compuesto.getLine(),compuesto.getColumn());:}
 		  ;
 // TODO
-PARAM_SIMPLE ::= EXPRESION                                                                                                                                 {::}
+PARAM_SIMPLE ::= EXPRESION:exp                                                                                                                             {: RETURN= new NodoParamSimple(exp,exp.getLine(),exp.getColumn()); :}
         ;
 // TODO
-PARAM_COMPUESTO ::= PARAMETROS tComa EXPRESION                                                                                                             {::}
+PARAM_COMPUESTO ::= PARAMETROS:param tComa:coma EXPRESION:exp                                                                                              {: RETURN= new NodoParamSimple(param,coma,exp,param.getLine(),param.getColumn()); :}
     ;
