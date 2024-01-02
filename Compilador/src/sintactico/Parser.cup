@@ -125,7 +125,7 @@ PROGRAMA ::= DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs  {: RETURN = new No
            ;
 
 // TODO
-MAIN ::= tMain tLbracket DECL_VARS SENTS tRbracket                                                                                                         {::}
+MAIN ::= tMain:main tLbracket:lbr DECL_VARS:dvars SENTS:sents tRbracket:rbr                                        {:RETURN= new NodoMain(main,lbr,dvars,sents,rbr,main.getLine(),main.getColumn());:}
         ;
  
  
