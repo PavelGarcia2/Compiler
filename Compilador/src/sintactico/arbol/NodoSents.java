@@ -13,20 +13,11 @@ public class NodoSents extends Nodo{
         super("SENTS", false, l, c);
         this.nodoSents = nodoSents;
         this.nodoSent = nodoSent;
-        linea = l;
-        columna = c;
     }
 
      public NodoSents() {
         super("SENTS", true);
     }
 
-    public int getLinea() {
-        return linea;
-    }
-
-    public int getColumna() {
-        return columna;
-    }
 
 }

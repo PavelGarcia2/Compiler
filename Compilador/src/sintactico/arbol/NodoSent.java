@@ -10,16 +10,7 @@ public class NodoSent extends Nodo {
         super("SENT", false, l, c);
         this.nodoOtrasSent = nodoOtrasSent;
         this.nodoRealAsign = nodoRealAsign;
-        linea = l;
-        columna = c;
     }
 
-    public int getColumna() {
-        return columna;
-    }   
-
-    public int getLinea() {
-        return linea;
-    }
 
 }

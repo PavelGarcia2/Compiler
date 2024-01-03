@@ -6,11 +6,9 @@ public class NodoDeclArray extends Nodo{
     NodoSimbolos lCorchete;
     NodoSimbolos rCorchete;
 
-    public NodoDeclArray(NodoDeclArray nDeclArr,NodoSimbolos lC, NodoSimbolos rC,int l, int c) {
+    public NodoDeclArray(NodoDeclArray nDeclArr,int l, int c) {
         super("DECLARRAY", false, l, c);
         nodoDeclArray = nDeclArr;
-        lCorchete = lC;
-        rCorchete = rC;
     }
 
     public NodoDeclArray(){

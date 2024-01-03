@@ -14,11 +14,11 @@ import tsimbolos.descripciones.DTipus.TSB;
  */
 public class Semantico {
     private final Parser parser;
-    private final NodoPrograma nodoPrograma;
+    private final NodoPrograma arbol;
     private TablaSimbolos ts ;
 
-    public Semantico(NodoPrograma nodoPrograma, Parser parser){
-        this.nodoPrograma=nodoPrograma;
+    public Semantico(NodoPrograma arbol, Parser parser){
+        this.arbol=arbol;
         //creamos la tabla de simbolos y la inicializamos
         this.parser = parser;
         this.ts = new TablaSimbolos(parser);
@@ -27,15 +27,22 @@ public class Semantico {
     }
 
     public void runProgram(){
-        NodoMain main = nodoPrograma.getNodoMain();
+        NodoMain main = arbol.getNodoMain();
         if (main != null) {
             //obtenemos todas las declaracioes de variables
-            NodoDeclVars varList = nodoPrograma.getNodoDeclaracionVariables();
+            NodoDeclVars varList = arbol.getNodoDeclaracionVariables();
             //si la lista no esta vacia o es nula
             if(varList !=null && !varList.isEmpty()){
                 //controlamos todas las declaraciones de variables
                 ctrlDeclListVariables(varList);
             }
+
+            //obtenemos todas las declaraciones de procedures
+            NodoDeclFunc funcList = arbol.getNodoDeclaracionFunciones();
+            if (funcList != null && !funcList.isEmpty()) {
+                ctrlDeclListFunciones(funcList);
+            }
+
         }
     }
 
@@ -68,15 +75,10 @@ public class Semantico {
 
 
 
-    public void ctrlDeclListVariables(NodoDeclVars declList) {
-        /*
-        NodoDeclVars listaDecls = declList.getDeclList();
-        //Lista con declaraciones?
-        if (listaDecls != null && !listaDecls.isEmpty()) {
-            handleDeclList(listaDecls);
-        }
-        //Una sola declaración
-        handleDecl(declList.getDecl());*/
+    public void ctrlDeclListVariables(NodoDeclVars varList) {
+    }
+
+    public void ctrlDeclListFunciones(NodoDeclFunc funcList) {
     }
 
 

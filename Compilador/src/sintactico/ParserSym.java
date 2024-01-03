@@ -8,65 +8,62 @@ package sintactico;
 /** CUP generated class containing symbol constants. */
 public class ParserSym {
   /* terminals */
-  public static final int tInt = 33;
-  public static final int tIgualMenor = 19;
-  public static final int tFor = 29;
-  public static final int tMenor = 17;
-  public static final int tDospuntos = 56;
-  public static final int tBreak = 23;
-  public static final int tBool = 34;
-  public static final int tNot = 9;
-  public static final int tAnd = 7;
-  public static final int tError = 57;
-  public static final int tMayor = 16;
+  public static final int tInt = 32;
+  public static final int tIgualMenor = 18;
+  public static final int tFor = 28;
+  public static final int tMenor = 16;
+  public static final int tDospuntos = 53;
+  public static final int tBreak = 22;
+  public static final int tBool = 33;
+  public static final int tNot = 8;
+  public static final int tAnd = 6;
+  public static final int tError = 54;
+  public static final int tMayor = 15;
   public static final int tFun = 4;
-  public static final int tSuma = 11;
+  public static final int tSuma = 10;
   public static final int tMain = 3;
-  public static final int tPunto = 55;
-  public static final int tDiv = 14;
-  public static final int tCaracter = 39;
-  public static final int tDefault = 24;
-  public static final int tWhile = 28;
-  public static final int tTrue = 41;
-  public static final int tPuntocoma = 54;
-  public static final int tComa = 53;
-  public static final int tSys = 6;
-  public static final int tFloat = 32;
-  public static final int tLcorchete = 52;
-  public static final int tEntero = 46;
-  public static final int tLparen = 48;
-  public static final int tNew = 21;
-  public static final int tVoid = 58;
-  public static final int tRbracket = 49;
-  public static final int tFalse = 42;
-  public static final int tMod = 15;
-  public static final int tLinea = 38;
-  public static final int tRparen = 47;
-  public static final int tElse = 26;
-  public static final int tPrint = 43;
+  public static final int tDiv = 13;
+  public static final int tCaracter = 37;
+  public static final int tDefault = 23;
+  public static final int tWhile = 27;
+  public static final int tTrue = 39;
+  public static final int tPuntocoma = 52;
+  public static final int tComa = 51;
+  public static final int tFloat = 31;
+  public static final int tLcorchete = 50;
+  public static final int tEntero = 44;
+  public static final int tLparen = 46;
+  public static final int tNew = 20;
+  public static final int tVoid = 55;
+  public static final int tRbracket = 47;
+  public static final int tFalse = 40;
+  public static final int tMod = 14;
+  public static final int tLinea = 36;
+  public static final int tRparen = 45;
+  public static final int tElse = 25;
+  public static final int tPrint = 41;
   public static final int EOF = 0;
   public static final int error = 1;
   public static final int tIn = 5;
-  public static final int tOr = 8;
-  public static final int tConst = 36;
-  public static final int tIf = 25;
-  public static final int tId = 45;
-  public static final int tPrintln = 44;
-  public static final int tResta = 12;
+  public static final int tOr = 7;
+  public static final int tConst = 35;
+  public static final int tIf = 24;
+  public static final int tId = 43;
+  public static final int tPrintln = 42;
+  public static final int tResta = 11;
   public static final int tReturn = 2;
-  public static final int tIgualMay = 18;
-  public static final int tElif = 27;
-  public static final int tArray = 37;
-  public static final int tIgualIgual = 20;
-  public static final int tIgual = 10;
-  public static final int tSwitch = 30;
-  public static final int tMult = 13;
-  public static final int tChar = 31;
-  public static final int tRcorchete = 51;
-  public static final int tCase = 22;
-  public static final int tStr = 35;
-  public static final int tDecimal = 40;
-  public static final int tLbracket = 50;
+  public static final int tIgualMay = 17;
+  public static final int tElif = 26;
+  public static final int tIgualIgual = 19;
+  public static final int tIgual = 9;
+  public static final int tSwitch = 29;
+  public static final int tMult = 12;
+  public static final int tChar = 30;
+  public static final int tRcorchete = 49;
+  public static final int tCase = 21;
+  public static final int tStr = 34;
+  public static final int tDecimal = 38;
+  public static final int tLbracket = 48;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -74,7 +71,6 @@ public class ParserSym {
   "tMain",
   "tFun",
   "tIn",
-  "tSys",
   "tAnd",
   "tOr",
   "tNot",
@@ -105,7 +101,6 @@ public class ParserSym {
   "tBool",
   "tStr",
   "tConst",
-  "tArray",
   "tLinea",
   "tCaracter",
   "tDecimal",
@@ -123,7 +118,6 @@ public class ParserSym {
   "tLcorchete",
   "tComa",
   "tPuntocoma",
-  "tPunto",
   "tDospuntos",
   "tError",
   "tVoid"

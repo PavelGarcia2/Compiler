@@ -2,11 +2,11 @@ package sintactico.arbol;
 
 public class NodoExpresionLog extends Nodo{
 
-    NodoTermino1 termino1;
+    NodoTermino termino1;
     NodoOpLog opLog;
-    NodoTermino2 termino2;
+    NodoTermino termino2;
 
-    public NodoExpresionLog(NodoTermino1 termino1, NodoONodoOpLogpArit opArit, NodoTermino2 termino2, int f, int l) {
+    public NodoExpresionLog(NodoTermino termino1, NodoOpLog opLog, NodoTermino termino2, int f, int l) {
         super("ExpArit",false,f, l);
         this.termino1 = termino1;
         this.opLog = opLog;

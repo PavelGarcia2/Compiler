@@ -10,10 +10,8 @@ public class NodoVar extends Nodo{
     NodoDeclArray nodoDeclArray; 
     //NODO ASIGN
     NodoAsignacion nodoAsignacion;
-    // NODO PUNTOCOMA
-    NodoSimbolos nodoPuntoComa;
 
-    public NodoVar(NodoTipo nT, NodoId nId, NodoDeclArray nDeclArr, NodoAsignacion nAsign, NodoSimbolos nPc, int l, int c) {
+    public NodoVar(NodoTipo nT, NodoId nId, NodoDeclArray nDeclArr, NodoAsignacion nAsign, int l, int c) {
 
         // Contructor en mantenimiento
         super("Var", false, l , c);
@@ -22,7 +20,6 @@ public class NodoVar extends Nodo{
         nodoId = nId;
         nodoDeclArray = nDeclArr;
         nodoAsignacion = nAsign;
-        nodoPuntoComa = nPc;
 
     }
 
@@ -40,9 +37,5 @@ public class NodoVar extends Nodo{
     
     public NodoAsignacion getNodoAsignacion() {
         return nodoAsignacion;
-    }
-
-    public NodoSimbolos getNodoPuntoComa() {
-        return nodoPuntoComa;
     }
 }

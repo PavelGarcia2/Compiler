@@ -6,9 +6,6 @@ public class NodoReturn extends Nodo {
     NodoExpresion nodoExpresion;
     NodoSimbolos nodoPuntoComa;
 
-    int linea;
-    int columna;
-
     public NodoReturn(NodoKeyWords nodoReturn, NodoExpresion nodoExpresion, NodoSimbolos nodoPuntoComa, int l, int c) {
         super("RETURN", false, l, c);
         this.nodoReturn = nodoReturn;
@@ -22,12 +19,4 @@ public class NodoReturn extends Nodo {
         super("RETURN", true);
     }
 
-    public int getLinea() {
-        return linea;
-    }
-
-    public int getColumna() {
-        return columna;
-    }
-    
 }

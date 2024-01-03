@@ -27,8 +27,8 @@ public class NodoOtrasSent extends Nodo{
     NodoKeyWords nodoPrintLn;
     NodoLlamadaFunc nodoLlamadaFunc;
 
-    int linea;
-    int columna;
+    NodoKeyWords nodoIn;    
+
 
     //if
     public NodoOtrasSent(NodoKeyWords nodoIF, NodoSimbolos nodoLParen, NodoParametros nodoParametros, NodoSimbolos nodoRParen, NodoSimbolos nodoLBracket, NodoSents nodoSents, NodoSimbolos nodoRBracket,NodoElse nodoElse, int l, int c) {
@@ -41,8 +41,6 @@ public class NodoOtrasSent extends Nodo{
         this.nodoSents = nodoSents;
         this.nodoRBracket = nodoRBracket;
         this.nodoElse = nodoElse;
-        linea = l;
-        columna = c;
     }
 
     //while
@@ -55,8 +53,6 @@ public class NodoOtrasSent extends Nodo{
         this.nodoLBracket = nodoLBracket;
         this.nodoSents = nodoSents;
         this.nodoRBracket = nodoRBracket;
-        linea = l;
-        columna = c;
     }
 
     //for
@@ -73,8 +69,6 @@ public class NodoOtrasSent extends Nodo{
         this.nodoLBracket = nodoLBracket;
         this.nodoSents = nodoSents;
         this.nodoRBracket = nodoRBracket;
-        linea = l;
-        columna = c;
     }
 
     //switch
@@ -87,20 +81,16 @@ public class NodoOtrasSent extends Nodo{
         this.nodoLBracket = nodoLBracket;
         this.nodoCase = nodoCase;
         this.nodoRBracket = nodoRBracket;
-        linea = l;
-        columna = c;
     }
 
     //print
-    public NodoOtrasSent(NodoKeyWords nodoPrint, NodoSimbolos nodoLParen, NodoExpresion nodoExpresion, NodoSimbolos nodoRParen, NodoSimbolos nodoPuntoComa, int l, int c) {
+    public NodoOtrasSent(int diff,NodoKeyWords nodoPrint, NodoSimbolos nodoLParen, NodoExpresion nodoExpresion, NodoSimbolos nodoRParen, NodoSimbolos nodoPuntoComa, int l, int c) {
         super("OtrasSents_PRINT", false, l, c);
         this.nodoPrint = nodoPrint;
         this.nodoLParen = nodoLParen;
         this.nodoExpresion = nodoExpresion;
         this.nodoRParen = nodoRParen;
         this.nodoPuntoComa = nodoPuntoComa;
-        linea = l;
-        columna = c;
     }
 
     //println
@@ -111,8 +101,6 @@ public class NodoOtrasSent extends Nodo{
         this.nodoExpresion = nodoExpresion;
         this.nodoRParen = nodoRParen;
         this.nodoPuntoComa = nodoPuntoComa;
-        linea = l;
-        columna = c;
     }
 
     //llamadaFunc
@@ -120,13 +108,15 @@ public class NodoOtrasSent extends Nodo{
         super("OtrasSents_LLAMADAFUNC", false, l, c);
         this.nodoLlamadaFunc = nodoLlamadaFunc;
         this.nodoPuntoComa = nodoPuntoComa;
-        linea = l;
-        columna = c;
     }
 
-
-
-
-
+    //In
+    public NodoOtrasSent(NodoKeyWords NodoIn, NodoSimbolos nodoLParen, NodoSimbolos nodoRParen, NodoSimbolos nodoPuntoComa, int l, int c) {
+        super("OtrasSents_IN", false, l, c);
+        this.nodoIn = NodoIn;
+        this.nodoLParen = nodoLParen;
+        this.nodoRParen = nodoRParen;
+        this.nodoPuntoComa = nodoPuntoComa;
+    }
 
 }

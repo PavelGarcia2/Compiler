@@ -7,8 +7,6 @@ public class NodoRealAsign extends Nodo {
     NodoExpresion nodoExpresion;
     NodoSimbolos nodoPuntocoma;
 
-    int linea;
-    int columna;
 
     public NodoRealAsign(NodoId NodoId,  NodoSimbolos nodoIgual,  NodoExpresion nodoExpresion, NodoSimbolos nodoPuntocoma, int l, int c) {
         super("REALASIGN", false, l, c);
@@ -17,18 +15,6 @@ public class NodoRealAsign extends Nodo {
         this.nodoExpresion = nodoExpresion;
         this.nodoPuntocoma = nodoPuntocoma;
 
-        linea = l;
-        columna = c;
-
-    }
-
-   
-    public int getLinea() {
-        return linea;
-    }
-
-    public int getColumna() {
-        return columna;
     }
 
 

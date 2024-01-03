@@ -15,9 +15,6 @@ public class NodoFunc extends Nodo{
     NodoReturn nodoReturn;
     NodoSimbolos nodoRBracket;
 
-    int linea;
-    int columna;
-
     public NodoFunc(NodoKeyWords nodoFunc, NodoTipo nodoTipo, NodoDeclArray nodoDeclArray, NodoId nodoId, NodoSimbolos nodoLParen, NodoDeclFuncP nodoDeclFuncP, NodoSimbolos nodoRParen, NodoSimbolos nodoLBracket, NodoDeclVars nodoDeclVars, NodoSents nodoSents, NodoReturn nodoReturn, NodoSimbolos nodoRBracket, int l, int c) {
         super("FUNC", false, l, c);
         this.nodoFunc = nodoFunc;
@@ -32,15 +29,6 @@ public class NodoFunc extends Nodo{
         this.nodoSents = nodoSents;
         this.nodoReturn = nodoReturn;
         this.nodoRBracket = nodoRBracket;
-        linea = l;
-        columna = c;
     }
 
-    public int getLinea() {
-        return linea;
-    }
-
-    public int getColumna() {
-        return columna;
-    }
 }
