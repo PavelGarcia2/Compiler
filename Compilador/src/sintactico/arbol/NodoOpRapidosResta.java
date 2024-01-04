@@ -9,4 +9,7 @@ public class NodoOpRapidosResta extends Nodo {
         this.nodoId = nodoId;
     }
     
+    public NodoId getNodoId() {
+        return nodoId;
+    }
 }

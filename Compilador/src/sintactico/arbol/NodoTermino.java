@@ -27,4 +27,21 @@ public class NodoTermino extends Nodo {
         super("TERMINO", false, l, c);
         this.decimal = decimal; 
     }
+
+
+    public NodoId getIdentificador() {
+        return identificador;
+    }
+
+    public int getEntero() {
+        return entero;
+    }
+
+    public NodoLlamadaFunc getNodoLlamadaFunc() {
+        return nodoLlamadaFunc;
+    }
+
+    public float getDecimal() {
+        return decimal;
+    }
 }

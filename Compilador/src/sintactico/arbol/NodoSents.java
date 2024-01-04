@@ -6,9 +6,6 @@ public class NodoSents extends Nodo{
     NodoSents nodoSents;
     NodoSent nodoSent;
 
-    int linea;
-    int columna;
-
     public NodoSents(NodoSents nodoSents, NodoSent nodoSent, int l, int c) {
         super("SENTS", false, l, c);
         this.nodoSents = nodoSents;
@@ -17,6 +14,14 @@ public class NodoSents extends Nodo{
 
      public NodoSents() {
         super("SENTS", true);
+    }
+
+    public NodoSents getNodoSents() {
+        return nodoSents;
+    }
+
+    public NodoSent getNodoSent() {
+        return nodoSent;
     }
 
 

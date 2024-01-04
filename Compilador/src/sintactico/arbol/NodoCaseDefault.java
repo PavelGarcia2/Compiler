@@ -8,5 +8,9 @@ public class NodoCaseDefault extends Nodo {
         super("CASEDEFAULT", false, l, c);
         this.nodoSents = nodoSents;
     }
+
+    public NodoSents getNodoSents() {
+        return nodoSents;
+    }
     
 }

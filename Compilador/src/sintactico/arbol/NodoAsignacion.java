@@ -12,4 +12,9 @@ public class NodoAsignacion extends Nodo{
     public NodoAsignacion(){
         super("NODOASIGN",true);
     }
+
+
+    public NodoTipoAsignacion getNodoTipoAsignacion() {
+        return nodoTipoAsignacion;
+    }
 }

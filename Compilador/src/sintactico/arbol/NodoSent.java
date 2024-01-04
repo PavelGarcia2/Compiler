@@ -12,5 +12,13 @@ public class NodoSent extends Nodo {
         this.nodoRealAsign = nodoRealAsign;
     }
 
+    public NodoOtrasSent getNodoOtrasSent() {
+        return nodoOtrasSent;
+    }
+
+    public NodoRealAsign getNodoRealAsign() {
+        return nodoRealAsign;
+    }
+
 
 }

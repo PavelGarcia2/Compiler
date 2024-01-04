@@ -13,4 +13,9 @@ public class NodoReturn extends Nodo {
         super("RETURN", true);
     }
 
+
+    public NodoExpresion getNodoExpresion() {
+        return nodoExpresion;
+    }
+
 }

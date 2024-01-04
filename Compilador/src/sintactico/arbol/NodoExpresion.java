@@ -26,4 +26,36 @@ public class NodoExpresion extends Nodo{
         this.nodoLlamadaFunc = nodoLlamadaFunc; 
         this.nodoLlamadaFunc = nodoLlamadaFunc; 
     }
+
+    public NodoExpresion getNodoExpresionConParentesis() {
+        return conParentesis;
+    }
+
+    public NodoExpresion getNodoExpresionConNegacion() {
+        return conNegacion;
+    }
+
+    public NodoExpresionArit getNodoExpresionArit() {
+        return nodoExpresionArit;
+    }
+
+    public NodoExpresionLog getNodoExpresionLog() {
+        return nodoExpresionLog;
+    }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public NodoLiteral getNodoLiteral() {
+        return nodoLiteral;
+    }
+
+    public int getBool() {
+        return bool;
+    }
+
+    public NodoLlamadaFunc getNodoLlamadaFunc() {
+        return nodoLlamadaFunc;
+    }
 }

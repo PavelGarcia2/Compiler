@@ -18,5 +18,9 @@ public class NodoInitCases extends Nodo {
     public String getValor(){
         return this.valor;
     }
+
+    public Tipo getTipo(){
+        return this.tipo;
+    }
     
 }

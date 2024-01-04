@@ -12,4 +12,16 @@ public class NodoTerminoLog extends Nodo {
         this.bool = bool;
         this.nodoLlamadaFunc = nodoLlamadaFunc;
     }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public int getBool() {
+        return bool;
+    }
+
+    public NodoLlamadaFunc getNodoLlamadaFunc() {
+        return nodoLlamadaFunc;
+    }
 }

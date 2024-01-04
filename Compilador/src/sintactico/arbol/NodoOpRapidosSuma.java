@@ -9,4 +9,7 @@ public class NodoOpRapidosSuma extends Nodo {
         this.nodoId = nodoId;
     }
     
+    public NodoId getNodoId() {
+        return nodoId;
+    }
 }

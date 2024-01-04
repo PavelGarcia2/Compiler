@@ -16,10 +16,6 @@ public class NodoOtrasSent extends Nodo{
     NodoCase nodoCase;
     NodoLlamadaFunc nodoLlamadaFunc;
 
-    NodoKeyWords nodoIn;    
-
-
-
     // IDENTIFICADOR
     int identificador;
     /* 
@@ -98,6 +94,39 @@ public class NodoOtrasSent extends Nodo{
 
     public int getIdentificador() {
         return identificador;
+    }
+
+    
+    public NodoParametros getNodoParametros() {
+        return nodoParametros;
+    }
+
+    public NodoSents getNodoSents() {
+        return nodoSents;
+    }
+
+    public NodoElse getNodoElse() {
+        return nodoElse;
+    }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public NodoExpresion getNodoExpresion() {
+        return nodoExpresion;
+    }
+
+    public NodoOpRapidos getNodoOpRapidos() {
+        return nodoOpRapidos;
+    }
+
+    public NodoCase getNodoCase() {
+        return nodoCase;
+    }
+
+    public NodoLlamadaFunc getNodoLlamadaFunc() {
+        return nodoLlamadaFunc;
     }
 
 }

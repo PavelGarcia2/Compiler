@@ -168,7 +168,7 @@ non terminal NodoConst DECL_CON;
 
 start with PROGRAMA;
 
-PROGRAMA ::= DECL_CONST:dconst DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs                                                                                                                              {: RESULT = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());
+PROGRAMA ::= DECL_CONST:dconst DECL_VARS:dvars MAIN:main DECL_FUNCIONES:dfuncs                                                                                                                              {: RESULT = new NodoPrograma(dconst,dvars, dfuncs, main, main.getLine(), main.getColumn());
                                                                                                                                                                                                             Semantico semantico = new Semantico(RESULT, parser); if(errores == 0){semantico.runProgram();} :}                                                                                           
            ;
 

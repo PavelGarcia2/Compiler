@@ -10,4 +10,12 @@ public class NodoLlamadaFunc extends Nodo {
         this.nodoId = nodoId;
         this.nodoParams = nodoParams;
     }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public NodoParametros getNodoParams() {
+        return nodoParams;
+    }
 }

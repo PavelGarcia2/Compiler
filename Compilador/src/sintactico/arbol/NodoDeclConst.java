@@ -14,4 +14,12 @@ public class NodoDeclConst extends Nodo{
     public NodoDeclConst(){
         super("DECLCONST",true); 
     }
+
+    public NodoConst getNodoConst() {
+        return nodoConst;
+    }
+
+    public NodoDeclConst getHijo() {
+        return nodoDeclConst;
+    }
 }

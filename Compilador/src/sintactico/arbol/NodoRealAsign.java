@@ -12,5 +12,13 @@ public class NodoRealAsign extends Nodo {
         this.nodoExpresion = nodoExpresion;
     }
 
+    public NodoId getNodoId() {
+        return NodoId;
+    }
+
+    public NodoExpresion getNodoExpresion() {
+        return nodoExpresion;
+    }
+
 
 }

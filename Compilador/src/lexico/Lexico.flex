@@ -59,7 +59,6 @@ w_bool      = "bool"
 w_str       = "str"
 w_true      = ("true"|"True")
 w_false     = ("false"|"False")
-//w_tupla       = "tup"
 w_void      = "void"
 
 //============================//
@@ -96,7 +95,6 @@ coma        = \,
 puntoComa   = \;
 dosPuntos   = \:
 punto       = \.
-array       = {lcorchete}{rcorchete}({lcorchete}{rcorchete})*
 
 
 //============================//
@@ -106,7 +104,6 @@ array       = {lcorchete}{rcorchete}({lcorchete}{rcorchete})*
 w_print     = "print"
 w_println   = "println"
 w_in        = "in"
-w_sys       = "sys"
 
 
 //============================//
@@ -177,7 +174,6 @@ decimal     = {digito}*{punto}{digito}+
 {multiCom}                             { /* ignore */ }
 {comLinea}                             { /* ignore */ }
 {w_in}                                 { return symbol(ParserSym.tIn); }
-{w_sys}                                { return symbol(ParserSym.tSys); }
 {and}                                  { return symbol(ParserSym.tAnd); }
 {or}                                   { return symbol(ParserSym.tOr); }
 {not}                                  { return symbol(ParserSym.tNot); }
@@ -208,8 +204,6 @@ decimal     = {digito}*{punto}{digito}+
 {w_bool}                               { return symbol(ParserSym.tBool); }
 {w_str}                                { return symbol(ParserSym.tStr); }
 {w_const}                              { return symbol(ParserSym.tConst); }
-//{w_tupla}                              { return symbol(ParserSym.tTupla); }
-{array}                                { return symbol(ParserSym.tArray); }
 {str}                                  { return symbol(ParserSym.tLinea, yytext()); }
 {char}                                 { return symbol(ParserSym.tCaracter, yytext()); }
 {decimal}                              { return symbol(ParserSym.tDecimal, yytext()); }
@@ -228,6 +222,5 @@ decimal     = {digito}*{punto}{digito}+
 {lcorchete}                            { return symbol(ParserSym.tLcorchete); }
 {coma}                                 { return symbol(ParserSym.tComa);}
 {puntoComa}                            { return symbol(ParserSym.tPuntocoma); }
-{punto}                                { return symbol(ParserSym.tPunto); }
 {dosPuntos}                            { return symbol(ParserSym.tDospuntos); }  
 .                                      { return symbol(ParserSym.tError); } 

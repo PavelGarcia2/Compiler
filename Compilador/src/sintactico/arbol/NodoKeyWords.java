@@ -8,5 +8,9 @@ public class NodoKeyWords extends Nodo{
         super("KEYWORD", false, l, c);
         keyword = kw;
     }
+
+    public String getKeyword() {
+        return keyword;
+    }
     
 }

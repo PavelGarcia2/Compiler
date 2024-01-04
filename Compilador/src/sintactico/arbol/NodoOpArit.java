@@ -8,4 +8,8 @@ TipoArit opArit;
         super("OP_ARIT", false, l, c);
         this.opArit = opArit;
     }
+
+    public TipoArit getOpArit() {
+        return opArit;
+    }
 }

@@ -172,7 +172,11 @@ public class TablaSimbolos {
     
 
     public Descripcion consultarTD(String id) {
-        return td.getElemento(id).getDescripcion();
+        if(td.getElemento(id) != null){
+            return td.getElemento(id).getDescripcion();
+        }else{
+            return null;
+        }
     }
 
     public Descripcion consultarTE(int idx) {

@@ -16,4 +16,12 @@ public class NodoDeclFunc extends Nodo {
     public NodoDeclFunc() {
         super("DECLFUNC", true);
     } 
+
+    public NodoDeclFunc getNodoDeclFunc() {
+        return nodoDeclFunc;
+    }
+
+    public NodoFunc getNodoFunc() {
+        return nodoFunc;
+    }
 }

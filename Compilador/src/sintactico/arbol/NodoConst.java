@@ -12,4 +12,16 @@ public class NodoConst extends Nodo{
         this.nodoId = nodoId;
         this.nodoAsignacion = nodoAsignacion; 
     }
+
+    public NodoTipo getNodoTipo() {
+        return nodoTipo;
+    }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public NodoAsignacion getNodoAsignacion() {
+        return nodoAsignacion;
+    }
 }

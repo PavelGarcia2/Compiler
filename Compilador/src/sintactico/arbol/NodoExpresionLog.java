@@ -12,4 +12,16 @@ public class NodoExpresionLog extends Nodo{
         this.opLog = opLog;
         this.termino2 = termino2;
     }
+
+    public NodoTerminoLog getTermino1() {
+        return termino1;
+    }
+
+    public NodoOpLog getOpLog() {
+        return opLog;
+    }
+
+    public NodoTerminoLog getTermino2() {
+        return termino2;
+    }
 }

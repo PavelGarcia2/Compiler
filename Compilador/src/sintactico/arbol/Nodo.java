@@ -24,6 +24,7 @@ public class Nodo extends ComplexSymbol {
     public boolean isEmpty() {
         return vacio;
     }
+    
     public int getLine() {
         return linea;
     }

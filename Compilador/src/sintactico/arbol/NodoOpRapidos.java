@@ -16,5 +16,13 @@ public class NodoOpRapidos extends Nodo {
         this.nodoOpRapidosResta = nodoOpRapidosResta;
 
     }
+
+    public NodoOpRapidosSuma getNodoOpRapidosSuma() {
+        return nodoOpRapidosSuma;
+    }
+
+    public NodoOpRapidosResta getNodoOpRapidosResta() {
+        return nodoOpRapidosResta;
+    }
     
 }

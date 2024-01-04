@@ -17,4 +17,12 @@ public class NodoDeclFuncParams extends Nodo {
         this.nodoDeclFuncParams = nodoDeclFuncParams;
     }
 
+    public NodoDeclFuncParams getNodoDeclFuncParams(){
+        return nodoDeclFuncParams;
+    }
+
+    public NodoDeclFuncParam getNodoDeclFuncParam() {
+        return nodoDeclFuncParam;
+    }
+
 }

@@ -25,5 +25,21 @@ public class NodoCase extends Nodo {
     public NodoCase(){
         super("CASE",true);
     }
+
+    public NodoCase getNodoCase() {
+        return nodoCase;
+    }
+
+    public NodoInitCases getNodoInitCases() {
+        return nodoInitCases;
+    }
+
+    public NodoSents getNodoSents() {
+        return nodoSents;
+    }
+
+    public NodoCaseDefault getNodoCaseDefault() {
+        return nodoCaseDefault;
+    }
     
 }

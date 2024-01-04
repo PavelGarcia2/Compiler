@@ -8,4 +8,8 @@ TipoLog opLog;
         super("OP_LOG", false, l, c);
         this.opLog = opLog;
     }
+
+    public TipoLog getOpLog() {
+        return opLog;
+    }
 }

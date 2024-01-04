@@ -11,5 +11,13 @@ public class NodoParamCompuesto extends Nodo {
         this.nodoParametros = nodoParametros;
         this.nodoExpresion = nodoExpresion;
     }
+
+    public NodoParametros getNodoParametros() {
+        return nodoParametros;
+    }
+
+    public NodoExpresion getNodoExpresion() {
+        return nodoExpresion;
+    }
     
 }

@@ -8,4 +8,8 @@ public class NodoSimbolos extends Nodo {
         super("SIMBOLOS", false, l, c);
         simbolo = s;
     }
+
+    public char getSimbolo() {
+        return simbolo;
+    }
 }

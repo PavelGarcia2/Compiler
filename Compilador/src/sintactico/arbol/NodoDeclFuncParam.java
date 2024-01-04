@@ -14,4 +14,16 @@ public class NodoDeclFuncParam extends Nodo {
         this.nodoDeclArray = nodoDeclArray;
     }
 
+    public NodoTipo getNodoTipo() {
+        return nodoTipo;
+    }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public NodoDeclArray getNodoDeclArray() {
+        return nodoDeclArray;
+    }
+
 }

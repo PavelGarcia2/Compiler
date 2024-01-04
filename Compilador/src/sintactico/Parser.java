@@ -562,7 +562,7 @@ class CUP$Parser$actions {
 		int dfuncsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int dfuncsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoDeclFunc dfuncs = (NodoDeclFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoPrograma(dvars, dfuncs, main, main.getLine(), main.getColumn());
+		 RESULT = new NodoPrograma(dconst,dvars, dfuncs, main, main.getLine(), main.getColumn());
                                                                                                                                                                                                             Semantico semantico = new Semantico(RESULT, parser); if(errores == 0){semantico.runProgram();} 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PROGRAMA",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

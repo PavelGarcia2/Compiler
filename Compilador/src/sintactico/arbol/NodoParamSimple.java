@@ -9,4 +9,8 @@ public class NodoParamSimple extends Nodo {
 
         this.nodoExpresion = nodoExpresion;
     }
+
+    public NodoExpresion getNodoExpresion() {
+        return nodoExpresion;
+    }
 }

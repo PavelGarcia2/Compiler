@@ -19,4 +19,32 @@ public class NodoFunc extends Nodo{
         this.nodoSents = nodoSents;
         this.nodoReturn = nodoReturn;
     }
+
+    public NodoTipo getNodoTipo() {
+        return nodoTipo;
+    }
+
+    public NodoDeclArray getNodoDeclArray() {
+        return nodoDeclArray;
+    }
+
+    public NodoId getNodoId() {
+        return nodoId;
+    }
+
+    public NodoDeclFuncP getNodoDeclFuncP() {
+        return nodoDeclFuncP;
+    }
+
+    public NodoDeclVars getNodoDeclVars() {
+        return nodoDeclVars;
+    }
+
+    public NodoSents getNodoSents() {
+        return nodoSents;
+    }
+
+    public NodoReturn getNodoReturn() {
+        return nodoReturn;
+    }
 }

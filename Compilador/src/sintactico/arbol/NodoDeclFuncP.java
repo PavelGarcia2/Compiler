@@ -14,4 +14,8 @@ public class NodoDeclFuncP extends Nodo {
         super("DECLFUNCP", true);
     }
 
+    public NodoDeclFuncParams getNodoDeclFuncParams() {
+        return nodoDeclFuncParams;
+    }
+
 }
