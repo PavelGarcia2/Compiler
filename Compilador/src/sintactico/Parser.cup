@@ -14,8 +14,8 @@
  */
 package sintactico;
 
+//import java_cup.runtime.*;
 import java.io.*;
-import java_cup.runtime.*;
 import sintactico.arbol.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;
@@ -28,8 +28,46 @@ class Parser;
  **/
 parser code {:
 
-    private Scanner scanner;
+   // private Scanner scanner;
     int errores = 0;
+    BufferedWriter bf;
+
+    String file = "error.log";
+
+
+    @Override
+    public void report_error(String msg, Object nodo){
+        errores++;
+        if(nodo!=null){
+            if(nodo instanceof java_cup.runtime.Symbol){
+                ComplexSymbol token = (ComplexSymbol) nodo;
+                Location l = token.getLeft();
+                msg += ", (Linea,Columna) => ("+l.getLine()+","+l.getColumn()+")\n";
+            }
+
+            if(nodo instanceof Nodo){
+                Nodo n = (Nodo) nodo;
+                    msg += "Error Semantico, (Linea,Columna) => ("+n.getLine()+","+n.getColumn()+")\n";
+            }
+            escribeEnFichero(msg);
+        }
+    }
+
+    public void escribeEnFichero(String msg){
+        try{
+            if(errores == 1){
+                bf = new BufferedWriter(new FileWriter(file));
+            }
+            bf.write(msg);
+        } catch( IOException e ){
+
+        }
+    }
+
+
+    public int getErrores(){
+        return errores;
+    }
 
     private int getLineaToken(ComplexSymbol sym){
         Location l = sym.getLeft();
@@ -48,7 +86,7 @@ parser code {:
     }
 
     private String getValor(ComplexSymbol sym){
-        return sym.value;
+        return (String) sym.value;
     }
 
 :}
@@ -283,17 +321,17 @@ OP_RAPIDO_R ::= ID:tid tResta tResta                                            
 
 // TODO
 TERMINO_1 ::= ID:id                                                                                                                                                                                         {: RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); :}
-         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(entero,getLineaToken(entero),getColumnaToken(entero)); :}
+         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),getLineaToken(entero),getColumnaToken(entero)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); :}
-         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(decimal, getLineaToken(decimal),getColumnaToken(decimal)); :}
+         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), getLineaToken(decimal),getColumnaToken(decimal)); :}
          ;
 
 
 // TODO
 TERMINO_2 ::= ID:id                                                                                                                                                                                         {: RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); :}
-         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(entero,getLineaToken(entero),getColumnaToken(entero)); :}
+         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),getLineaToken(entero),getColumnaToken(entero)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); :}
-         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(decimal, getLineaToken(decimal),getColumnaToken(decimal)); :}
+         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), getLineaToken(decimal),getColumnaToken(decimal)); :}
          ;
 
 
@@ -330,10 +368,10 @@ EXPRESION ::= tLparen:v EXPRESION:e tRparen                                     
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, null, null,null, null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
 		 ;
 
-LITERAL ::= tEntero:i                                                                                                                                                                                       {: RESULT = new NodoLiteral(Integer.toString(i.getValor()),Tipo.INT,getLineaToken(i),getColumnaToken(i)); :}
-         | tDecimal:d                                                                                                                                                                                       {: RESULT = new NodoLiteral(Float.toString(d),Tipo.FLOAT,getLineaToken(d),getColumnaToken(d)); :}
-         | tChar:c                                                                                                                                                                                          {: RESULT = new NodoLiteral(c,Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); :}
-         | tLinea:l                                                                                                                                                                                         {: RESULT = new NodoLiteral(l,Tipo.STR,getLineaToken(l),getColumnaToken(l)); :}
+LITERAL ::= tEntero:i                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(i),Tipo.INT,getLineaToken(i),getColumnaToken(i)); :}
+         | tDecimal:d                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(d),Tipo.FLOAT,getLineaToken(d),getColumnaToken(d)); :}
+         | tChar:c                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(c),Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); :}
+         | tLinea:l                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(l),Tipo.STR,getLineaToken(l),getColumnaToken(l)); :}
         ;
 
 
@@ -351,5 +389,5 @@ PARAM_SIMPLE ::= EXPRESION:exp                                                  
 PARAM_COMPUESTO ::= PARAMETROS:param tComa EXPRESION:exp                                                                                                                                               {: RESULT= new NodoParamCompuesto(param,exp,param.getLine(),param.getColumn()); :}
         ;
 
-ID ::= tId:valor                                                                                                                                                                                           {: RESULT = new NodoId((String) valor.getValor(), getLineaToken(valor),getColumnaToken(valor)); :}                                                         
+ID ::= tId:valor                                                                                                                                                                                           {: RESULT = new NodoId((String) getValor(valor), getLineaToken(valor),getColumnaToken(valor)); :}                                                         
     ;

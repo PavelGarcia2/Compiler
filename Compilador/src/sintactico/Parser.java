@@ -6,7 +6,6 @@
 package sintactico;
 
 import java.io.*;
-import java_cup.runtime.*;
 import sintactico.arbol.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;
@@ -446,8 +445,46 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 
-    private Scanner scanner;
+   // private Scanner scanner;
     int errores = 0;
+    BufferedWriter bf;
+
+    String file = "error.log";
+
+
+    @Override
+    public void report_error(String msg, Object nodo){
+        errores++;
+        if(nodo!=null){
+            if(nodo instanceof java_cup.runtime.Symbol){
+                ComplexSymbol token = (ComplexSymbol) nodo;
+                Location l = token.getLeft();
+                msg += ", (Linea,Columna) => ("+l.getLine()+","+l.getColumn()+")\n";
+            }
+
+            if(nodo instanceof Nodo){
+                Nodo n = (Nodo) nodo;
+                    msg += "Error Semantico, (Linea,Columna) => ("+n.getLine()+","+n.getColumn()+")\n";
+            }
+            escribeEnFichero(msg);
+        }
+    }
+
+    public void escribeEnFichero(String msg){
+        try{
+            if(errores == 1){
+                bf = new BufferedWriter(new FileWriter(file));
+            }
+            bf.write(msg);
+        } catch( IOException e ){
+
+        }
+    }
+
+
+    public int getErrores(){
+        return errores;
+    }
 
     private int getLineaToken(ComplexSymbol sym){
         Location l = sym.getLeft();
@@ -466,7 +503,7 @@ public class Parser extends java_cup.runtime.lr_parser {
     }
 
     private String getValor(ComplexSymbol sym){
-        return sym.value;
+        return (String) sym.value;
     }
 
 
@@ -1543,7 +1580,7 @@ class CUP$Parser$actions {
 		int enteroleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int enteroright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol entero = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(entero,getLineaToken(entero),getColumnaToken(entero)); 
+		 RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),getLineaToken(entero),getColumnaToken(entero)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_1",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1567,7 +1604,7 @@ class CUP$Parser$actions {
 		int decimalleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int decimalright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol decimal = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(decimal, getLineaToken(decimal),getColumnaToken(decimal)); 
+		 RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), getLineaToken(decimal),getColumnaToken(decimal)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_1",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1591,7 +1628,7 @@ class CUP$Parser$actions {
 		int enteroleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int enteroright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol entero = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(entero,getLineaToken(entero),getColumnaToken(entero)); 
+		 RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),getLineaToken(entero),getColumnaToken(entero)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_2",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1615,7 +1652,7 @@ class CUP$Parser$actions {
 		int decimalleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int decimalright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol decimal = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(decimal, getLineaToken(decimal),getColumnaToken(decimal)); 
+		 RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), getLineaToken(decimal),getColumnaToken(decimal)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_2",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1873,7 +1910,7 @@ class CUP$Parser$actions {
 		int ileft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol i = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(Integer.toString(i.getValor()),Tipo.INT,getLineaToken(i),getColumnaToken(i)); 
+		 RESULT = new NodoLiteral(getValor(i),Tipo.INT,getLineaToken(i),getColumnaToken(i)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1885,7 +1922,7 @@ class CUP$Parser$actions {
 		int dleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int dright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol d = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(Float.toString(d),Tipo.FLOAT,getLineaToken(d),getColumnaToken(d)); 
+		 RESULT = new NodoLiteral(getValor(d),Tipo.FLOAT,getLineaToken(d),getColumnaToken(d)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1897,7 +1934,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol c = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(c,Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); 
+		 RESULT = new NodoLiteral(getValor(c),Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1909,7 +1946,7 @@ class CUP$Parser$actions {
 		int lleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int lright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol l = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(l,Tipo.STR,getLineaToken(l),getColumnaToken(l)); 
+		 RESULT = new NodoLiteral(getValor(l),Tipo.STR,getLineaToken(l),getColumnaToken(l)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1987,7 +2024,7 @@ class CUP$Parser$actions {
 		int valorleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol valor = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoId((String) valor.getValor(), getLineaToken(valor),getColumnaToken(valor)); 
+		 RESULT = new NodoId((String) getValor(valor), getLineaToken(valor),getColumnaToken(valor)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ID",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
