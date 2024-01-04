@@ -465,6 +465,10 @@ public class Parser extends java_cup.runtime.lr_parser {
         return 0;
     }
 
+    private String getValor(ComplexSymbol sym){
+        return sym.value;
+    }
+
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -555,6 +559,9 @@ class CUP$Parser$actions {
           case 4: // DECL_CON ::= tConst TIPO ID ASIGN tPuntocoma 
             {
               NodoConst RESULT =null;
+		int tConstleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
+		int tConstright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
+		ComplexSymbol tConst = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		int tipoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
 		int tiporight = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
 		NodoTipo tipo = (NodoTipo)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
@@ -564,10 +571,7 @@ class CUP$Parser$actions {
 		int asignleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int asignright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoAsignacion asign = (NodoAsignacion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int pcomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int pcomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol pcoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoConst(tipo,id,asign,tipo.getLine(),tipo.getColumn()); 
+		 RESULT = new NodoConst(tipo,id,asign,getLineaToken(tConst),getColumnaToken(tConst)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("DECL_CON",44, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -579,18 +583,12 @@ class CUP$Parser$actions {
 		int mainleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
 		int mainright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		ComplexSymbol main = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int lbrleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int lbrright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol lbr = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
 		int dvarsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int dvarsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoDeclVars dvars = (NodoDeclVars)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int rbrleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int rbrright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol rbr = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 RESULT= new NodoMain(dvars,sents,getLineaToken(main),getColumnaToken(main)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("MAIN",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -636,9 +634,6 @@ class CUP$Parser$actions {
 		int asignleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int asignright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoAsignacion asign = (NodoAsignacion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int pCleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int pCright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol pC = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 RESULT = new NodoVar(t,id,darr,asign,t.getLine(),t.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("DECL_VAR",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -681,7 +676,7 @@ class CUP$Parser$actions {
 		int tAsignleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int tAsignright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoTipoAsignacion tAsign = (NodoTipoAsignacion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoAsignacion(tAsign,tAsign.getLine(),tAsign.getColumn()); 
+		 RESULT = new NodoAsignacion(tAsign,getLineaToken(igual),getColumnaToken(igual)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ASIGN",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -702,7 +697,7 @@ class CUP$Parser$actions {
 		int asignNormalleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int asignNormalright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoAsignacionNormal asignNormal = (NodoAsignacionNormal)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = asignNormal; 
+		 RESULT = new NodoTipoAsignacion(asignNormal,null,asignNormal.getLine(),asignNormal.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T_ASIGN",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -714,7 +709,7 @@ class CUP$Parser$actions {
 		int asignArrayleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int asignArrayright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoAsignacionArray asignArray = (NodoAsignacionArray)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = asignArray; 
+		 RESULT = new NodoTipoAsignacion(null,asignArray,asignArray.getLine(),asignArray.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T_ASIGN",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -744,7 +739,7 @@ class CUP$Parser$actions {
 		int dimArrayleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int dimArrayright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoDimArray dimArray = (NodoDimArray)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoAsignacionArray(n,tipo,dimArray,dimArray.getLine(),dimArray.getColumn()); 
+		 RESULT = new NodoAsignacionArray(tipo,dimArray,getLineaToken(n),getColumnaToken(n)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ASIGN_ARRAY",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -765,7 +760,7 @@ class CUP$Parser$actions {
 		int rCorleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int rCorright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol rCor = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoDimArray(dimArr,lCor,expr,rCor,dimArr.getLine(),dimArr.getColumn()); 
+		 RESULT = new NodoDimArray(dimArr,expr,dimArr.getLine(),dimArr.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("DIM_ARRAY",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -795,7 +790,7 @@ class CUP$Parser$actions {
 		int pcomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int pcomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol pcoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoRealAsign(id,igual,exp,pcoma,id.getLine(),id.getColumn()); 
+		 RESULT= new NodoRealAsign(id,exp,id.getLine(),id.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("REAL_ASIGN",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -807,7 +802,7 @@ class CUP$Parser$actions {
 		int ileft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol i = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTipo("int",i.getLine(),i.getColumn()); 
+		 RESULT = new NodoTipo(Tipo.INT,getLineaToken(i),getColumnaToken(i)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TIPO",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -819,7 +814,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol c = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTipo("char",c.getLine(),c.getColumn()); 
+		 RESULT = new NodoTipo(Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TIPO",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -831,7 +826,7 @@ class CUP$Parser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol f = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTipo("float",f.getLine(),f.getColumn()); 
+		 RESULT = new NodoTipo(Tipo.FLOAT,getLineaToken(f),getColumnaToken(f)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TIPO",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -843,7 +838,7 @@ class CUP$Parser$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol b = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTipo("bool",b.getLine(),b.getColumn()); 
+		 RESULT = new NodoTipo(Tipo.BOOL,getLineaToken(b),getColumnaToken(b)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TIPO",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -855,7 +850,7 @@ class CUP$Parser$actions {
 		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol s = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTipo("str",s.getLine(),s.getColumn()); 
+		 RESULT = new NodoTipo(Tipo.STR,getLineaToken(s),getColumnaToken(s)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TIPO",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -867,7 +862,7 @@ class CUP$Parser$actions {
 		int vleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int vright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol v = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTipo("void",v.getLine(),v.getColumn()); 
+		 RESULT = new NodoTipo(Tipo.VOID,getLineaToken(v),getColumnaToken(v)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TIPO",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -875,10 +870,10 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 26: // FUNC ::= tFun TIPO DECL_ARRAY ID tLparen DECL_FUNCP tRparen tLbracket DECL_VARS SENTS RETURN tRbracket 
             {
-              NodFunc RESULT =null;
-		int funcleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)).left;
-		int funcright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)).right;
-		ComplexSymbol func = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-11)).value;
+              NodoFunc RESULT =null;
+		int funleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)).left;
+		int funright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)).right;
+		ComplexSymbol fun = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-11)).value;
 		int tipoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)).left;
 		int tiporight = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)).right;
 		NodoTipo tipo = (NodoTipo)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-10)).value;
@@ -900,7 +895,7 @@ class CUP$Parser$actions {
 		int retornoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int retornoright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoReturn retorno = (NodoReturn)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		RESULT= new NodoFunc(func,tipo,decarr,id,id,decfuncp,declvars,sents,retorno,func.getLine(),func.getColumn()); 
+		RESULT= new NodoFunc(tipo,decarr,id,decfuncp,declvars,sents,retorno,getLineaToken(fun),getColumnaToken(fun)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("FUNC",12, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-11)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -915,7 +910,7 @@ class CUP$Parser$actions {
 		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoExpresion exp = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT= new NodoReturn(retorno,exp,retorno.getLine(),retorno.getColumn()); 
+		 RESULT= new NodoReturn(exp,getLineaToken(retorno),getColumnaToken(retorno)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("RETURN",40, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1004,7 +999,7 @@ class CUP$Parser$actions {
 		NodoDeclFunc declfunc = (NodoDeclFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int funcleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int funcright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		NodFunc func = (NodFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		NodoFunc func = (NodoFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 RESULT = new NodoDeclFunc(declfunc,func,declfunc.getLine(),declfunc.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("DECL_FUNCIONES",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1038,7 +1033,7 @@ class CUP$Parser$actions {
           case 37: // SENTS ::= 
             {
               NodoSents RESULT =null;
-		 RESULT= new NodoSents() 
+		 RESULT= new NodoSents(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("SENTS",14, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1050,7 +1045,7 @@ class CUP$Parser$actions {
 		int otrasleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int otrasright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoOtrasSent otras = (NodoOtrasSent)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoSent(otras,otras.getLine(),otras.getColumn()); 
+		 RESULT= new NodoSent(otras,null,otras.getLine(),otras.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("SENT",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1062,7 +1057,7 @@ class CUP$Parser$actions {
 		int realleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int realright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoRealAsign real = (NodoRealAsign)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoSent(real,real.getLine(),real.getColumn()); 
+		 RESULT= new NodoSent(null,real,real.getLine(),real.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("SENT",15, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1074,28 +1069,16 @@ class CUP$Parser$actions {
 		int tifleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).left;
 		int tifright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).right;
 		ComplexSymbol tif = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-7)).value;
-		int tlparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
-		int tlparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
-		ComplexSymbol tlparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
 		int parametrosleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).left;
 		int parametrosright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).right;
 		NodoParametros parametros = (NodoParametros)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
-		int trparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
-		int trparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
-		ComplexSymbol trparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int tlbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int tlbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol tlbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int trbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int trbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol trbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int elsecondleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int elsecondright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoElse elsecond = (NodoElse)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(tif,parametros,sents,elsecond,tif.getLine(), tif.getColumn()); 
+		 RESULT= new NodoOtrasSent(0,parametros,sents,elsecond,getLineaToken(tif), getColumnaToken(tif)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1104,28 +1087,16 @@ class CUP$Parser$actions {
           case 41: // OTRAS_SENTS ::= tWhile tLparen PARAMETROS tRparen tLbracket SENTS tRbracket 
             {
               NodoOtrasSent RESULT =null;
-		int twhileleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
-		int twhileright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
-		ComplexSymbol twhile = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
-		int tlparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).left;
-		int tlparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).right;
-		ComplexSymbol tlparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
+		int twleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
+		int twright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
+		ComplexSymbol tw = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
 		int parametrosleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
 		int parametrosright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		NodoParametros parametros = (NodoParametros)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int trparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int trparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol trparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
-		int tlbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int tlbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		ComplexSymbol tlbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int trbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int trbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol trbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(twhile,parametros,sents,twhile.getLine(), twhile.getColumn()); 
+		 RESULT= new NodoOtrasSent(1,parametros,sents,getLineaToken(tw), getColumnaToken(tw)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1134,40 +1105,22 @@ class CUP$Parser$actions {
           case 42: // OTRAS_SENTS ::= tFor tLparen ID tPuntocoma EXPRESION tPuntocoma OP_RAPIDOS tRparen tLbracket SENTS tRbracket 
             {
               NodoOtrasSent RESULT =null;
-		int tforleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)).left;
-		int tforright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)).right;
-		ComplexSymbol tfor = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-10)).value;
-		int tlparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)).left;
-		int tlparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-9)).right;
-		ComplexSymbol tlparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-9)).value;
+		int tfleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)).left;
+		int tfright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)).right;
+		ComplexSymbol tf = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-10)).value;
 		int tidleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)).left;
 		int tidright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)).right;
 		NodoId tid = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-8)).value;
-		int tpuntocomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).left;
-		int tpuntocomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).right;
-		ComplexSymbol tpuntocoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-7)).value;
 		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
 		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
 		NodoExpresion exp = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
-		int tpuntocomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).left;
-		int tpuntocomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).right;
-		ComplexSymbol tpuntocoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
 		int oprapidosleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
 		int oprapidosright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		NodoOpRapidos oprapidos = (NodoOpRapidos)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int trparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int trparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol trparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
-		int tlbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int tlbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		ComplexSymbol tlbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int trbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int trbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol trbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(tfor,tid,exp,oprapidos,sents, tfor.getLine(), tfor.getColumn()); 
+		 RESULT= new NodoOtrasSent(2,tid,exp,oprapidos,sents,getLineaToken(tf), getColumnaToken(tf)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-10)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1176,28 +1129,16 @@ class CUP$Parser$actions {
           case 43: // OTRAS_SENTS ::= tSwitch tLparen ID tRparen tLbracket CASOS tRbracket 
             {
               NodoOtrasSent RESULT =null;
-		int tswitchleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
-		int tswitchright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
-		ComplexSymbol tswitch = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
-		int tlparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).left;
-		int tlparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).right;
-		ComplexSymbol tlparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
+		int tsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
+		int tsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
+		ComplexSymbol ts = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
 		int tidleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
 		int tidright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		NodoId tid = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int trparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int trparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol trparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
-		int tlbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int tlbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		ComplexSymbol tlbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int casosleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int casosright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoCase casos = (NodoCase)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int trbracketleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int trbracketright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol trbracket = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(tswitch,tid,trparen,tlbracket,casos,trbracket,tswitch.getLine(), tswitch.getColumn()); 
+		 RESULT= new NodoOtrasSent(3,tid,casos,getLineaToken(ts), getColumnaToken(ts)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1206,22 +1147,13 @@ class CUP$Parser$actions {
           case 44: // OTRAS_SENTS ::= tPrint tLparen EXPRESION tRparen tPuntocoma 
             {
               NodoOtrasSent RESULT =null;
-		int tprintleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
-		int tprintright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
-		ComplexSymbol tprint = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int tlparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int tlparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol tlparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
+		int tpleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
+		int tpright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
+		ComplexSymbol tp = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoExpresion exp = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int trparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int trparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol trparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int tpuntocomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int tpuntocomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol tpuntocoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(1,tprint,tlparen,exp,trparen,tpuntocoma,tprint.getLine(),tprint.getColumn()); 
+		 RESULT= new NodoOtrasSent(4,exp,getLineaToken(tp), getColumnaToken(tp),-1); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1230,22 +1162,13 @@ class CUP$Parser$actions {
           case 45: // OTRAS_SENTS ::= tPrintln tLparen EXPRESION tRparen tPuntocoma 
             {
               NodoOtrasSent RESULT =null;
-		int tprintlnleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
-		int tprintlnright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
-		ComplexSymbol tprintln = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int tlparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int tlparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol tlparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
+		int tplleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
+		int tplright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
+		ComplexSymbol tpl = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoExpresion exp = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int trparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int trparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol trparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int tpuntocomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int tpuntocomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol tpuntocoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(tprintln,tlparen,exp,trparen,tpuntocoma,tprintln.getLine(),tprintln.getColumn()); 
+		 RESULT= new NodoOtrasSent(5,exp,getLineaToken(tpl), getColumnaToken(tpl)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1257,10 +1180,7 @@ class CUP$Parser$actions {
 		int llamFuncleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int llamFuncright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoLlamadaFunc llamFunc = (NodoLlamadaFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int pcomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int pcomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol pcoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(llamFunc,pcoma,llamFunc.getLine(),llamFunc.getColumn()); 
+		 RESULT= new NodoOtrasSent(6,llamFunc,llamFunc.getLine(),llamFunc.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1272,16 +1192,7 @@ class CUP$Parser$actions {
 		int inleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
 		int inright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
 		ComplexSymbol in = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
-		int lparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int lparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		ComplexSymbol lparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int rparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int rparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol rparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int pcomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int pcomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol pcoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOtrasSents(in,lparen,rparen,pcoma,in.getLine(),in.getColumn()); 
+		 RESULT= new NodoOtrasSent(7,getLineaToken(in),getColumnaToken(in)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OTRAS_SENTS",16, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1293,28 +1204,16 @@ class CUP$Parser$actions {
 		int elifleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).left;
 		int elifright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)).right;
 		ComplexSymbol elif = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-7)).value;
-		int lparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
-		int lparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
-		ComplexSymbol lparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
 		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).left;
 		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).right;
 		NodoExpresion exp = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
-		int rparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
-		int rparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
-		ComplexSymbol rparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int lbrleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int lbrright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol lbr = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int rbrleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int rbrright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol rbr = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int elsecondleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int elsecondright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoElse elsecond = (NodoElse)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoElse(elif,lparen,exp,rparen,lbr,sents,rbr,elsecond,elif.getLine(),elif.getColumn()); 
+		 RESULT= new NodoElse(exp,sents,elsecond,getLineaToken(elif),getColumnaToken(elif)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ELSE_COND",36, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1326,16 +1225,10 @@ class CUP$Parser$actions {
 		int telseleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
 		int telseright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
 		ComplexSymbol telse = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
-		int lbrleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int lbrright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		ComplexSymbol lbr = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int rbrleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int rbrright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol rbr = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoElse(telse,lbr,sents,rbr,telse.getLine(),telse.getColumn()); 
+		 RESULT= new NodoElse(sents,getLineaToken(telse),getColumnaToken(telse)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ELSE_COND",36, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1356,25 +1249,13 @@ class CUP$Parser$actions {
 		int casosleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).left;
 		int casosright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)).right;
 		NodoCase casos = (NodoCase)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
-		int tcaseleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).left;
-		int tcaseright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)).right;
-		ComplexSymbol tcase = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
 		int icaseleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
 		int icaseright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		NodoInitCases icase = (NodoInitCases)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int dospleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int dospright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol dosp = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int tbreakleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int tbreakright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol tbreak = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int pcoleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int pcoright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol pco = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoCase(casos,tcase,icase,dosp,sents,tbreak,pco,casos.getLine(), casos.getColumn()); 
+		 RESULT= new NodoCase(casos,icase,sents,casos.getLine(), casos.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("CASOS",17, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1404,22 +1285,13 @@ class CUP$Parser$actions {
           case 54: // CASO_DEFAULT ::= tDefault tDospuntos SENTS tBreak tPuntocoma 
             {
               NodoCaseDefault RESULT =null;
-		int tbreakleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
-		int tbreakright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
-		ComplexSymbol tbreak = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
-		int tdospuntosleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
-		int tdospuntosright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
-		ComplexSymbol tdospuntos = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
+		int defleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left;
+		int defright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
+		ComplexSymbol def = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		int sentsleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int sentsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoSents sents = (NodoSents)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int tbreakleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int tbreakright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol tbreak = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int tpuntocomaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int tpuntocomaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol tpuntocoma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoCaseDefault(tbreak, tdospuntos,sents,tbreak,tpuntocoma,tbreak.getLine(),t.break.getColumn()); 
+		 RESULT= new NodoCaseDefault(sents,getLineaToken(def),getColumnaToken(def)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("CASO_DEFAULT",18, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1431,7 +1303,7 @@ class CUP$Parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol e = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoInitCases(Tipo.INT,e,null,e.getLine,e.getColumn); 
+		 RESULT= new NodoInitCases(Tipo.INT,getValor(e),getLineaToken(e),getColumnaToken(e)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INIT_CASES",19, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1440,10 +1312,10 @@ class CUP$Parser$actions {
           case 56: // INIT_CASES ::= tLinea 
             {
               NodoInitCases RESULT =null;
-		int lleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int lright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol l = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoInitCases(Tipo.STR,-1,s,s.getLine,s.getColumn); 
+		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		ComplexSymbol s = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		 RESULT= new NodoInitCases(Tipo.STR,getValor(s),getLineaToken(s),getColumnaToken(s)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INIT_CASES",19, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1455,7 +1327,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol c = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoInitCases(Tipo.CHAR,-1,c,s.getLine,s.getColumn); 
+		 RESULT= new NodoInitCases(Tipo.CHAR,getValor(c),getLineaToken(c),getColumnaToken(c)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("INIT_CASES",19, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1467,7 +1339,7 @@ class CUP$Parser$actions {
 		int andleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int andright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol and = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(and, and.getLine(), and.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.AND, getLineaToken(and),getColumnaToken(and)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1479,7 +1351,7 @@ class CUP$Parser$actions {
 		int orleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int orright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol or = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(or,or.getLine(), or.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.OR,getLineaToken(or),getColumnaToken(or)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1491,7 +1363,7 @@ class CUP$Parser$actions {
 		int mayleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int mayright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol may = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(may,may.getLine(), may.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.MAYOR,getLineaToken(may),getColumnaToken(may)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1503,7 +1375,7 @@ class CUP$Parser$actions {
 		int menleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int menright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol men = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(men, men.getLine(), men.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.MENOR, getLineaToken(men),getColumnaToken(men)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1515,7 +1387,7 @@ class CUP$Parser$actions {
 		int imayleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int imayright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol imay = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(imay, imay.getLine(), imay.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.IGUALMAYOR,getLineaToken(imay),getColumnaToken(imay)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1527,7 +1399,7 @@ class CUP$Parser$actions {
 		int imenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int imenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol imen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(imen,imen.getLine(), imen.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.IGUALMENOR,getLineaToken(imen),getColumnaToken(imen)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1539,7 +1411,7 @@ class CUP$Parser$actions {
 		int iileft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int iiright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol ii = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpLog(ii,ii.getLine(), ii.getColumn()); 
+		 RESULT= new NodoOpLog(TipoLog.IGUALIGUAL,getLineaToken(ii),getColumnaToken(ii)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_LOG",20, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1551,7 +1423,7 @@ class CUP$Parser$actions {
 		int sleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol s = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpArit(s, s.getLine(), s.getColumn()); 
+		 RESULT= new NodoOpArit(TipoArit.SUMA, getLineaToken(s),getColumnaToken(s)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_ARIT",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1563,7 +1435,7 @@ class CUP$Parser$actions {
 		int rleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int rright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol r = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpArit(r, r.getLine(), r.getColumn()); 
+		 RESULT= new NodoOpArit(TipoArit.RESTA, getLineaToken(r),getColumnaToken(r)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_ARIT",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1575,7 +1447,7 @@ class CUP$Parser$actions {
 		int muleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int muright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol mu = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpArit(mu, mu.getLine(), mu.getColumn()); 
+		 RESULT= new NodoOpArit(TipoArit.MULT, getLineaToken(mu),getColumnaToken(mu)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_ARIT",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1587,7 +1459,7 @@ class CUP$Parser$actions {
 		int dleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int dright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol d = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpArit(d, d.getLine(), d.getColumn()); 
+		 RESULT= new NodoOpArit(TipoArit.DIV, getLineaToken(d),getColumnaToken(d)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_ARIT",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1599,7 +1471,7 @@ class CUP$Parser$actions {
 		int mleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int mright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol m = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpArit(m, m.getLine(), m.getColumn()); 
+		 RESULT= new NodoOpArit(TipoArit.MOD, getLineaToken(m),getColumnaToken(m)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_ARIT",21, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1611,7 +1483,7 @@ class CUP$Parser$actions {
 		int rapidossumaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int rapidossumaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoOpRapidosSuma rapidossuma = (NodoOpRapidosSuma)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpRapidos(rapidossuma, rapidossuma.getFila(), rapidossuma.getColumn()); 
+		 RESULT= new NodoOpRapidos(rapidossuma, rapidossuma.getLine(), rapidossuma.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_RAPIDOS",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1623,7 +1495,7 @@ class CUP$Parser$actions {
 		int rapidosrestaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int rapidosrestaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoOpRapidosResta rapidosresta = (NodoOpRapidosResta)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoOpRapidos(rapidosresta ,rapidosresta.getFila(), rapidosresta.getColumn()); 
+		 RESULT= new NodoOpRapidos(rapidosresta ,rapidosresta.getLine(), rapidosresta.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_RAPIDOS",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1635,7 +1507,7 @@ class CUP$Parser$actions {
 		int tidleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int tidright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoId tid = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 RESULT= new NodoOpRapidosSuma(id, tId.getFila(), tId.getColumn()); 
+		 RESULT= new NodoOpRapidosSuma(tid, tid.getLine(), tid.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_RAPIDO_S",23, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1647,7 +1519,7 @@ class CUP$Parser$actions {
 		int tidleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int tidright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoId tid = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		 RESULT= new NodoOpRapidosResta(id, tId.getFila(), tId.getColumn()); 
+		 RESULT= new NodoOpRapidosResta(tid, tid.getLine(), tid.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("OP_RAPIDO_R",24, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1659,7 +1531,7 @@ class CUP$Parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoId id = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RETURN = new NodoTermino(id,-1,null,-1,id.getLine(),id.getColumn()); 
+		 RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_1",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1671,7 +1543,7 @@ class CUP$Parser$actions {
 		int enteroleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int enteroright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol entero = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RETURN = new NodoTermino(null, entero, null, -1, entero.getLine(), entero.getcolumn()); 
+		 RESULT = new NodoTermino(entero,getLineaToken(entero),getColumnaToken(entero)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_1",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1683,7 +1555,7 @@ class CUP$Parser$actions {
 		int funcCallleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int funcCallright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoLlamadaFunc funcCall = (NodoLlamadaFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RETURN = new NodoTermino(null,-1,funcCall,-1,funcCall.getLine(),funcCall.getColumn()); 
+		 RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_1",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1695,7 +1567,7 @@ class CUP$Parser$actions {
 		int decimalleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int decimalright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol decimal = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RETURN = new NodoTermino(null,-1,null,decimal,decimal.getLine(),decimal.getColumn()); 
+		 RESULT = new NodoTermino(decimal, getLineaToken(decimal),getColumnaToken(decimal)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_1",25, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1707,7 +1579,7 @@ class CUP$Parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoId id = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(id,-1,null,-1,id.getLine(),id.getColumn());
+		 RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_2",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1719,7 +1591,7 @@ class CUP$Parser$actions {
 		int enteroleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int enteroright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol entero = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(null, entero, null, -1, entero.getLine(), entero.getcolumn()); 
+		 RESULT = new NodoTermino(entero,getLineaToken(entero),getColumnaToken(entero)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_2",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1731,7 +1603,7 @@ class CUP$Parser$actions {
 		int funcCallleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int funcCallright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoLlamadaFunc funcCall = (NodoLlamadaFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(null,-1,funcCall,-1,funcCall.getLine(),funcCall.getColumn()); 
+		 RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_2",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1743,7 +1615,7 @@ class CUP$Parser$actions {
 		int decimalleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int decimalright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol decimal = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTermino(null,-1,null,decimal,decimal.getLine(),dedcimal.getColumn()); 
+		 RESULT = new NodoTermino(decimal, getLineaToken(decimal),getColumnaToken(decimal)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINO_2",26, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1767,7 +1639,7 @@ class CUP$Parser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol t = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null, 1,null, t.getLine(),t.getColumn()); 
+		 RESULT = new NodoTerminoLog(null, 1,null, getLineaToken(t),getColumnaToken(t)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_1",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1779,7 +1651,7 @@ class CUP$Parser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol f = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,0,null,f.getLine(),f.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,0,null,getLineaToken(f),getColumnaToken(f)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_1",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1815,7 +1687,7 @@ class CUP$Parser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol t = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,1,null,t.getLine(),t.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,1,null,getLineaToken(t),getColumnaToken(t)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_2",28, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1827,7 +1699,7 @@ class CUP$Parser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol f = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,0,null,f.getLine(),f.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,0,null,getLineaToken(f),getColumnaToken(f)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_2",28, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1884,10 +1756,13 @@ class CUP$Parser$actions {
           case 92: // EXPRESION ::= tLparen EXPRESION tRparen 
             {
               NodoExpresion RESULT =null;
+		int vleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
+		int vright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
+		ComplexSymbol v = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoExpresion e = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 RESULT = new NodoExpresion(e, null, null, null,null, null, -1, null, e.getLine(), e.getColumn()); 
+		 RESULT = new NodoExpresion(e, null, null, null,null, null, -1, null, getLineaToken(v),getColumnaToken(v)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1896,10 +1771,13 @@ class CUP$Parser$actions {
           case 93: // EXPRESION ::= tNot EXPRESION 
             {
               NodoExpresion RESULT =null;
+		int vleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int vright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		ComplexSymbol v = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoExpresion e = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoExpresion(null, e, null, null,null, null, -1, null, e.getLine(), e.getColumn()); 
+		 RESULT = new NodoExpresion(null, e, null, null,null, null, -1, null, getLineaToken(v),getColumnaToken(v)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1959,7 +1837,7 @@ class CUP$Parser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol t = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoExpresion(null, null, null, null,null, null, 1, null, t.getLine(), t.getColumn()); 
+		 RESULT = new NodoExpresion(null, null, null, null,null, null, 1, null, getLineaToken(t),getColumnaToken(t)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1971,7 +1849,7 @@ class CUP$Parser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol f = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoExpresion(null, null, null, null,null, null, 0, null, f.getLine(), f.getColumn()); 
+		 RESULT = new NodoExpresion(null, null, null, null,null, null, 0, null, getLineaToken(f),getColumnaToken(f)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1995,7 +1873,7 @@ class CUP$Parser$actions {
 		int ileft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol i = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(Integer.toString(i),Tipo.INT,i.getLine(),i.getColumn()); 
+		 RESULT = new NodoLiteral(Integer.toString(i.getValor()),Tipo.INT,getLineaToken(i),getColumnaToken(i)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2007,7 +1885,7 @@ class CUP$Parser$actions {
 		int dleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int dright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol d = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(Float.toString(d),Tipo.FLOAT,d.getLine(),d.getColumn()); 
+		 RESULT = new NodoLiteral(Float.toString(d),Tipo.FLOAT,getLineaToken(d),getColumnaToken(d)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2019,7 +1897,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol c = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(c,Tipo.CHAR,c.getLine(),c.getColumn()); 
+		 RESULT = new NodoLiteral(c,Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2031,7 +1909,7 @@ class CUP$Parser$actions {
 		int lleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int lright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol l = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoLiteral(l,Tipo.STR,l.getLine(),l.getColumn()); 
+		 RESULT = new NodoLiteral(l,Tipo.STR,getLineaToken(l),getColumnaToken(l)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LITERAL",42, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2043,16 +1921,10 @@ class CUP$Parser$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)).right;
 		NodoId id = (NodoId)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-3)).value;
-		int lparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
-		int lparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
-		ComplexSymbol lparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		int paramleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int paramright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		NodoParametros param = (NodoParametros)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		int rparenleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
-		int rparenright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		ComplexSymbol rparen = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoLlamadaFunc(id,lparen,param,rparen,id.getLine(),id.getColumn()); 
+		 RESULT= new NodoLlamadaFunc(id,param,id.getLine(),id.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("LLAMADA_FUNC",32, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2100,13 +1972,10 @@ class CUP$Parser$actions {
 		int paramleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int paramright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		NodoParametros param = (NodoParametros)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		int comaleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
-		int comaright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
-		ComplexSymbol coma = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int expleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int expright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoExpresion exp = (NodoExpresion)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT= new NodoParamCompuesto(param,coma,exp,param.getLine(),param.getColumn()); 
+		 RESULT= new NodoParamCompuesto(param,exp,param.getLine(),param.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PARAM_COMPUESTO",35, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2118,7 +1987,7 @@ class CUP$Parser$actions {
 		int valorleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valorright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ComplexSymbol valor = (ComplexSymbol)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoId((String) valor.getLiteral(), valor.getLine(), valor.getColumn()); 
+		 RESULT = new NodoId((String) valor.getValor(), getLineaToken(valor),getColumnaToken(valor)); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("ID",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

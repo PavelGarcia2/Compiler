@@ -7,14 +7,16 @@ public class NodoInitCases extends Nodo {
 
 
     Tipo tipo;
-    int valor;
-    String valor2;
+    String valor;
 
-    public NodoInitCases(Tipo tipo,int valor,String valor2,int l, int c) {
+    public NodoInitCases(Tipo tipo,String valor,int l, int c) {
         super("INIT_CASES", false, l, c);
         this.tipo = tipo;
         this.valor = valor;
-        this.valor2 = valor2;
+    }
+
+    public String getValor(){
+        return this.valor;
     }
     
 }

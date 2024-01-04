@@ -3,14 +3,10 @@ package sintactico.arbol;
 public class NodoId extends Nodo {
 
     String nombre;
-    int linea;
-    int columna;
 
     public NodoId(String n, int linea, int columna) {
-        super("ID", false);
+        super("ID", false,linea,columna);
         nombre = n;
-        this.linea = linea;
-        this.columna = columna;
     }
 
     public String getNombre() {

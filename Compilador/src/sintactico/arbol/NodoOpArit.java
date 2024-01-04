@@ -2,9 +2,9 @@ package sintactico.arbol;
 
 public class NodoOpArit extends Nodo {
 
-NodoSimbolos opArit;
+TipoArit opArit;
 
-    public NodoOpArit(NodoSimbolos opArit, int l, int c){
+    public NodoOpArit(TipoArit opArit, int l, int c){
         super("OP_ARIT", false, l, c);
         this.opArit = opArit;
     }

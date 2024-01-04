@@ -6,117 +6,98 @@ package sintactico.arbol;
  */
 public class NodoOtrasSent extends Nodo{
 
-    NodoKeyWords nodoIF;
-    NodoSimbolos nodoLParen;
+    
     NodoParametros nodoParametros;
-    NodoSimbolos nodoRParen;
-    NodoSimbolos nodoLBracket;
     NodoSents nodoSents;
-    NodoSimbolos nodoRBracket;
     NodoElse nodoElse;
-    NodoKeyWords nodoWhile;
-    NodoKeyWords nodoFor;
     NodoId nodoId;
-    NodoSimbolos nodoPuntoComa;
-    NodoSimbolos nodoPuntoComa2;
     NodoExpresion nodoExpresion;
     NodoOpRapidos nodoOpRapidos;
-    NodoKeyWords nodoSwitch;
     NodoCase nodoCase;
-    NodoKeyWords nodoPrint;
-    NodoKeyWords nodoPrintLn;
     NodoLlamadaFunc nodoLlamadaFunc;
 
     NodoKeyWords nodoIn;    
 
 
+
+    // IDENTIFICADOR
+    int identificador;
+    /* 
+        if -> 0 
+        while -> 1
+        for -> 2
+        switch -> 3
+        print -> 4
+        println -> 5
+        llamadaFunc -> 6
+        In -> 7
+    */ 
+    
+
     //if
-    public NodoOtrasSent(NodoKeyWords nodoIF, NodoSimbolos nodoLParen, NodoParametros nodoParametros, NodoSimbolos nodoRParen, NodoSimbolos nodoLBracket, NodoSents nodoSents, NodoSimbolos nodoRBracket,NodoElse nodoElse, int l, int c) {
+    public NodoOtrasSent(int diff, NodoParametros nodoParametros, NodoSents nodoSents,NodoElse nodoElse, int l, int c) {
         super("OtrasSents_IF", false, l, c);
-        this.nodoIF = nodoIF;
-        this.nodoLParen = nodoLParen;
         this.nodoParametros = nodoParametros;
-        this.nodoRParen = nodoRParen;
-        this.nodoLBracket = nodoLBracket;
         this.nodoSents = nodoSents;
-        this.nodoRBracket = nodoRBracket;
         this.nodoElse = nodoElse;
+        identificador = diff;
     }
 
     //while
-    public NodoOtrasSent(NodoKeyWords nodoWhile, NodoSimbolos nodoLParen, NodoParametros nodoParametros, NodoSimbolos nodoRParen, NodoSimbolos nodoLBracket, NodoSents nodoSents, NodoSimbolos nodoRBracket, int l, int c) {
+    public NodoOtrasSent(int diff,NodoParametros nodoParametros, NodoSents nodoSents, int l, int c) {
         super("OtrasSents_WHILE", false, l, c);
-        this.nodoWhile = nodoWhile;
-        this.nodoLParen = nodoLParen;
         this.nodoParametros = nodoParametros;
-        this.nodoRParen = nodoRParen;
-        this.nodoLBracket = nodoLBracket;
         this.nodoSents = nodoSents;
-        this.nodoRBracket = nodoRBracket;
+        identificador = diff;
     }
 
     //for
-    public NodoOtrasSent(NodoKeyWords nodoFor, NodoSimbolos nodoLParen, NodoId nodoId, NodoSimbolos nodoPuntoComa, NodoExpresion nodoExpresion, NodoSimbolos nodoPuntoComa2, NodoOpRapidos nodoOpRapidos, NodoSimbolos nodoRParen, NodoSimbolos nodoLBracket, NodoSents nodoSents, NodoSimbolos nodoRBracket, int l, int c) {
+    public NodoOtrasSent(int diff,NodoId nodoId, NodoExpresion nodoExpresion, NodoOpRapidos nodoOpRapidos, NodoSents nodoSents, int l, int c) {
         super("OtrasSents_FOR", false, l, c);
-        this.nodoFor = nodoFor;
-        this.nodoLParen = nodoLParen;
         this.nodoId = nodoId;
-        this.nodoPuntoComa = nodoPuntoComa;
         this.nodoExpresion = nodoExpresion;
-        this.nodoPuntoComa2 = nodoPuntoComa2; //Ns si esto esta bien
         this.nodoOpRapidos = nodoOpRapidos;
-        this.nodoRParen = nodoRParen;
-        this.nodoLBracket = nodoLBracket;
         this.nodoSents = nodoSents;
-        this.nodoRBracket = nodoRBracket;
+        identificador = diff;
     }
 
     //switch
-    public NodoOtrasSent(NodoKeyWords nodoSwitch, NodoSimbolos nodoLParen, NodoId nodoId, NodoSimbolos nodoRParen, NodoSimbolos nodoLBracket, NodoCase nodoCase, NodoSimbolos nodoRBracket, int l, int c) {
+    public NodoOtrasSent(int diff,NodoId nodoId, NodoCase nodoCase, int l, int c) {
         super("OtrasSents_SWITCH", false, l, c);
-        this.nodoSwitch = nodoSwitch;
-        this.nodoLParen = nodoLParen;
         this.nodoId = nodoId;
-        this.nodoRParen = nodoRParen;
-        this.nodoLBracket = nodoLBracket;
         this.nodoCase = nodoCase;
-        this.nodoRBracket = nodoRBracket;
+        identificador = diff;
     }
 
     //print
-    public NodoOtrasSent(int diff,NodoKeyWords nodoPrint, NodoSimbolos nodoLParen, NodoExpresion nodoExpresion, NodoSimbolos nodoRParen, NodoSimbolos nodoPuntoComa, int l, int c) {
+    public NodoOtrasSent(int diff, NodoExpresion nodoExpresion, int l, int c, int a) {
         super("OtrasSents_PRINT", false, l, c);
-        this.nodoPrint = nodoPrint;
-        this.nodoLParen = nodoLParen;
         this.nodoExpresion = nodoExpresion;
-        this.nodoRParen = nodoRParen;
-        this.nodoPuntoComa = nodoPuntoComa;
+        identificador = diff;
     }
 
     //println
-    public NodoOtrasSent(NodoKeyWords nodoPrintLn, NodoSimbolos nodoLParen, NodoExpresion nodoExpresion, NodoSimbolos nodoRParen, NodoSimbolos nodoPuntoComa, int l, int c) {
+    public NodoOtrasSent(int diff,NodoExpresion nodoExpresion, int l, int c) {
         super("OtrasSents_PRINTLN", false, l, c);
-        this.nodoPrintLn = nodoPrintLn;
-        this.nodoLParen = nodoLParen;
         this.nodoExpresion = nodoExpresion;
-        this.nodoRParen = nodoRParen;
-        this.nodoPuntoComa = nodoPuntoComa;
+        identificador = diff;
     }
 
     //llamadaFunc
-    public NodoOtrasSent(NodoLlamadaFunc nodoLlamadaFunc, NodoSimbolos nodoPuntoComa, int l, int c) {
+    public NodoOtrasSent(int diff,NodoLlamadaFunc nodoLlamadaFunc, int l, int c) {
         super("OtrasSents_LLAMADAFUNC", false, l, c);
         this.nodoLlamadaFunc = nodoLlamadaFunc;
-        this.nodoPuntoComa = nodoPuntoComa;
+        identificador = diff;
     }
 
     //In
-    public NodoOtrasSent(NodoKeyWords NodoIn, NodoSimbolos nodoLParen, NodoSimbolos nodoRParen, NodoSimbolos nodoPuntoComa, int l, int c) {
+    public NodoOtrasSent(int diff, int l, int c) {
         super("OtrasSents_IN", false, l, c);
-        this.nodoIn = NodoIn;
-        this.nodoLParen = nodoLParen;
-        this.nodoRParen = nodoRParen;
-        this.nodoPuntoComa = nodoPuntoComa;
+        identificador = diff;
+    }
+
+    public int getIdentificador() {
+        return identificador;
     }
 
 }
