@@ -177,82 +177,34 @@ public class Semantico {
 
         // Mirar si estamos declarando un array
         NodoDeclArray declaracionArray = var.getNodoDeclArray();
-        if(arr != null && !arr.isEmpty()){
+        if(declaracionArray != null && !declaracionArray.isEmpty()){
             
             //Miramos las dimensiones del array
             int dimArray = dimensionArr(declaracionArray);
-
+            Darray da;
             //Mirar si estamos inicializando el array
-            if(asignacion != null && !asignacion.isEmpty()){
-                //Si estamos inicializando
+            if(asignacion != null && !asignacion.isEmpty()){                
                 
-                
-                                
+                // da = new Darray(0, dt.getTsb(),dimArray,false);
+                // ts.poner(id.getName(), da, id);
+
+                //Si estamos inicializando tenemos que comprobar que init y decl tengan la misma dim
+                NodoAsignacionArray nodoAsignacionArray = new
                 
             } else {
                 //Simplemente declaramos un array
-                Darray da;
-                switch(dt.getTsb()){
-                    case Tipo.tsb_int:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        da = new Darray(0, Tipo.tsb_int,dimArray,false);
-                        ts.poner(id.getName(), da, id);
-                    break;
-                    case Tipo.tsb_char:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        da = new Darray(0, Tipo.tsb_char,dimArray,false);
-                        ts.poner(id.getName(), da, id);
-                    break;
-                    case Tipo.tsb_bool:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        da = new Darray(0, Tipo.tsb_bool,dimArray,false);
-                        ts.poner(id.getName(), da, id);
-                    break;
-                    case Tipo.tsb_str:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        da = new Darray(0, Tipo.tsb_str,dimArray,false);
-                        ts.poner(id.getName(), da, id);
-                    break;                    
-                    case Tipo.tsb_float:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        da = new Darray(0, Tipo.tsb_float,dimArray,false);
-                        ts.poner(id.getName(), da, id);
-                    break;
-                }            
-            }
+                da = new Darray(0, dt.getTsb(),dimArray,false);
+                ts.poner(id.getName(), da, id);
+            }            
+            
         }else{
             // Mirar si tenemos que hacer la asignacion
             if(asignacion != null && !asignacion.isEmpty()){
                 ctrlAsignNormal(dt, asignacion,id);
             }else{
                 Dvar d;
-                switch(dt.getTsb()){
-                    case Tipo.tsb_int:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        d = new Dvar(0, Tipo.tsb_int);
-                        ts.poner(id.getName(), d, id);
-                    break;
-                    case Tipo.tsb_char:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        d = new Dvar(0, Tipo.tsb_char);
-                        ts.poner(id.getName(), d, id);
-                    break;
-                    case Tipo.tsb_bool:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        d = new Dvar(0, Tipo.tsb_bool);
-                        ts.poner(id.getName(), d, id);
-                    break;
-                    case Tipo.tsb_str:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        d = new Dvar(0, Tipo.tsb_str);
-                        ts.poner(id.getName(), d, id);
-                    break;                    
-                    case Tipo.tsb_float:
-                        // EL 0 es provisional este 0 se tendra que pasar con c3a
-                        d = new Dvar(0, Tipo.tsb_float);
-                        ts.poner(id.getName(), d, id);
-                    break;
-                }            
+                d = new Dvar(0, dt.getTsb());
+                ts.poner(id.getName(), d, id);           
             }
         }   
     }
@@ -416,10 +368,6 @@ public class Semantico {
         if(ret != null && !ret.isEmpty()){
             ctrlReturn(ret, func.getNodoTipo());
         }
-        //*** Mirar si el return y el tipo son iguales ****
-        if(ret.getNodoExpresion(). != tipo.getTipo()){
-
-        }
 
         ts.salirBloque();
         
@@ -435,71 +383,98 @@ public class Semantico {
         
         if(ret.getNodoReturnParam() != null){            
             if(paramReturn.getNodoLiteral()!=null){//caso de literal 
-                consultarValidez(tipo,paramReturn.getNodoLiteral().getTipo())
+                consultarValidez(tipo,paramReturn.getNodoLiteral().getTipo(),ret);
             }else{//caso de de id
-                ts.consultarTD(id.get)
-                conultarValidez(tipo,)
+               DTipus dt = (DTipus) ts.consultarTD(id.getNombre().toString());            
+                consultarValidez(tipo,dt.getTsb(),ret);
             }
-        }
-
-        
+        }else if(ret.isEmpty()){
+            //se ha derivado en landa
+        }        
     }
 
-    private void consultarValidez(NodoTipo tipo, Tipo t){
-         switch(tipo.getTipo()){
-                //si la funcion tiene un tipo booleano el rreturn tambien debe ser booleano
-                case tsb_bool:
-                    //compruebo las posibles partes boleanas, si no es true o false error
-                    if (t !=  Tipo.tsb_true || t !=  Tipo.tsb_false ) {
-                        //No es un bool error
-                        parser.report_error("ERROR: La funcion es booleana y el return no es booleano",ret);
-                    }
-                    
-                    break;
+    private void consultarValidez(NodoTipo tipo, Tipo t, NodoReturn ret){
+        switch(tipo.getTipo()){
+            //si la funcion tiene un tipo booleano el rreturn tambien debe ser booleano
+            case tsb_bool:
+                //compruebo las posibles partes boleanas, si no es true o false error
+                if (t !=  Tipo.tsb_true || t !=  Tipo.tsb_false ) {
+                    //No es un bool error
+                    parser.report_error("ERROR: La funcion es booleana y el return no es booleano",ret);
+                }
+                
+                break;
 
-                case tsb_char:
-                    if(t != Tipo.tsb_char){
-                        //No es un char error
-                        parser.report_error("ERROR: La funcion es de tipo character y el return no es character",ret);
-                    }
-                    
-                    break;
+            case tsb_char:
+                if(t != Tipo.tsb_char){
+                    //No es un char error
+                    parser.report_error("ERROR: La funcion es de tipo character y el return no es character",ret);
+                }
+                
+                break;
 
-                case tsb_float:
-                    
-                    if(t != Tipo.tsb_float){
-                        //No es un float error
-                        parser.report_error("ERROR: La funcion es de tipo float y el return no es float",ret);
-                    }
-                    break;
+            case tsb_float:
+                
+                if(t != Tipo.tsb_float){
+                    //No es un float error
+                    parser.report_error("ERROR: La funcion es de tipo float y el return no es float",ret);
+                }
+                break;
 
-                case tsb_int:
+            case tsb_int:
 
-                    if(t != Tipo.tsb_int){
-                        //No es un int error
-                        parser.report_error("ERROR: La funcion es de tipo int y el return no es int",ret);
-                    }
-                    break;
+                if(t != Tipo.tsb_int){
+                    //No es un int error
+                    parser.report_error("ERROR: La funcion es de tipo int y el return no es int",ret);
+                }
+                break;
 
-                case tsb_str:
-                    
-                    if(t != Tipo.tsb_str){
-                        //No es un string error
-                        parser.report_error("ERROR: La funcion es de tipo string y el return no es string",ret);
-                    }
-                    break;
+            case tsb_str:
+                
+                if(t != Tipo.tsb_str){
+                    //No es un string error
+                    parser.report_error("ERROR: La funcion es de tipo string y el return no es string",ret);
+                }
+                break;
 
-                case tsb_void: 
+            case tsb_void: 
 
-                        if(!ret.isEmpty){
-                            parser.report_error("ERROR: La funcion es de tipo void y el return no es void",ret);
-                        } 
-                                    
-                    break;
+                    if(!ret.isEmpty()){
+                        parser.report_error("ERROR: La funcion es de tipo void y el return no es void",ret);
+                    } 
+                                
+                break;
 
-                default:
-                    break; 
-            } 
+            default:
+                break; 
+        } 
+    }
+
+
+    public void ctrlSents(NodoSents sents){
+        NodoSent sent = sents.getNodoSent();
+        if(sent != null && !sent.isEmpty()){
+            ctrlSent(sent);
+        }else if(sent.isEmpty()){
+            //se ha derivado en landa
+        }else{
+            ctrlSents(sents.getNodoSents());
+        }
+    }
+
+    public void ctrlSent(NodoSent sent){
+
+        if(sent.getNodoOtrasSent() != null){
+            ctrlOtrasSent(sent.getNodoOtrasSent());
+        }
+
+        if(sent.getNodoRealAsign() !=null){
+            ctrlRealAsign(sent.getNodoRealAsign());
+        }
+    }
+
+    public void ctrlOtrasSent(NodoOtrasSent otras){
+        
     }
 
 

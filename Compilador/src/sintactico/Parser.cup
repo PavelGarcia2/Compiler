@@ -20,6 +20,7 @@ import sintactico.arbol.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import semantico.Semantico;
+import herramientas.*;
 
 class Parser;
 
@@ -161,6 +162,7 @@ non terminal NodoLiteral LITERAL;
 non terminal NodoDeclConst DECL_CONST;
 non terminal NodoConst DECL_CON;
 non terminal NodoReturnParam RETURN_PARAM;
+//non terminal NodoRealArrAsign REAL_ARRAY_ASSIGN;
 
 
 
@@ -217,15 +219,17 @@ DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor   
 REAL_ASIGN ::= ID:id tIgual:igual EXPRESION:exp tPuntocoma:pcoma                                                                                                                                            {: RESULT= new NodoRealAsign(id,exp,id.getLine(),id.getColumn()); :}
             ;
 
-REAL_ARRAY_ASSIGN ::= ID:id DIM_ARRAY:dim tIgual EXPRESION:exp tPuntoComa                                                                                                                                              {: RESULT= new NodoRealArrAsign(id,dim,exp,id.getLine(),id.getColumn()); :}
+/*
+REAL_ARRAY_ASSIGN ::= ID:id DIM_ARRAY:dim tIgual EXPRESION:exp tPuntocoma                                                                                                                                   {: RESULT= new NodoRealArrAsign(id,dim,exp,id.getLine(),id.getColumn()); :}
                     ;
+*/
 
-TIPO ::= tInt:i                                                                                                                                                                                             {: RESULT = new NodoTipo(Tipo.INT,getLineaToken(i),getColumnaToken(i)); :}
-    | tCaracter:c                                                                                                                                                                                           {: RESULT = new NodoTipo(Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); :}
-    | tFloat:f                                                                                                                                                                                              {: RESULT = new NodoTipo(Tipo.FLOAT,getLineaToken(f),getColumnaToken(f)); :}                                     
-    | tBool:b                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.BOOL,getLineaToken(b),getColumnaToken(b)); :}                               
-    | tStr:s                                                                                                                                                                                                {: RESULT = new NodoTipo(Tipo.STR,getLineaToken(s),getColumnaToken(s)); :}                                       
-    | tVoid:v                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.VOID,getLineaToken(v),getColumnaToken(v)); :}                     
+TIPO ::= tInt:i                                                                                                                                                                                             {: RESULT = new NodoTipo(Tipo.tsb_int,getLineaToken(i),getColumnaToken(i)); :}
+    | tCaracter:c                                                                                                                                                                                           {: RESULT = new NodoTipo(Tipo.tsb_char,getLineaToken(c),getColumnaToken(c)); :}
+    | tFloat:f                                                                                                                                                                                              {: RESULT = new NodoTipo(Tipo.tsb_float,getLineaToken(f),getColumnaToken(f)); :}                                     
+    | tBool:b                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.tsb_bool,getLineaToken(b),getColumnaToken(b)); :}                               
+    | tStr:s                                                                                                                                                                                                {: RESULT = new NodoTipo(Tipo.tsb_str,getLineaToken(s),getColumnaToken(s)); :}                                       
+    | tVoid:v                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.tsb_void,getLineaToken(v),getColumnaToken(v)); :}                     
 	;
 
 // TODO
@@ -292,9 +296,9 @@ CASO_DEFAULT ::= tDefault:def tDospuntos SENTS:sents tBreak tPuntocoma          
                 ;
 
 // TODO
-INIT_CASES ::= tEntero:e                                                                                                                                                                                    {: RESULT= new NodoInitCases(Tipo.INT,getValor(e),getLineaToken(e),getColumnaToken(e)); :}
-          | tLinea:s                                                                                                                                                                                        {: RESULT= new NodoInitCases(Tipo.STR,getValor(s),getLineaToken(s),getColumnaToken(s)); :}
-          | tCaracter:c                                                                                                                                                                                     {: RESULT= new NodoInitCases(Tipo.CHAR,getValor(c),getLineaToken(c),getColumnaToken(c)); :}
+INIT_CASES ::= tEntero:e                                                                                                                                                                                    {: RESULT= new NodoInitCases(Tipo.tsb_int,getValor(e),getLineaToken(e),getColumnaToken(e)); :}
+          | tLinea:s                                                                                                                                                                                        {: RESULT= new NodoInitCases(Tipo.tsb_str,getValor(s),getLineaToken(s),getColumnaToken(s)); :}
+          | tCaracter:c                                                                                                                                                                                     {: RESULT= new NodoInitCases(Tipo.tsb_char,getValor(c),getLineaToken(c),getColumnaToken(c)); :}
 		  ;
 
 // TODO
@@ -371,8 +375,6 @@ EXPRESION ::= tLparen:v EXPRESION:e tRparen                                     
          | EXPRESION_ARITM:earit                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, earit, null,null, null, -1, null, earit.getLine(), earit.getColumn()); :}
          | ID:id                                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, null, null,id, null, -1, null, id.getLine(), id.getColumn()); :}
          | LITERAL:l                                                                                                                                                                                        {: RESULT = new NodoExpresion(null, null, null, null,null, l, -1, null, l.getLine(), l.getColumn()); :}
-         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoExpresion(null, null, null, null,null, null, 1, null, getLineaToken(t),getColumnaToken(t)); :}
-         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoExpresion(null, null, null, null,null, null, 0, null, getLineaToken(f),getColumnaToken(f)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, null, null,null, null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
 		 ;
 
