@@ -4,7 +4,7 @@ public class Descripcion {
     TDesc tipoDescripcion;
     
     public enum TDesc {
-        darg,dargin,dcamp,dconst,dindex,dnula,dproc,dtipus,dvar,darray
+        darg,dargin,dcamp,dconst,dindex,dnula,dproc,dtipus,dvar,darray,dfunc
     }
 
     

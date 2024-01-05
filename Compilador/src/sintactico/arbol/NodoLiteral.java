@@ -1,5 +1,7 @@
 package sintactico.arbol;
 
+import herramientas.Tipo;
+
 public class NodoLiteral extends Nodo{
     
     String valor;

@@ -6,6 +6,8 @@
 package sintactico;
 
 import java.io.*;
+
+import herramientas.Tipo;
 import sintactico.arbol.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;

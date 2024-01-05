@@ -1,22 +1,24 @@
 package tsimbolos.descripciones;
-
+import herramientas.Tipo;
 
 public class DConst extends Descripcion{
 
+    private String id;
     private int valor;
-    private String tipo;
+    private Tipo tipo;
 
-    public DConst (String tipo, int valor){
+    public DConst (Tipo tipo, int valor, String id){
         super(TDesc.dconst);
         this.tipo = tipo;
         this.valor = valor;
+        this.id = id;
     }
 
     public int getValor(){
         return this.valor;
     }
 
-    public String getTipo(){
+    public Tipo getTipo(){
         return this.tipo;
     }
 

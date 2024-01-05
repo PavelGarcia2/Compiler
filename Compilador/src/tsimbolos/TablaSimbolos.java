@@ -4,6 +4,7 @@ import sintactico.Parser;
 import tsimbolos.auxi.DatosTE;
 import tsimbolos.auxi.DatosTD;
 import tsimbolos.descripciones.*;
+import sintactico.arbol.Nodo;
 
 public class TablaSimbolos {
 
@@ -61,10 +62,10 @@ public class TablaSimbolos {
      * @param id
      * @return
      */
-    public boolean poner(String id, Descripcion d) {
+    public boolean poner(String id, Descripcion d, Nodo nodo) {
         // Si el identificador ya existe en el nivel actual, error
         if (td.getElemento(id).getnp() == n) {
-            System.out.println("ERROR!");
+            parser.report_error("Simbolo ya declarado en el nivel actual",nodo);
             return false;
         }
 

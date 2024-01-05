@@ -1,5 +1,7 @@
 package sintactico.arbol;
 
+import herramientas.Tipo;
+
 public class NodoTipo extends Nodo{
 
     Tipo tipo;            //De momento un string para saber el tipo

@@ -160,6 +160,7 @@ non terminal NodoLiteral LITERAL;
 
 non terminal NodoDeclConst DECL_CONST;
 non terminal NodoConst DECL_CON;
+non terminal NodoReturnParam RETURN_PARAM;
 
 
 
@@ -216,6 +217,9 @@ DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor   
 REAL_ASIGN ::= ID:id tIgual:igual EXPRESION:exp tPuntocoma:pcoma                                                                                                                                            {: RESULT= new NodoRealAsign(id,exp,id.getLine(),id.getColumn()); :}
             ;
 
+REAL_ARRAY_ASSIGN ::= ID:id DIM_ARRAY:dim tIgual EXPRESION:exp tPuntoComa                                                                                                                                              {: RESULT= new NodoRealArrAsign(id,dim,exp,id.getLine(),id.getColumn()); :}
+                    ;
+
 TIPO ::= tInt:i                                                                                                                                                                                             {: RESULT = new NodoTipo(Tipo.INT,getLineaToken(i),getColumnaToken(i)); :}
     | tCaracter:c                                                                                                                                                                                           {: RESULT = new NodoTipo(Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); :}
     | tFloat:f                                                                                                                                                                                              {: RESULT = new NodoTipo(Tipo.FLOAT,getLineaToken(f),getColumnaToken(f)); :}                                     
@@ -228,9 +232,13 @@ TIPO ::= tInt:i                                                                 
 FUNC ::= tFun:fun TIPO:tipo DECL_ARRAY:decarr ID:id tLparen DECL_FUNCP:decfuncp tRparen tLbracket DECL_VARS:declvars SENTS:sents RETURN:retorno tRbracket                                                   {:RESULT= new NodoFunc(tipo,decarr,id,decfuncp,declvars,sents,retorno,getLineaToken(fun),getColumnaToken(fun)); :}
     ;
 // TODO
-RETURN ::= tReturn:retorno EXPRESION:exp tPuntocoma                                                                                                                                                         {: RESULT= new NodoReturn(exp,getLineaToken(retorno),getColumnaToken(retorno)); :}                                                                                                                           
+RETURN ::= tReturn:retorno RETURN_PARAM:exp tPuntocoma                                                                                                                                                      {: RESULT= new NodoReturn(exp,getLineaToken(retorno),getColumnaToken(retorno)); :}                                                                                                                           
         |                                                                                                                                                                                                   {: RESULT= new NodoReturn(); :} 
         ;
+
+RETURN_PARAM ::= ID:id                                                                                                                                                                                      {: RESULT= new NodoReturnParam(id,getLineaToken(id),getColumnaToken(id));:} 
+                | LITERAL:lit                                                                                                                                                                               {: RESULT= new NodoReturnParam(lit,getLineaToken(lit),getColumnaToken(lit)); :}
+                ;
 // TODO
 DECL_FUNCP ::= DECL_FUNCPARAMS:funcpa                                                                                                                                                                       {: RESULT= new NodoDeclFuncP(funcpa, funcpa.getLine(),funcpa.getColumn()); :}
                |                                                                                                                                                                                            {: RESULT= new NodoDeclFuncP(); :}
@@ -368,11 +376,14 @@ EXPRESION ::= tLparen:v EXPRESION:e tRparen                                     
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, null, null,null, null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
 		 ;
 
-LITERAL ::= tEntero:i                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(i),Tipo.INT,getLineaToken(i),getColumnaToken(i)); :}
-         | tDecimal:d                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(d),Tipo.FLOAT,getLineaToken(d),getColumnaToken(d)); :}
-         | tChar:c                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(c),Tipo.CHAR,getLineaToken(c),getColumnaToken(c)); :}
-         | tLinea:l                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(l),Tipo.STR,getLineaToken(l),getColumnaToken(l)); :}
+LITERAL ::= tEntero:i                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(i),Tipo.tsb_int,getLineaToken(i),getColumnaToken(i)); :}
+         | tDecimal:d                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(d),Tipo.tsb_float,getLineaToken(d),getColumnaToken(d)); :}
+         | tChar:c                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(c),Tipo.tsb_char,getLineaToken(c),getColumnaToken(c)); :}
+         | tLinea:l                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(l),Tipo.tsb_str,getLineaToken(l),getColumnaToken(l)); :}
+         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(t),Tipo.tsb_true,getLineaToken(t),getColumnaToken(t)); :}
+         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(f),Tipo.tsb_false,getLineaToken(f),getColumnaToken(f)); :}
         ;
+
 
 
 // TODO

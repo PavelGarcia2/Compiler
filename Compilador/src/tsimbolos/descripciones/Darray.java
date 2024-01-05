@@ -1,25 +1,27 @@
 package tsimbolos.descripciones;
-
+import herramientas.*;
 public class Darray extends Descripcion {
     
     private final int variableNumber;
-    private String  tipus;  
+    private Tipo tipus;  
     private int tam; // numero de la variable que está en la tabla de variables que contiene el total de ocupacion de bytes de la array
     private boolean init;
+    private int dimensiones;
     
-    public Darray(int variableNumber, String tipus, boolean init) {
+    public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init) {
         super(TDesc.darray);
         this.variableNumber = variableNumber;
         this.tipus = tipus;
         this.tam = -1;
         this.init = init;
+        this.dimensiones = dimensiones;
     }
 
     public int getVariableNumber() {
         return variableNumber;
     }
 
-    public String getTipus() {
+    public Tipo getTipus() {
         return tipus;
     }
     

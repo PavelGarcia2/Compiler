@@ -13,7 +13,6 @@ public class NodoDeclArray extends Nodo{
         super("DECLARRAY", true);
     }
 
-
     public NodoDeclArray getNodoDeclArray() {
         return nodoDeclArray;
     }

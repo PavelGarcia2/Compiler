@@ -2,11 +2,11 @@ package sintactico.arbol;
 
 public class NodoReturn extends Nodo {
 
-    NodoExpresion nodoExpresion;
+    NodoReturnParam nodoParam;
 
-    public NodoReturn(NodoExpresion nodoExpresion, int l, int c) {
+    public NodoReturn(NodoReturnParam nodoParam, int l, int c) {
         super("RETURN", false, l, c);
-        this.nodoExpresion = nodoExpresion;
+        this.nodoParam = nodoParam;
     }
 
     public NodoReturn() {
@@ -14,8 +14,8 @@ public class NodoReturn extends Nodo {
     }
 
 
-    public NodoExpresion getNodoExpresion() {
-        return nodoExpresion;
+    public NodoReturnParam getNodoReturnParam() {
+        return nodoParam;
     }
 
 }

@@ -1,13 +1,13 @@
 package tsimbolos.descripciones;
-
+import herramientas.*;
 public class Dvar extends Descripcion{                         // entrada que correspon a una variable
 
     private int nv = 0;                     // identificador únic
-    private String tipus;                   // identificador del tipus de la variable
+    private Tipo tipus;                   // identificador del tipus de la variable
 
-    public Dvar(int nv, String tipus){
+    public Dvar(int nv,Tipo tipus){
         super(TDesc.dvar);
-        nv += 1;
+        this.nv = nv;
         this.tipus = tipus;
     }
 
@@ -15,7 +15,7 @@ public class Dvar extends Descripcion{                         // entrada que co
         return nv;
     }
 
-    public String getTipus(){
+    public Tipo getTipus(){
         return tipus;
     }
 

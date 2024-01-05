@@ -1,21 +1,36 @@
 package tsimbolos.descripciones;
-
+import herramientas.*;
 
 public class DTipus extends Descripcion {
 
-    public enum TSB {
-        tsb_char, tsb_int, tsb_bool, tsb_void
-    }
+
 
     private int limiteInferior;
     private int limiteSuperior;
-    private TSB tsb;
+    private float limiteSupF;
+    private float limiteInfF;
+    private Tipo tsb;
     
-    public DTipus(TSB tsb,int limiteInferior, int limiteSuperior) {
+    public DTipus(Tipo tsb,int limiteInferior, int limiteSuperior) {
         super(TDesc.dtipus);
         this.limiteInferior = limiteInferior;
         this.limiteSuperior = limiteSuperior;
         this.tsb = tsb;
+    }
+
+    public DTipus(Tipo tsb,float limiteSupF, float limiteInfF) {
+        super(TDesc.dtipus);
+        this.limiteSupF = limiteSupF;
+        this.limiteInfF = limiteInfF;
+        this.tsb = tsb;
+    }
+
+    public float getLimiteSupF() {
+        return limiteSupF;
+    }
+
+    public float getLimiteInfF() {
+        return limiteInfF;
     }
 
     public int getLimiteInferior() {
@@ -26,7 +41,7 @@ public class DTipus extends Descripcion {
         return limiteSuperior;
     }
 
-    public TSB getTsb() {
+    public Tipo getTsb() {
         return tsb;
     }
 }
