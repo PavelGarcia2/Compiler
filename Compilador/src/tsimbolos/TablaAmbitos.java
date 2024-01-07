@@ -41,11 +41,11 @@ public class TablaAmbitos {
     }
 
     public int getAmbito(int n) {
-        int ambito = -1;
+        int ambito = 0;
         if(n<=ind){
             ambito = ta[n];
         }
-        if(ambito==-1){
+        if(n==-1){
             System.out.println("TablaAmbitos.java : Ambito no disponible");
         }
         return ambito;

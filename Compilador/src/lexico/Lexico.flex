@@ -3,24 +3,21 @@ package lexico;
 import java.io.*;
 
 import java_cup.runtime.*;
-import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
-import java_cup.runtime.ComplexSymbolFactory.Location;
-
+import java_cup.runtime.ComplexSymbolFactory.*;
+import java_cup.sym;
 import sintactico.ParserSym;
+import lexico.Literal;
 
 %%
 // Declaraciones
+%cup
 
 %public                 // Indicamos que la clase será pública
 %class Scanner          // Indicamos el nombre de la clase que se generará
 %line
 %column
-%cup
 %char
 %int
-%type java_cup.runtime.Symbol
-%implements java_cup.runtime.Scanner
-%function next_token
 
 %eofval{
   return symbol(ParserSym.EOF);
@@ -146,8 +143,8 @@ decimal     = {digito}*{punto}{digito}+
         // Sumar 1 per a que la primera línia i columna no sigui 0.
         Location esquerra = new Location(yyline+1, yycolumn+1);
         Location dreta = new Location(yyline+1, yycolumn+yytext().length()+1);
-
-        return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta);
+        ComplexSymbol val = new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta);
+        return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta, val);
     }
 
     // Construcció d'un symbol amb un atribut associat.
@@ -207,15 +204,15 @@ decimal     = {digito}*{punto}{digito}+
 {w_bool}                               { return symbol(ParserSym.tBool); }
 {w_str}                                { return symbol(ParserSym.tStr); }
 {w_const}                              { return symbol(ParserSym.tConst); }
-{str}                                  { return symbol(ParserSym.tLinea, yytext()); }
-{char}                                 { return symbol(ParserSym.tCaracter, yytext()); }
-{decimal}                              { return symbol(ParserSym.tDecimal, yytext()); }
-{w_true}                               { return symbol(ParserSym.tTrue); }
-{w_false}                              { return symbol(ParserSym.tFalse); }
+{str}                                  { return symbol(ParserSym.tLinea, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
+{char}                                 { return symbol(ParserSym.tCaracter, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
+{decimal}                              { return symbol(ParserSym.tDecimal, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
+{w_true}                               { return symbol(ParserSym.tTrue, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
+{w_false}                              { return symbol(ParserSym.tFalse, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
 {w_print}                              { return symbol(ParserSym.tPrint); }
 {w_println}                            { return symbol(ParserSym.tPrintln); }
-{id}                                   { return symbol(ParserSym.tId, yytext()); }
-{numero}                               { return symbol(ParserSym.tEntero, yytext()); }
+{id}                                   { return symbol(ParserSym.tId, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
+{numero}                               { return symbol(ParserSym.tEntero, new Literal(this.yytext(), this.yyline+1, this.yycolumn+1)); }
 {slinea}                               { /* ignore */ }
 {rparen}                               { return symbol(ParserSym.tRparen); }
 {lparen}                               { return symbol(ParserSym.tLparen); }

@@ -1,6 +1,5 @@
-
-const int hola = 2;
-const int ha = 2;
+const int a = 1;
+const bool b = 2;
 
 main {
     

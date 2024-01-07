@@ -11,7 +11,7 @@ public class TablaSimbolos {
     int n; // Nivel actual (indicador de ambito) apunta al nivel de la tabla de ambitos
     TablaAmbitos ta;
     TablaExpansion te;
-   
+
     TablaDescripcion td;
     private final Parser parser;
 
@@ -64,19 +64,27 @@ public class TablaSimbolos {
      */
     public boolean poner(String id, Descripcion d, Nodo nodo) {
         // Si el identificador ya existe en el nivel actual, error
-        if (td.getElemento(id).getnp() == n) {
-            parser.report_error("Simbolo ya declarado en el nivel actual",nodo);
-            return false;
+
+        if (td.getElemento(id) == null) {
+
+        } else {
+
+            if (td.getElemento(id).getnp() == n) {
+                parser.report_error("Simbolo ya declarado en el nivel actual", nodo);
+                return false;
+            }
+
+            if (td.getElemento(id) != null) {
+                // existe en otro nivel distinto al actual
+                int idxe = ta.getAmbito(n);
+                idxe++;
+                ta.setAmbito(n, idxe);
+                te.put(idxe, new DatosTE(-1, id, d, td.getElemento(id).getnp()));
+            }
         }
 
-        if (td.getElemento(id) != null) {
-            // existe en otro nivel distinto al actual
-            int idxe = ta.getAmbito(n);
-            idxe++;
-            ta.setAmbito(n, idxe);
-            te.put(idxe, new DatosTE(-1, id, d, td.getElemento(id).getnp()));
-        }
         td.insertar(id, new DatosTD(-1, n, d));
+
         return true;
     }
 
@@ -117,8 +125,8 @@ public class TablaSimbolos {
     }
 
     public void entrarBloque() {
-        n++;
-        ta.setAmbito(n, ta.getAmbito(n - 1));
+        this.n++;
+        this.ta.setAmbito(n, this.ta.getAmbito(n - 1));
     }
 
     public void salirBloque() {
@@ -140,10 +148,9 @@ public class TablaSimbolos {
         }
     }
 
-
     public void ponerParam(String idPr, String idParam, Descripcion d) {
         if (d.getTDescripcion() != "dproc") {
-            throw new UnsupportedOperationException("No existe el procedimiento/función con este nombre: " + idPr);   
+            throw new UnsupportedOperationException("No existe el procedimiento/función con este nombre: " + idPr);
         }
         int idxe = td.getElemento(idPr).getFirst();
         // idxep és l’element anterior a idxe
@@ -152,30 +159,29 @@ public class TablaSimbolos {
             idxep = idxe;
             idxe = te.get(idxep).getNext();
         }
-        if(idxep != 0){  throw new UnsupportedOperationException("Ya hay un parametro con este id: " + idxep); }
+        if (idxep != 0) {
+            throw new UnsupportedOperationException("Ya hay un parametro con este id: " + idxep);
+        }
         idxep = ta.getAmbito(n);
         idxep++;
         ta.setAmbito(n, idxep);
         te.get(idxe).setIdcamp(idParam);
         te.get(idxe).setNp(-1);
         te.get(idxe).setD(d);
-        te.get(idxe).setNext(0); 
-        // És el primer índex?      
-        if (idxep == 0){
+        te.get(idxe).setNext(0);
+        // És el primer índex?
+        if (idxep == 0) {
             td.getElemento(idPr).setFirst(idxe);
-        }else{
+        } else {
             // L’índex anterior s’enllaça
             te.get(idxep).setNext(idxe);
         }
     }
-        
-
-    
 
     public Descripcion consultarTD(String id) {
-        if(td.getElemento(id) != null){
+        if (td.getElemento(id) != null) {
             return td.getElemento(id).getDescripcion();
-        }else{
+        } else {
             return null;
         }
     }
@@ -192,7 +198,7 @@ public class TablaSimbolos {
     }
 
     public int consultarNext(int idx) {
-        if(te.get(idx).getNext()==0){
+        if (te.get(idx).getNext() == 0) {
             throw new UnsupportedOperationException("TablaSimbolos.java: Error del compilador");
         }
         return te.get(idx).getNext();

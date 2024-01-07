@@ -20,14 +20,14 @@ public class Semantico {
         this.parser = parser;
         this.ts = new TablaSimbolos(parser);
         inicializarTablaSimbolos();
-
+        runProgram();
     }
 
     private void inicializarTablaSimbolos() {
-
+        System.out.println("INIT TS");
         //Inicializamos el bool
         DTipus d = new DTipus(Tipo.tsb_bool,-1,0);
-        ts.poner("tsb_bool", d, null);
+        ts.poner("tsb_bool", d, null);    
 
         //Inicializamos el valor true
         DConst dC = new DConst(Tipo.tsb_bool, -1,"true");
@@ -51,18 +51,19 @@ public class Semantico {
 
         /* Para que las palabras reservadas queden en el ámbito 1 de forma exclusiva */
         ts.entrarBloque();
-        
+        System.out.println("HEMOS INIT TS");
     }
 
     public void runProgram(){
         NodoMain main = arbol.getNodoMain();
         if (main != null) {
 
+            System.out.println("INIT RUN PROGRAM");
             //comprobar las constantes
             NodoDeclConst constList = arbol.getNodoDeclaracionConstantes();
             if(constList != null && !constList.isEmpty()){
                 ctrlDeclConstantes(constList);
-            }
+            }           
 
             // //obtenemos todas las declaracioes de variables
             // NodoDeclVars varList = arbol.getNodoDeclaracionVariables();
@@ -84,51 +85,69 @@ public class Semantico {
     }
 
     public void ctrlDeclConstantes(NodoDeclConst constList) {
+        System.out.println("INIT DECLCONST");
         NodoDeclConst hijo = constList.getHijo();
         if(hijo!=null && !hijo.isEmpty()){
-            System.out.println("entro Semantico.java");
             ctrlDeclConstantes(hijo);
-        } else if(hijo.isEmpty()){      //Hemos llegado a la producción con lambda
-            // do nothing
-        } else {
-            ctrlConst(hijo.getNodoConst());
-        }
+        } 
+        ctrlConst(constList.getNodoConst());
+        System.out.println("FIN INIT CONST");
     }
 
     public void ctrlConst(NodoConst constante){
 
+        System.out.println("INIT CONST");
         NodoTipo tipo = constante.getNodoTipo();
         NodoId id = constante.getNodoId();
         NodoAsignacion asignacion = constante.getNodoAsignacion();
-        
+        System.out.println("HEMOS PILLADO LOS NODOS TIPO,ID,ASIGNACION");
+
+        System.out.println("COMPROBAMOS QUE SEA UN TIPO QUE EXISTE");
         DTipus dt = (DTipus) ts.consultarTD(tipo.getTipo().toString());
         //Comprovar que tipo es un tipo
         if(dt == null){        // NO EXISTE EL TIPO O NO ES UN TIPO
             parser.report_error("ERROR: No existe el tipo",constante);
         }
+        System.out.println("COMPROBADO");
+
 
         //Comprovar que el tipo es adecuado
+        System.out.println("COMPROBAMOS QUE EL TIPO ES ADECUADO");
         if((dt.getTsb() != Tipo.tsb_int) && (dt.getTsb() != Tipo.tsb_char) && (dt.getTsb() != Tipo.tsb_bool)){
             parser.report_error("ERROR: No se pueden crear constantes de este tipo",constante);
         }
+        System.out.println("COMPROBADO");
+
 
         //Primero miramos que nodo literal no sea null
+        System.out.println("COMPROBAMOS QUE LITERAL NO ES NULL");
         if(asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral()==null){
             parser.report_error("ERROR: Estas asignando un valor incorrecto",constante); 
         }
+        System.out.println("COMPROBADO");
 
         //Cogemos el tipo de literal
         Tipo type = asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral().getTipo();
         String valor = asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral().getValor();
         
+
+        System.out.println("COMPROBAMOS QUE EL TIPO DE LA IZQUIERDA Y DERECHA SON IGUALES");
         //Mirar si el tipo de la izquierda y derecha son iguales
         if(dt.getTsb() != type){
-            parser.report_error("ERROR: Estas asignando un valor de otro tipo",constante); 
+            System.out.println("REPORTAMOS ERROR");
+            if(tipo == null){
+                System.out.println("id Es null");
+            }
+            parser.report_error("ERROR: Estas asignando un valor de otro tipo",tipo); 
         }
+        System.out.println("COMPROBADO");
 
         //Mirar rango
+        System.out.println("Miro rango parseInt");
         int rango = Integer.parseInt(valor);
+        System.out.println("MIRADO");
         
+        System.out.println("COMPROBAMOS EL RANGO, switch");
         switch(type){
             case tsb_char:
                 if(rango < dt.getLimiteInferior() || rango > dt.getLimiteSuperior()){
@@ -151,10 +170,13 @@ public class Semantico {
                 parser.report_error("ERROR: No permitimos crear constantes de esta forma",constante);
                 break;
         }
+        System.out.println("COMPROBADO");
 
         //Creamos la nueva declaracion si todo ha ido bien
+        System.out.println("CREAMOS LA CONSTANTE EN LA TS");
         DConst dc = new DConst(dt.getTsb(),rango,id.getNombre());
         ts.poner(id.getNombre(), dc, constante);
+        System.out.println("CREADO");
     }
 
     public void ctrlDeclListVariables(NodoDeclVars varList) {
