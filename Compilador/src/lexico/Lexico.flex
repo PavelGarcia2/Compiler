@@ -18,6 +18,9 @@ import sintactico.ParserSym;
 %cup
 %char
 %int
+%type java_cup.runtime.Symbol
+%implements java_cup.runtime.Scanner
+%function next_token
 
 %eofval{
   return symbol(ParserSym.EOF);

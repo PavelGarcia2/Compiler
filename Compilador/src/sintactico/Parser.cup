@@ -35,6 +35,9 @@ parser code {:
 
     String file = "error.log";
 
+    // public Parser(java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {
+    //     super(s,sf);
+    // } 
 
     @Override
     public void report_error(String msg, Object nodo){
@@ -70,7 +73,26 @@ parser code {:
         return errores;
     }
 
+    private int extractLine(ComplexSymbol symbol) {
+        System.out.println("hoola");
+        Location l = symbol.getLeft();
+        if(l != null) {
+            return l.getLine();
+        }
+        return 0;
+    }
+
+    private int extractColumn(ComplexSymbol symbol) {
+        System.out.println("hoola2");
+        Location l = symbol.getLeft();
+        if(l != null) {
+            return l.getColumn();
+        }
+        return 0;
+    }
+
     private int getLineaToken(ComplexSymbol sym){
+        System.out.println(sym.toString());
         Location l = sym.getLeft();
         if(l!=null){
             return l.getLine();
@@ -89,7 +111,6 @@ parser code {:
     private String getValor(ComplexSymbol sym){
         return (String) sym.value;
     }
-
 :}
 
 /**
@@ -179,11 +200,11 @@ DECL_CONST ::= DECL_CON:dcon DECL_CONST:dconst                                  
              |                                                                                                                                                                                              {: RESULT = new NodoDeclConst(); :}
              ;
 
-DECL_CON ::= tConst:tConst TIPO:tipo ID:id ASIGN:asign tPuntocoma                                                                                                                                            {: RESULT = new NodoConst(tipo,id,asign,getLineaToken(tConst),getColumnaToken(tConst)); :}                                                                                                                        
+DECL_CON ::= tConst:c TIPO:tipo ID:id ASIGN:asign tPuntocoma                                                                                                                                                {: RESULT = new NodoConst(tipo,id,asign,extractLine(c),extractColumn(c)); :}                                                                                                                        
             ;
 
 // TODO
-MAIN ::= tMain:main tLbracket DECL_VARS:dvars SENTS:sents tRbracket                                                                                                                                         {: RESULT= new NodoMain(dvars,sents,getLineaToken(main),getColumnaToken(main)); :}
+MAIN ::= tMain:main tLbracket DECL_VARS:dvars SENTS:sents tRbracket                                                                                                                                         {: RESULT= new NodoMain(dvars,sents,extractLine(main),extractColumn(main)); :}
         ;                                                   
  
  
@@ -198,7 +219,7 @@ DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor                  
                |                                                                                                                                                                                            {: RESULT = new NodoDeclArray(); :}
 		       ;
 
-ASIGN ::= tIgual:igual T_ASIGN:tAsign                                                                                                                                                                       {: RESULT = new NodoAsignacion(tAsign,getLineaToken(igual),getColumnaToken(igual)); :} 
+ASIGN ::= tIgual:igual T_ASIGN:tAsign                                                                                                                                                                       {: RESULT = new NodoAsignacion(tAsign,extractLine(igual),extractColumn(igual)); :} 
           |                                                                                                                                                                                                 {: RESULT = new NodoAsignacion(); :} 
           ; 
 
@@ -209,7 +230,7 @@ T_ASIGN ::= ASIGN_NORMAL:asignNormal                                            
 ASIGN_NORMAL ::= EXPRESION:expr                                                                                                                                                                             {: RESULT = new NodoAsignacionNormal(expr, expr.getLine(), expr.getColumn()); :}
                 ;
 
-ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray                                                                                                                                                         {: RESULT = new NodoAsignacionArray(tipo,dimArray,getLineaToken(n),getColumnaToken(n)); :}
+ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray                                                                                                                                                         {: RESULT = new NodoAsignacionArray(tipo,dimArray,extractLine(n),extractColumn(n)); :}
                 ;
 
 DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor                                                                                                                               {: RESULT = new NodoDimArray(dimArr,expr,dimArr.getLine(),dimArr.getColumn()); :}                                                                                                
@@ -224,24 +245,24 @@ REAL_ARRAY_ASSIGN ::= ID:id DIM_ARRAY:dim tIgual EXPRESION:exp tPuntocoma       
                     ;
 */
 
-TIPO ::= tInt:i                                                                                                                                                                                             {: RESULT = new NodoTipo(Tipo.tsb_int,getLineaToken(i),getColumnaToken(i)); :}
-    | tCaracter:c                                                                                                                                                                                           {: RESULT = new NodoTipo(Tipo.tsb_char,getLineaToken(c),getColumnaToken(c)); :}
-    | tFloat:f                                                                                                                                                                                              {: RESULT = new NodoTipo(Tipo.tsb_float,getLineaToken(f),getColumnaToken(f)); :}                                     
-    | tBool:b                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.tsb_bool,getLineaToken(b),getColumnaToken(b)); :}                               
-    | tStr:s                                                                                                                                                                                                {: RESULT = new NodoTipo(Tipo.tsb_str,getLineaToken(s),getColumnaToken(s)); :}                                       
-    | tVoid:v                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.tsb_void,getLineaToken(v),getColumnaToken(v)); :}                     
+TIPO ::= tInt:i                                                                                                                                                                                             {: RESULT = new NodoTipo(Tipo.tsb_int,extractLine(i),extractColumn(i)); :}
+    | tCaracter:c                                                                                                                                                                                           {: RESULT = new NodoTipo(Tipo.tsb_char,extractLine(c),extractColumn(c)); :}
+    | tFloat:f                                                                                                                                                                                              {: RESULT = new NodoTipo(Tipo.tsb_float,extractLine(f),extractColumn(f)); :}                                     
+    | tBool:b                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.tsb_bool,extractLine(b),extractColumn(b)); :}                               
+    | tStr:s                                                                                                                                                                                                {: RESULT = new NodoTipo(Tipo.tsb_str,extractLine(s),extractColumn(s)); :}                                       
+    | tVoid:v                                                                                                                                                                                               {: RESULT = new NodoTipo(Tipo.tsb_void,extractLine(v),extractColumn(v)); :}                     
 	;
 
 // TODO
-FUNC ::= tFun:fun TIPO:tipo DECL_ARRAY:decarr ID:id tLparen DECL_FUNCP:decfuncp tRparen tLbracket DECL_VARS:declvars SENTS:sents RETURN:retorno tRbracket                                                   {:RESULT= new NodoFunc(tipo,decarr,id,decfuncp,declvars,sents,retorno,getLineaToken(fun),getColumnaToken(fun)); :}
+FUNC ::= tFun:fun TIPO:tipo DECL_ARRAY:decarr ID:id tLparen DECL_FUNCP:decfuncp tRparen tLbracket DECL_VARS:declvars SENTS:sents RETURN:retorno tRbracket                                                   {:RESULT= new NodoFunc(tipo,decarr,id,decfuncp,declvars,sents,retorno,extractLine(fun),extractColumn(fun)); :}
     ;
 // TODO
-RETURN ::= tReturn:retorno RETURN_PARAM:exp tPuntocoma                                                                                                                                                      {: RESULT= new NodoReturn(exp,getLineaToken(retorno),getColumnaToken(retorno)); :}                                                                                                                           
+RETURN ::= tReturn:retorno RETURN_PARAM:exp tPuntocoma                                                                                                                                                      {: RESULT= new NodoReturn(exp,extractLine(retorno),extractColumn(retorno)); :}                                                                                                                           
         |                                                                                                                                                                                                   {: RESULT= new NodoReturn(); :} 
         ;
 
-RETURN_PARAM ::= ID:id                                                                                                                                                                                      {: RESULT= new NodoReturnParam(id,getLineaToken(id),getColumnaToken(id));:} 
-                | LITERAL:lit                                                                                                                                                                               {: RESULT= new NodoReturnParam(lit,getLineaToken(lit),getColumnaToken(lit)); :}
+RETURN_PARAM ::= ID:id                                                                                                                                                                                      {: RESULT= new NodoReturnParam(id,extractLine(id),extractColumn(id));:} 
+                | LITERAL:lit                                                                                                                                                                               {: RESULT= new NodoReturnParam(lit,extractLine(lit),extractColumn(lit)); :}
                 ;
 // TODO
 DECL_FUNCP ::= DECL_FUNCPARAMS:funcpa                                                                                                                                                                       {: RESULT= new NodoDeclFuncP(funcpa, funcpa.getLine(),funcpa.getColumn()); :}
@@ -268,20 +289,20 @@ SENT ::= OTRAS_SENTS:otras                                                      
         ;
 
 // TODO
-OTRAS_SENTS ::= tIf:tif tLparen PARAMETROS:parametros tRparen tLbracket SENTS:sents tRbracket ELSE_COND:elsecond                                                                                            {: RESULT= new NodoOtrasSent(0,parametros,sents,elsecond,getLineaToken(tif), getColumnaToken(tif)); :}                                                 
-           | tWhile:tw tLparen PARAMETROS:parametros tRparen tLbracket SENTS:sents tRbracket                                                                                                                {: RESULT= new NodoOtrasSent(1,parametros,sents,getLineaToken(tw), getColumnaToken(tw)); :}                      
-           | tFor:tf tLparen ID:tid tPuntocoma EXPRESION:exp tPuntocoma OP_RAPIDOS:oprapidos tRparen tLbracket SENTS:sents tRbracket                                                                        {: RESULT= new NodoOtrasSent(2,tid,exp,oprapidos,sents,getLineaToken(tf), getColumnaToken(tf)); :}
-           | tSwitch:ts tLparen ID:tid tRparen tLbracket CASOS:casos tRbracket                                                                                                                              {: RESULT= new NodoOtrasSent(3,tid,casos,getLineaToken(ts), getColumnaToken(ts)); :}    
-           | tPrint:tp tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                             {: RESULT= new NodoOtrasSent(4,exp,getLineaToken(tp), getColumnaToken(tp),-1); :}
-           | tPrintln:tpl tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                          {: RESULT= new NodoOtrasSent(5,exp,getLineaToken(tpl), getColumnaToken(tpl)); :}  
+OTRAS_SENTS ::= tIf:tif tLparen PARAMETROS:parametros tRparen tLbracket SENTS:sents tRbracket ELSE_COND:elsecond                                                                                            {: RESULT= new NodoOtrasSent(0,parametros,sents,elsecond,extractLine(tif), extractColumn(tif)); :}                                                 
+           | tWhile:tw tLparen PARAMETROS:parametros tRparen tLbracket SENTS:sents tRbracket                                                                                                                {: RESULT= new NodoOtrasSent(1,parametros,sents,extractLine(tw), extractColumn(tw)); :}                      
+           | tFor:tf tLparen ID:tid tPuntocoma EXPRESION:exp tPuntocoma OP_RAPIDOS:oprapidos tRparen tLbracket SENTS:sents tRbracket                                                                        {: RESULT= new NodoOtrasSent(2,tid,exp,oprapidos,sents,extractLine(tf), extractColumn(tf)); :}
+           | tSwitch:ts tLparen ID:tid tRparen tLbracket CASOS:casos tRbracket                                                                                                                              {: RESULT= new NodoOtrasSent(3,tid,casos,extractLine(ts), extractColumn(ts)); :}    
+           | tPrint:tp tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                             {: RESULT= new NodoOtrasSent(4,exp,extractLine(tp), extractColumn(tp),-1); :}
+           | tPrintln:tpl tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                          {: RESULT= new NodoOtrasSent(5,exp,extractLine(tpl), extractColumn(tpl)); :}  
            | LLAMADA_FUNC:llamFunc tPuntocoma                                                                                                                                                               {: RESULT= new NodoOtrasSent(6,llamFunc,llamFunc.getLine(),llamFunc.getColumn()); :}
-           | tIn:in tLparen tRparen tPuntocoma                                                                                                                                                              {: RESULT= new NodoOtrasSent(7,getLineaToken(in),getColumnaToken(in)); :}                                    
+           | tIn:in tLparen tRparen tPuntocoma                                                                                                                                                              {: RESULT= new NodoOtrasSent(7,extractLine(in),extractColumn(in)); :}                                    
            ;
 
 
 // TODO
-ELSE_COND ::= tElif:elif tLparen EXPRESION:exp tRparen tLbracket SENTS:sents tRbracket  ELSE_COND:elsecond                                                                                                  {: RESULT= new NodoElse(exp,sents,elsecond,getLineaToken(elif),getColumnaToken(elif)); :}
-          | tElse:telse tLbracket SENTS:sents tRbracket                                                                                                                                                     {: RESULT= new NodoElse(sents,getLineaToken(telse),getColumnaToken(telse)); :}                                      
+ELSE_COND ::= tElif:elif tLparen EXPRESION:exp tRparen tLbracket SENTS:sents tRbracket  ELSE_COND:elsecond                                                                                                  {: RESULT= new NodoElse(exp,sents,elsecond,extractLine(elif),extractColumn(elif)); :}
+          | tElse:telse tLbracket SENTS:sents tRbracket                                                                                                                                                     {: RESULT= new NodoElse(sents,extractLine(telse),extractColumn(telse)); :}                                      
           |                                                                                                                                                                                                 {: RESULT= new NodoElse(); :}                   
           ; 
 
@@ -292,30 +313,30 @@ CASOS ::= CASOS:casos tCase INIT_CASES:icase tDospuntos SENTS:sents tBreak tPunt
 	 ;
 
 // TODO
-CASO_DEFAULT ::= tDefault:def tDospuntos SENTS:sents tBreak tPuntocoma                                                                                                                                       {: RESULT= new NodoCaseDefault(sents,getLineaToken(def),getColumnaToken(def)); :}
+CASO_DEFAULT ::= tDefault:def tDospuntos SENTS:sents tBreak tPuntocoma                                                                                                                                       {: RESULT= new NodoCaseDefault(sents,extractLine(def),extractColumn(def)); :}
                 ;
 
 // TODO
-INIT_CASES ::= tEntero:e                                                                                                                                                                                    {: RESULT= new NodoInitCases(Tipo.tsb_int,getValor(e),getLineaToken(e),getColumnaToken(e)); :}
-          | tLinea:s                                                                                                                                                                                        {: RESULT= new NodoInitCases(Tipo.tsb_str,getValor(s),getLineaToken(s),getColumnaToken(s)); :}
-          | tCaracter:c                                                                                                                                                                                     {: RESULT= new NodoInitCases(Tipo.tsb_char,getValor(c),getLineaToken(c),getColumnaToken(c)); :}
+INIT_CASES ::= tEntero:e                                                                                                                                                                                    {: RESULT= new NodoInitCases(Tipo.tsb_int,getValor(e),extractLine(e),extractColumn(e)); :}
+          | tLinea:s                                                                                                                                                                                        {: RESULT= new NodoInitCases(Tipo.tsb_str,getValor(s),extractLine(s),extractColumn(s)); :}
+          | tCaracter:c                                                                                                                                                                                     {: RESULT= new NodoInitCases(Tipo.tsb_char,getValor(c),extractLine(c),extractColumn(c)); :}
 		  ;
 
 // TODO
-OP_LOG ::= tAnd:and                                                                                                                                                                                         {: RESULT= new NodoOpLog(TipoLog.AND, getLineaToken(and),getColumnaToken(and)); :}
-      | tOr:or                                                                                                                                                                                              {: RESULT= new NodoOpLog(TipoLog.OR,getLineaToken(or),getColumnaToken(or)); :}
-      | tMayor:may                                                                                                                                                                                          {: RESULT= new NodoOpLog(TipoLog.MAYOR,getLineaToken(may),getColumnaToken(may)); :}
-      | tMenor:men                                                                                                                                                                                          {: RESULT= new NodoOpLog(TipoLog.MENOR, getLineaToken(men),getColumnaToken(men)); :}
-      | tIgualMay:imay                                                                                                                                                                                      {: RESULT= new NodoOpLog(TipoLog.IGUALMAYOR,getLineaToken(imay),getColumnaToken(imay)); :}
-      | tIgualMenor:imen                                                                                                                                                                                    {: RESULT= new NodoOpLog(TipoLog.IGUALMENOR,getLineaToken(imen),getColumnaToken(imen)); :}
-      | tIgualIgual:ii                                                                                                                                                                                      {: RESULT= new NodoOpLog(TipoLog.IGUALIGUAL,getLineaToken(ii),getColumnaToken(ii)); :}
+OP_LOG ::= tAnd:and                                                                                                                                                                                         {: RESULT= new NodoOpLog(TipoLog.AND, extractLine(and),extractColumn(and)); :}
+      | tOr:or                                                                                                                                                                                              {: RESULT= new NodoOpLog(TipoLog.OR,extractLine(or),extractColumn(or)); :}
+      | tMayor:may                                                                                                                                                                                          {: RESULT= new NodoOpLog(TipoLog.MAYOR,extractLine(may),extractColumn(may)); :}
+      | tMenor:men                                                                                                                                                                                          {: RESULT= new NodoOpLog(TipoLog.MENOR, extractLine(men),extractColumn(men)); :}
+      | tIgualMay:imay                                                                                                                                                                                      {: RESULT= new NodoOpLog(TipoLog.IGUALMAYOR,extractLine(imay),extractColumn(imay)); :}
+      | tIgualMenor:imen                                                                                                                                                                                    {: RESULT= new NodoOpLog(TipoLog.IGUALMENOR,extractLine(imen),extractColumn(imen)); :}
+      | tIgualIgual:ii                                                                                                                                                                                      {: RESULT= new NodoOpLog(TipoLog.IGUALIGUAL,extractLine(ii),extractColumn(ii)); :}
 	  ;
 // TODO
-OP_ARIT ::= tSuma:s                                                                                                                                                                                          {: RESULT= new NodoOpArit(TipoArit.SUMA, getLineaToken(s),getColumnaToken(s)); :}
-       | tResta:r                                                                                                                                                                                            {: RESULT= new NodoOpArit(TipoArit.RESTA, getLineaToken(r),getColumnaToken(r)); :}
-       | tMult:mu                                                                                                                                                                                            {: RESULT= new NodoOpArit(TipoArit.MULT, getLineaToken(mu),getColumnaToken(mu)); :}
-       | tDiv:d                                                                                                                                                                                              {: RESULT= new NodoOpArit(TipoArit.DIV, getLineaToken(d),getColumnaToken(d)); :}
-       | tMod:m                                                                                                                                                                                              {: RESULT= new NodoOpArit(TipoArit.MOD, getLineaToken(m),getColumnaToken(m)); :}
+OP_ARIT ::= tSuma:s                                                                                                                                                                                          {: RESULT= new NodoOpArit(TipoArit.SUMA, extractLine(s),extractColumn(s)); :}
+       | tResta:r                                                                                                                                                                                            {: RESULT= new NodoOpArit(TipoArit.RESTA, extractLine(r),extractColumn(r)); :}
+       | tMult:mu                                                                                                                                                                                            {: RESULT= new NodoOpArit(TipoArit.MULT, extractLine(mu),extractColumn(mu)); :}
+       | tDiv:d                                                                                                                                                                                              {: RESULT= new NodoOpArit(TipoArit.DIV, extractLine(d),extractColumn(d)); :}
+       | tMod:m                                                                                                                                                                                              {: RESULT= new NodoOpArit(TipoArit.MOD, extractLine(m),extractColumn(m)); :}
 	   ;
 
 // TODO
@@ -333,31 +354,31 @@ OP_RAPIDO_R ::= ID:tid tResta tResta                                            
 
 // TODO
 TERMINO_1 ::= ID:id                                                                                                                                                                                         {: RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); :}
-         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),getLineaToken(entero),getColumnaToken(entero)); :}
+         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),extractLine(entero),extractColumn(entero)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); :}
-         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), getLineaToken(decimal),getColumnaToken(decimal)); :}
+         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), extractLine(decimal),extractColumn(decimal)); :}
          ;
 
 
 // TODO
 TERMINO_2 ::= ID:id                                                                                                                                                                                         {: RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); :}
-         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),getLineaToken(entero),getColumnaToken(entero)); :}
+         | tEntero:entero                                                                                                                                                                                   {: RESULT = new NodoTermino(Integer.parseInt(getValor(entero)),extractLine(entero),extractColumn(entero)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); :}
-         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), getLineaToken(decimal),getColumnaToken(decimal)); :}
+         | tDecimal:decimal                                                                                                                                                                                 {: RESULT = new NodoTermino(Float.parseFloat(getValor(decimal)), extractLine(decimal),extractColumn(decimal)); :}
          ;
 
 
 // TODO
 TERMINOLOG_1 ::= ID:id                                                                                                                                                                                      {: RESULT = new NodoTerminoLog(id, -1,null,id.getLine(),id.getColumn()); :}
-         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoTerminoLog(null, 1,null, getLineaToken(t),getColumnaToken(t)); :}
-         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,0,null,getLineaToken(f),getColumnaToken(f)); :}
+         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoTerminoLog(null, 1,null, extractLine(t),extractColumn(t)); :}
+         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,0,null,extractLine(f),extractColumn(f)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTerminoLog(null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
          ;
  
 // TODO
 TERMINOLOG_2 ::= ID:id                                                                                                                                                                                      {: RESULT = new NodoTerminoLog(id,-1,null,id.getLine(),id.getColumn()); :}
-         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoTerminoLog(null,1,null,getLineaToken(t),getColumnaToken(t)); :}
-         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,0,null,getLineaToken(f),getColumnaToken(f)); :}
+         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoTerminoLog(null,1,null,extractLine(t),extractColumn(t)); :}
+         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,0,null,extractLine(f),extractColumn(f)); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTerminoLog(null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
          ;
 
@@ -369,8 +390,8 @@ EXPRESION_ARITM ::= TERMINO_1:term1 OP_ARIT:oparit TERMINO_2:term2              
 EXPRESION_LOG ::= TERMINOLOG_1:tlog1 OP_LOG:oplog TERMINOLOG_2:tlog2                                                                                                                                        {: RESULT= new NodoExpresionLog(tlog1,oplog,tlog2,tlog1.getLine(),tlog1.getColumn()); :}
                 ;
 //PEDRO
-EXPRESION ::= tLparen:v EXPRESION:e tRparen                                                                                                                                                                 {: RESULT = new NodoExpresion(e, null, null, null,null, null, -1, null, getLineaToken(v),getColumnaToken(v)); :}        
-         | tNot:v EXPRESION:e                                                                                                                                                                               {: RESULT = new NodoExpresion(null, e, null, null,null, null, -1, null, getLineaToken(v),getColumnaToken(v)); :}
+EXPRESION ::= tLparen:v EXPRESION:e tRparen                                                                                                                                                                 {: RESULT = new NodoExpresion(e, null, null, null,null, null, -1, null, extractLine(v),extractColumn(v)); :}        
+         | tNot:v EXPRESION:e                                                                                                                                                                               {: RESULT = new NodoExpresion(null, e, null, null,null, null, -1, null, extractLine(v),extractColumn(v)); :}
          | EXPRESION_LOG:elog                                                                                                                                                                               {: RESULT = new NodoExpresion(null, null, null, elog,null, null, -1, null, elog.getLine(), elog.getColumn()); :}
          | EXPRESION_ARITM:earit                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, earit, null,null, null, -1, null, earit.getLine(), earit.getColumn()); :}
          | ID:id                                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, null, null,id, null, -1, null, id.getLine(), id.getColumn()); :}
@@ -378,12 +399,12 @@ EXPRESION ::= tLparen:v EXPRESION:e tRparen                                     
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion(null, null, null, null,null, null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
 		 ;
 
-LITERAL ::= tEntero:i                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(i),Tipo.tsb_int,getLineaToken(i),getColumnaToken(i)); :}
-         | tDecimal:d                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(d),Tipo.tsb_float,getLineaToken(d),getColumnaToken(d)); :}
-         | tChar:c                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(c),Tipo.tsb_char,getLineaToken(c),getColumnaToken(c)); :}
-         | tLinea:l                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(l),Tipo.tsb_str,getLineaToken(l),getColumnaToken(l)); :}
-         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(t),Tipo.tsb_true,getLineaToken(t),getColumnaToken(t)); :}
-         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(f),Tipo.tsb_false,getLineaToken(f),getColumnaToken(f)); :}
+LITERAL ::= tEntero:i                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(i),Tipo.tsb_int,extractLine(i),extractColumn(i)); :}
+         | tDecimal:d                                                                                                                                                                                       {: RESULT = new NodoLiteral(getValor(d),Tipo.tsb_float,extractLine(d),extractColumn(d)); :}
+         | tChar:c                                                                                                                                                                                          {: RESULT = new NodoLiteral(getValor(c),Tipo.tsb_char,extractLine(c),extractColumn(c)); :}
+         | tLinea:l                                                                                                                                                                                         {: RESULT = new NodoLiteral(getValor(l),Tipo.tsb_str,extractLine(l),extractColumn(l)); :}
+         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoLiteral("-1",Tipo.tsb_bool,extractLine(t),extractColumn(t)); :}
+         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoLiteral("0",Tipo.tsb_bool,extractLine(f),extractColumn(f)); :}
         ;
 
 
@@ -402,5 +423,5 @@ PARAM_SIMPLE ::= EXPRESION:exp                                                  
 PARAM_COMPUESTO ::= PARAMETROS:param tComa EXPRESION:exp                                                                                                                                               {: RESULT= new NodoParamCompuesto(param,exp,param.getLine(),param.getColumn()); :}
         ;
 
-ID ::= tId:valor                                                                                                                                                                                           {: RESULT = new NodoId((String) getValor(valor), getLineaToken(valor),getColumnaToken(valor)); :}                                                         
+ID ::= tId:valor                                                                                                                                                                                           {: RESULT = new NodoId((String) getValor(valor), extractLine(valor),extractColumn(valor)); :}                                                         
     ;

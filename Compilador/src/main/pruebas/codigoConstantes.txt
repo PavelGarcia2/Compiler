@@ -1,0 +1,7 @@
+
+const int hola = 2;
+const int ha = 2;
+
+main {
+    
+}
