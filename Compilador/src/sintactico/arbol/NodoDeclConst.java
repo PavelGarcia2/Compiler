@@ -19,7 +19,7 @@ public class NodoDeclConst extends Nodo{
         return nodoConst;
     }
 
-    public NodoDeclConst getHijo() {
+    public NodoDeclConst getNodoDeclConst() {
         return nodoDeclConst;
     }
 }

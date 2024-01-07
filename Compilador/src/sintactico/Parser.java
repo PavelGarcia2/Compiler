@@ -461,21 +461,26 @@ public class Parser extends java_cup.runtime.lr_parser {
     // }
 
     @Override
-    public void report_error(String msg, Object nodo){
-        errores++;
-        if(nodo!=null){
-            if(nodo instanceof java_cup.runtime.Symbol){
-                ComplexSymbol token = (ComplexSymbol) nodo;
-                Location l = token.getLeft();
-                msg += ", (Linea,Columna) => ("+l.getLine()+","+l.getColumn()+")\n";
+    public void report_error(String message, Object info) {
+        StringBuilder msg = new StringBuilder("ERROR");
+        if (info instanceof java_cup.runtime.Symbol) {
+            ComplexSymbol token = (ComplexSymbol) info;
+            if(token == null){
+                System.out.println("Token nulo");
             }
-
-            if(nodo instanceof Nodo){
-                Nodo n = (Nodo) nodo;
-                    msg += "Error Semantico, (Linea,Columna) => ("+n.getLine()+","+n.getColumn()+")\n";
+            Location l = token.getLeft();
+            
+            if (l != null) {
+                msg.append(" (fila: ")
+                   .append(l.getLine())
+                   .append(", columna: ")
+                   .append(l.getColumn())
+                   .append(")");
             }
-            escribeEnFichero(msg);
         }
+        msg.append(": ").append(message);
+        
+        System.err.println(msg);
     }
 
     public void escribeEnFichero(String msg){
@@ -531,6 +536,25 @@ public class Parser extends java_cup.runtime.lr_parser {
         // return (String) sym.value;
         return "";
     }
+
+
+    @Override
+    public void unrecovered_syntax_error(Symbol cur_token) throws Exception {
+        report_error("Error sintàctic catastròfic", cur_token);
+        done_parsing();        
+    }
+
+     @Override
+    public void report_fatal_error(String message, Object info) throws Exception {
+        report_error("Error catastròfic ("+message+")", info);
+        done_parsing();
+    }
+
+     @Override
+    public void syntax_error(Symbol cur_token) {
+        report_error("de sintaxis", cur_token);
+    }
+
 
 
 /** Cup generated class to encapsulate user supplied action code.*/

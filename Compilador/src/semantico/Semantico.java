@@ -46,8 +46,8 @@ public class Semantico {
         ts.poner("tsb_int", d, null);
 
         //Inicializamos el float
-        d = new DTipus(Tipo.tsb_int, Float.MIN_VALUE,Float.MAX_VALUE);
-        ts.poner("tsb_int", d, null);
+        d = new DTipus(Tipo.tsb_float, Float.MIN_VALUE,Float.MAX_VALUE);
+        ts.poner("tsb_float", d, null);
 
         /* Para que las palabras reservadas queden en el ámbito 1 de forma exclusiva */
         ts.entrarBloque();
@@ -58,7 +58,7 @@ public class Semantico {
         NodoMain main = arbol.getNodoMain();
         if (main != null) {
 
-            System.out.println("INIT RUN PROGRAM");
+            //System.out.println("INIT RUN PROGRAM");
             //comprobar las constantes
             NodoDeclConst constList = arbol.getNodoDeclaracionConstantes();
             if(constList != null && !constList.isEmpty()){
@@ -80,18 +80,21 @@ public class Semantico {
             // }
 
         } else {
-            parser.report_error("ERROR: No hemos encontrado el main",main);
+            parser.report_error("No hemos encontrado el main",main);
         }
     }
 
     public void ctrlDeclConstantes(NodoDeclConst constList) {
-        System.out.println("INIT DECLCONST");
-        NodoDeclConst hijo = constList.getHijo();
+       // System.out.println("INIT DECLCONST");
+        NodoDeclConst hijo = constList.getNodoDeclConst();
         if(hijo!=null && !hijo.isEmpty()){
             ctrlDeclConstantes(hijo);
-        } 
-        ctrlConst(constList.getNodoConst());
-        System.out.println("FIN INIT CONST");
+        } else if(hijo!=null && hijo.isEmpty()){
+
+        }else{
+            ctrlConst(constList.getNodoConst());
+        }
+        //System.out.println("FIN INIT CONST");
     }
 
     public void ctrlConst(NodoConst constante){
@@ -100,80 +103,77 @@ public class Semantico {
         NodoTipo tipo = constante.getNodoTipo();
         NodoId id = constante.getNodoId();
         NodoAsignacion asignacion = constante.getNodoAsignacion();
-        System.out.println("HEMOS PILLADO LOS NODOS TIPO,ID,ASIGNACION");
+        //System.out.println("HEMOS PILLADO LOS NODOS TIPO,ID,ASIGNACION");
 
-        System.out.println("COMPROBAMOS QUE SEA UN TIPO QUE EXISTE");
+        //System.out.println("COMPROBAMOS QUE SEA UN TIPO QUE EXISTE");
         DTipus dt = (DTipus) ts.consultarTD(tipo.getTipo().toString());
         //Comprovar que tipo es un tipo
         if(dt == null){        // NO EXISTE EL TIPO O NO ES UN TIPO
-            parser.report_error("ERROR: No existe el tipo",constante);
+            parser.report_error("No existe el tipo",constante);
         }
-        System.out.println("COMPROBADO");
+        //System.out.println("COMPROBADO");
 
 
         //Comprovar que el tipo es adecuado
-        System.out.println("COMPROBAMOS QUE EL TIPO ES ADECUADO");
+        //System.out.println("COMPROBAMOS QUE EL TIPO ES ADECUADO");
         if((dt.getTsb() != Tipo.tsb_int) && (dt.getTsb() != Tipo.tsb_char) && (dt.getTsb() != Tipo.tsb_bool)){
-            parser.report_error("ERROR: No se pueden crear constantes de este tipo",constante);
+            parser.report_error("No se pueden crear constantes de este tipo",constante);
         }
-        System.out.println("COMPROBADO");
+        //System.out.println("COMPROBADO");
 
 
         //Primero miramos que nodo literal no sea null
-        System.out.println("COMPROBAMOS QUE LITERAL NO ES NULL");
+        ////System.out.println("COMPROBAMOS QUE LITERAL NO ES NULL");
         if(asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral()==null){
-            parser.report_error("ERROR: Estas asignando un valor incorrecto",constante); 
+            parser.report_error("Estas asignando un valor incorrecto",constante); 
         }
-        System.out.println("COMPROBADO");
+        //ystem.out.println("COMPROBADO");
 
         //Cogemos el tipo de literal
         Tipo type = asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral().getTipo();
         String valor = asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral().getValor();
         
 
-        System.out.println("COMPROBAMOS QUE EL TIPO DE LA IZQUIERDA Y DERECHA SON IGUALES");
+        //System.out.println("COMPROBAMOS QUE EL TIPO DE LA IZQUIERDA Y DERECHA SON IGUALES");
         //Mirar si el tipo de la izquierda y derecha son iguales
         if(dt.getTsb() != type){
-            System.out.println("REPORTAMOS ERROR");
-            if(tipo == null){
-                System.out.println("id Es null");
-            }
-            parser.report_error("ERROR: Estas asignando un valor de otro tipo",tipo); 
+            //System.out.println("REPORTAMOS ERROR");
+            parser.report_error("Estas asignando un valor de otro tipo",tipo); 
         }
-        System.out.println("COMPROBADO");
+        //System.out.println("COMPROBADO");
 
         //Mirar rango
-        System.out.println("Miro rango parseInt");
+        //System.out.println("Miro rango parseInt");
         int rango = Integer.parseInt(valor);
-        System.out.println("MIRADO");
+        //System.out.println("MIRADO");
         
-        System.out.println("COMPROBAMOS EL RANGO, switch");
+        //System.out.println("COMPROBAMOS EL RANGO, switch");
         switch(type){
             case tsb_char:
                 if(rango < dt.getLimiteInferior() || rango > dt.getLimiteSuperior()){
-                    parser.report_error("ERROR: Has excedido los limites",constante);
+                    parser.report_error("Has excedido los limites",constante);
                 }
                 break;
             case tsb_bool:
                 // Comppobar si es true o false
                 if(rango != -1 || rango != 0){
-                    parser.report_error("ERROR: Has excedido los limites",constante);
+                    parser.report_error("Has excedido los limites",constante);
                 }
                 break;
             case tsb_int:
                 //Mirar rango int
                 if(rango < dt.getLimiteInferior() || rango > dt.getLimiteSuperior()){
-                    parser.report_error("ERROR: Has excedido los limites",constante);
+                    parser.report_error("Has excedido los limites",constante);
                 }
                 break;
             default:
-                parser.report_error("ERROR: No permitimos crear constantes de esta forma",constante);
+                parser.report_error("No permitimos crear constantes de esta forma",constante);
                 break;
         }
-        System.out.println("COMPROBADO");
+        //System.out.println("COMPROBADO");
 
         //Creamos la nueva declaracion si todo ha ido bien
-        System.out.println("CREAMOS LA CONSTANTE EN LA TS");
+        //System.out.println("CREAMOS LA CONSTANTE EN LA TS");
         DConst dc = new DConst(dt.getTsb(),rango,id.getNombre());
         ts.poner(id.getNombre(), dc, constante);
         System.out.println("CREADO");
@@ -199,11 +199,11 @@ public class Semantico {
         //Comprovar que tipo es un tipo existente
         DTipus dt = (DTipus) ts.consultarTD(tipo.getTipo().toString());
         if(dt == null){        // NO EXISTE EL TIPO O NO ES UN TIPO
-            parser.report_error("ERROR: No existe el tipo",var);
+            parser.report_error("No existe el tipo",var);
         }
 
         if(dt.getTsb() == Tipo.tsb_void){
-            parser.report_error("ERROR: No se pueden crear variables void",var);
+            parser.report_error("No se pueden crear variables void",var);
         }
 
         // Mirar si estamos declarando un array
@@ -271,12 +271,12 @@ public class Semantico {
             case Tipo.tsb_int:
             
                 if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_int){
-                    parser.report_error("ERROR: Estas asignando un valor incorrecto, no es int",nodo); 
+                    parser.report_error("Estas asignando un valor incorrecto, no es int",nodo); 
                 }
 
                 valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
                 if(valor < dt.getLimiteInferior() && valor > dt.getLimiteSuperior()){
-                    parser.report_error("ERROR: Has excedido los limites",nodo);
+                    parser.report_error("Has excedido los limites",nodo);
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_int);
@@ -286,7 +286,7 @@ public class Semantico {
 
             case Tipo.tsb_bool:
                 if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_true || nodo.getNodoLiteral().getTipo() != Tipo.tsb_false){
-                    parser.report_error("ERROR: Estas asignando un valor incorrecto, no es bool",nodo);
+                    parser.report_error("Estas asignando un valor incorrecto, no es bool",nodo);
                 } 
                 /*
                 else if(nodo.getBool()!= 0 && nodo.getBool()!=1){
@@ -303,12 +303,12 @@ public class Semantico {
             case Tipo.tsb_char:
 
                 if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_char){
-                    parser.report_error("ERROR: Estas asignando un valor incorrecto, no es char",nodo); 
+                    parser.report_error("Estas asignando un valor incorrecto, no es char",nodo); 
                 }
 
                 valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
                 if(valor < dt.getLimiteInferior() && valor > dt.getLimiteSuperior()){
-                    parser.report_error("ERROR: Has excedido los limites",nodo);
+                    parser.report_error("Has excedido los limites",nodo);
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_char);
@@ -319,12 +319,12 @@ public class Semantico {
             case Tipo.tsb_float:
 
                 if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_float){
-                    parser.report_error("ERROR: Estas asignando un valor incorrecto, no es float",nodo); 
+                    parser.report_error("Estas asignando un valor incorrecto, no es float",nodo); 
                 }
 
                 float val = Float.parseFloat(nodo.getNodoLiteral().getValor());
                 if(val < dt.getLimiteInferior() && val > dt.getLimiteSuperior()){
-                    parser.report_error("ERROR: Has excedido los limites",nodo);
+                    parser.report_error("Has excedido los limites",nodo);
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_float);
@@ -335,7 +335,7 @@ public class Semantico {
             case Tipo.tsb_str:
 
                 if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_str){
-                    parser.report_error("ERROR: Estas asignando un valor incorrecto, no es str",nodo); 
+                    parser.report_error("Estas asignando un valor incorrecto, no es str",nodo); 
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_str);
@@ -366,7 +366,7 @@ public class Semantico {
 
         //si el tipo no es null, es que es un tipo de los que tengo en la tabla de simbolos, si no error.
         if(dt == null){        // NO EXISTE EL TIPO O NO ES UN TIPO
-            parser.report_error("ERROR: No existe el tipo",func);
+            parser.report_error("No existe el tipo",func);
         }
 
         //comrpobar las delaraciones del array 
@@ -434,7 +434,7 @@ public class Semantico {
                 //compruebo las posibles partes boleanas, si no es true o false error
                 if (t !=  Tipo.tsb_true || t !=  Tipo.tsb_false ) {
                     //No es un bool error
-                    parser.report_error("ERROR: La funcion es booleana y el return no es booleano",ret);
+                    parser.report_error("La funcion es booleana y el return no es booleano",ret);
                 }
                 
                 break;
@@ -442,7 +442,7 @@ public class Semantico {
             case tsb_char:
                 if(t != Tipo.tsb_char){
                     //No es un char error
-                    parser.report_error("ERROR: La funcion es de tipo character y el return no es character",ret);
+                    parser.report_error("La funcion es de tipo character y el return no es character",ret);
                 }
                 
                 break;
@@ -451,7 +451,7 @@ public class Semantico {
                 
                 if(t != Tipo.tsb_float){
                     //No es un float error
-                    parser.report_error("ERROR: La funcion es de tipo float y el return no es float",ret);
+                    parser.report_error("La funcion es de tipo float y el return no es float",ret);
                 }
                 break;
 
@@ -459,7 +459,7 @@ public class Semantico {
 
                 if(t != Tipo.tsb_int){
                     //No es un int error
-                    parser.report_error("ERROR: La funcion es de tipo int y el return no es int",ret);
+                    parser.report_error("La funcion es de tipo int y el return no es int",ret);
                 }
                 break;
 
@@ -467,14 +467,14 @@ public class Semantico {
                 
                 if(t != Tipo.tsb_str){
                     //No es un string error
-                    parser.report_error("ERROR: La funcion es de tipo string y el return no es string",ret);
+                    parser.report_error("La funcion es de tipo string y el return no es string",ret);
                 }
                 break;
 
             case tsb_void: 
 
                     if(!ret.isEmpty()){
-                        parser.report_error("ERROR: La funcion es de tipo void y el return no es void",ret);
+                        parser.report_error("La funcion es de tipo void y el return no es void",ret);
                     } 
                                 
                 break;
@@ -519,7 +519,7 @@ public class Semantico {
 
         //comprobar que el id existe en la tabla de simbolos
         if(ts.consultarTD(id.getNombre()) == null){
-            parser.report_error("ERROR: No existe el id",realAsign);
+            parser.report_error("No existe el id",realAsign);
         }
 
         //comprobar que el tipo de la expresion es compatible con el tipo del id y ver si es una constante o una variable
@@ -563,12 +563,12 @@ public class Semantico {
         //compruebo tipo
         //si el tipo no es null, es que es un tipo de los que tengo en la tabla de simbolos, si no error.
         if((DTipus) ts.consultarTD(funParam.getNodoTipo().getTipo().toString()) == null){ // NO EXISTE EL TIPO O NO ES UN TIPO
-            parser.report_error("ERROR: No existe el tipo",funParam);
+            parser.report_error("No existe el tipo",funParam);
         }
 
         //Compruebo si es void, en ese caso error
         if(funParam.getNodoTipo().getTipo() == Tipo.tsb_void){
-            parser.report_error("ERROR: No se puede utilizar parametros void",funParam);
+            parser.report_error("No se puede utilizar parametros void",funParam);
         }
 
         //miro si hay un array o no

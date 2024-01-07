@@ -43,8 +43,11 @@ parser code {:
     @Override
     public void report_error(String message, Object info) {
         StringBuilder msg = new StringBuilder("ERROR");
-        if (info instanceof Symbol) {
+        if (info instanceof java_cup.runtime.Symbol) {
             ComplexSymbol token = (ComplexSymbol) info;
+            if(token == null){
+                System.out.println("Token nulo");
+            }
             Location l = token.getLeft();
             
             if (l != null) {
