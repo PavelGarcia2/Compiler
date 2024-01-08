@@ -1780,7 +1780,7 @@ class CUP$Parser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Literal t = (Literal)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,1,null,t.getLine(),t.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,1,null,t.getLinea(),t.getColumna()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_1",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1792,7 +1792,7 @@ class CUP$Parser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Literal f = (Literal)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,0,null,f.getLine(),f.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,0,null,f.getLinea(),f.getColumna()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_1",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1828,7 +1828,7 @@ class CUP$Parser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Literal t = (Literal)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,1,null,t.getLine(),t.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,1,null,t.getLinea(),t.getColumna()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_2",28, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1840,7 +1840,7 @@ class CUP$Parser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Literal f = (Literal)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoTerminoLog(null,0,null,f.getLine(),f.getColumn()); 
+		 RESULT = new NodoTerminoLog(null,0,null,f.getLinea(),f.getColumna()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("TERMINOLOG_2",28, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

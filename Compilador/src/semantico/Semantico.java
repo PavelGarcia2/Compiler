@@ -164,7 +164,7 @@ public class Semantico {
             }
             rango = Integer.parseInt(valor);
         }        
-        System.out.println("RANGO: "+rango);
+        
         //System.out.println("MIRADO");        
         //System.out.println("COMPROBAMOS EL RANGO, switch");
         switch(dt.getTsb()){
@@ -191,6 +191,7 @@ public class Semantico {
                 parser.report_error("No permitimos crear constantes de esta forma",constante);
                 break;
         }
+        System.out.println("RANGO: "+rango);
         //System.out.println("COMPROBADO");
 
         //Creamos la nueva declaracion si todo ha ido bien
