@@ -20,7 +20,7 @@ public class Semantico {
         this.parser = parser;
         this.ts = new TablaSimbolos(parser);
         inicializarTablaSimbolos();
-        runProgram();
+        //runProgram();
     }
 
     private void inicializarTablaSimbolos() {
@@ -53,7 +53,7 @@ public class Semantico {
         ts.entrarBloque();
         System.out.println("HEMOS INIT TS");
     }
-
+    
     public void runProgram(){
         NodoMain main = arbol.getNodoMain();
         if (main != null) {
@@ -85,21 +85,20 @@ public class Semantico {
     }
 
     public void ctrlDeclConstantes(NodoDeclConst constList) {
-       // System.out.println("INIT DECLCONST");
-        NodoDeclConst hijo = constList.getNodoDeclConst();
-        if(hijo!=null && !hijo.isEmpty()){
-            ctrlDeclConstantes(hijo);
-        } else if(hijo!=null && hijo.isEmpty()){
-
-        }else{
-            ctrlConst(constList.getNodoConst());
-        }
-        //System.out.println("FIN INIT CONST");
+        
+        NodoDeclConst hijoDeclaracions = constList.getNodoDeclConst(); 
+        if(hijoDeclaracions != null && !hijoDeclaracions.isEmpty()) {
+            ctrlDeclConstantes(hijoDeclaracions);
+        }        
+        ctrlConst(constList.getNodoConst());
+       
+        System.out.println("FIN DECLCONST");
     }
 
     public void ctrlConst(NodoConst constante){
 
         System.out.println("INIT CONST");
+        NodoSigno nodoSigno = constante.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral().getSigno();
         NodoTipo tipo = constante.getNodoTipo();
         NodoId id = constante.getNodoId();
         NodoAsignacion asignacion = constante.getNodoAsignacion();
@@ -136,34 +135,56 @@ public class Semantico {
 
         //System.out.println("COMPROBAMOS QUE EL TIPO DE LA IZQUIERDA Y DERECHA SON IGUALES");
         //Mirar si el tipo de la izquierda y derecha son iguales
-        if(dt.getTsb() != type){
-            //System.out.println("REPORTAMOS ERROR");
-            parser.report_error("Estas asignando un valor de otro tipo",tipo); 
-        }
-        //System.out.println("COMPROBADO");
-
-        //Mirar rango
-        //System.out.println("Miro rango parseInt");
-        int rango = Integer.parseInt(valor);
-        //System.out.println("MIRADO");
         
+        if(type == Tipo.tsb_int){
+            if(dt.getTsb() == Tipo.tsb_bool){
+                parser.report_error("Estas asignando un valor de otro tipo",constante);
+            }
+        } else if(dt.getTsb() != type){
+            parser.report_error("Estas asignando un valor de otro tipo",constante);
+        }
+        
+        //System.out.println("COMPROBADO");
+        //Si es un entero cogemos el signo
+        int signo = 1;
+        if(type == Tipo.tsb_int){
+            signo = nodoSigno.getSigno();
+        }
+        //Mirar rango
+        char aux;
+        int rango;
+        // Para mirar el rango
+        if(dt.getTsb() == Tipo.tsb_char && type == Tipo.tsb_char){
+           aux = valor.charAt(1);
+           rango = (int) aux; 
+        }else{
+            //Mirar rango bien de enteros a la hora de convertirlo en int nos peta
+            if(valor.length()>10){
+
+            }
+            rango = Integer.parseInt(valor);
+        }        
+        System.out.println("RANGO: "+rango);
+        //System.out.println("MIRADO");        
         //System.out.println("COMPROBAMOS EL RANGO, switch");
-        switch(type){
+        switch(dt.getTsb()){
             case tsb_char:
+                rango = rango*signo;
                 if(rango < dt.getLimiteInferior() || rango > dt.getLimiteSuperior()){
-                    parser.report_error("Has excedido los limites",constante);
+                    parser.report_error("Has excedido los limites, char de dimensiones incorrectas.",constante);
                 }
                 break;
             case tsb_bool:
-                // Comppobar si es true o false
-                if(rango != -1 || rango != 0){
-                    parser.report_error("Has excedido los limites",constante);
+                // Comprobar si es true o false
+                if(rango != -1 && rango != 0){
+                    parser.report_error("Has excedido los limites, no es bool.",constante);
                 }
                 break;
             case tsb_int:
                 //Mirar rango int
+                rango = rango*signo;
                 if(rango < dt.getLimiteInferior() || rango > dt.getLimiteSuperior()){
-                    parser.report_error("Has excedido los limites",constante);
+                    parser.report_error("Has excedido los limites, int de dimensiones incorrectas.",constante);
                 }
                 break;
             default:
@@ -176,7 +197,7 @@ public class Semantico {
         //System.out.println("CREAMOS LA CONSTANTE EN LA TS");
         DConst dc = new DConst(dt.getTsb(),rango,id.getNombre());
         ts.poner(id.getNombre(), dc, constante);
-        System.out.println("CREADO");
+        System.out.println("CREADO: "+id.getNombre());
     }
 
     public void ctrlDeclListVariables(NodoDeclVars varList) {

@@ -2,8 +2,8 @@ package sintactico.arbol;
 
 public class NodoDeclConst extends Nodo{
 
-    NodoConst nodoConst;
     NodoDeclConst nodoDeclConst;
+    NodoConst nodoConst;
 
     public NodoDeclConst(NodoConst nodoConst, NodoDeclConst nodoDeclConst, int l, int c){
         super("DECLCONST",false,l,c);
@@ -12,7 +12,9 @@ public class NodoDeclConst extends Nodo{
     }
 
     public NodoDeclConst(){
-        super("DECLCONST",true); 
+        super("DECLCONST",true);
+        this.nodoConst = null;
+        this.nodoDeclConst = null; 
     }
 
     public NodoConst getNodoConst() {

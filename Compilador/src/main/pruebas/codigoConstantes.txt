@@ -1,5 +1,21 @@
-const int a = 1;
+//CODIGO CORRECTO
+/* Comprobación de constantes
+const char b = 255; 
+const char e = 'a'; 
+const bool x = True;
+const bool y = false;
+const int a = 1; 
+*/
 
+//CODIGO INCORRECTO
+/* const kakita b = true;  el tipo kakita no existe 
+const bool m = 0;   valor de otro tipo 
+const char i = '255'; no se pueden comillas con numero 
+const char c = 257; char excede limite superior 
+const int z = (int) 'x'; muy mal */
+
+//const int min= -21474836484; //exceso inferior del rango
+//const int max= 21474836471; //exceso rango superior 
 main {
     
 }

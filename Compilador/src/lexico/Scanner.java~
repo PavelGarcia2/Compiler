@@ -403,7 +403,7 @@ public class Scanner implements java_cup.runtime.Scanner {
         // Sumar 1 per a que la primera línia i columna no sigui 0.
         Location esquerra = new Location(yyline+1, yycolumn+1);
         Location dreta = new Location(yyline+1, yycolumn+yytext().length()+1);
-        ComplexSymbol val = new ComplexSymbol(ParserSym.terminalNames[type], type, l, r);
+        ComplexSymbol val = new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta);
         return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta, val);
     }
 

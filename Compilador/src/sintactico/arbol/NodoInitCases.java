@@ -9,11 +9,13 @@ public class NodoInitCases extends Nodo {
 
     Tipo tipo;
     String valor;
+    NodoSigno s;
 
-    public NodoInitCases(Tipo tipo,String valor,int l, int c) {
+    public NodoInitCases(Tipo tipo,String valor, NodoSigno s, int l, int c) {
         super("INIT_CASES", false, l, c);
         this.tipo = tipo;
         this.valor = valor;
+        this.s = s;
     }
 
     public String getValor(){
@@ -22,6 +24,10 @@ public class NodoInitCases extends Nodo {
 
     public Tipo getTipo(){
         return this.tipo;
+    }
+
+    public NodoSigno getSigno(){
+        return this.s;
     }
     
 }

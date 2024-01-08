@@ -6,6 +6,7 @@ public class NodoTermino extends Nodo {
     int entero;
     NodoLlamadaFunc nodoLlamadaFunc;
     float decimal;
+    NodoSigno nodoSigno;
 
 
     public NodoTermino(NodoId identificador, int l, int c) {
@@ -13,9 +14,10 @@ public class NodoTermino extends Nodo {
         this.identificador = identificador;
     }
 
-    public NodoTermino(int entero, int l, int c){
+    public NodoTermino(int entero, NodoSigno s, int l, int c){
         super("TERMINO", false, l, c);
         this.entero = entero;
+        this.nodoSigno = s;
     }
 
     public NodoTermino(NodoLlamadaFunc nodoLlamadaFunc, int l, int c){
@@ -23,12 +25,16 @@ public class NodoTermino extends Nodo {
         this.nodoLlamadaFunc = nodoLlamadaFunc;
     }
 
-    public NodoTermino(float decimal, int l, int c){
+    public NodoTermino(float decimal, NodoSigno s, int l, int c){
         super("TERMINO", false, l, c);
         this.decimal = decimal; 
+        this.nodoSigno = s;
     }
 
-
+    public NodoSigno getNodoSigno() {
+        return nodoSigno;
+    }
+    
     public NodoId getIdentificador() {
         return identificador;
     }

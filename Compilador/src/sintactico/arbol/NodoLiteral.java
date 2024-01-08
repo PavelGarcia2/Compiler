@@ -6,9 +6,11 @@ public class NodoLiteral extends Nodo{
     
     String valor;
     Tipo tipo;
+    NodoSigno signo;
 
-    public NodoLiteral(String valor, Tipo tipo,int f, int c) {
+    public NodoLiteral(NodoSigno signo,String valor, Tipo tipo,int f, int c) {
         super("Literal",false,f, c);
+        this.signo = signo;
         this.valor = valor;
         this.tipo = tipo;
     }
@@ -19,6 +21,10 @@ public class NodoLiteral extends Nodo{
 
     public Tipo getTipo() {
         return tipo;
+    }
+
+    public NodoSigno getSigno() {
+        return signo;
     }
     
 }
