@@ -530,6 +530,105 @@ public class Semantico {
     }
 
     public void ctrlOtrasSent(NodoOtrasSent otras){
+
+        switch (otras.getIdentificador()) {
+            case 0: //if
+
+                ctrlParams(otras.getNodoParametros());
+
+                //comprobamos que los parametros sean booleanos ?¿?¿?¿?
+                if(otras.getNodoParametros().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool){
+                    parser.report_error("El parametro no es booleano",otras);
+
+                }
+
+                //comprobamos las sentencias
+                if(otras.getNodoSents() != null){
+                    ctrlSents(otras.getNodoSents());
+                }
+
+                //comprobamos el else
+                if(otras.getNodoElse() != null){
+                    ctrlElseSent(otras.getNodoElse());
+                }
+                
+                break;
+
+            case 1: //while
+
+
+                ctrlParams(otras.getNodoParametros());
+
+                //comprobamos que los parametros sean booleanos ?¿?¿?¿?
+                if(otras.getNodoParametros().getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool || otras.getNodoParametros().getNodoParamCompuesto().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_true || 
+                    otras.getNodoParametros().getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_false){
+                    parser.report_error("El parametro no es booleano",otras);
+
+                }
+
+                //comprobamos las sentencias
+                if(otras.getNodoSents() != null){
+                    ctrlSents(otras.getNodoSents());
+                }
+
+                break;
+
+            case 2: //for
+                
+                //comprobamos que exp sera bool
+                if(otras.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool){
+                    parser.report_error("El parametro no es booleano",otras);
+
+                }
+
+                if (otras.getNodoOpRapidos() != null) {
+                    ctrlOpRapidos(otras.getNodoOpRapidos()); 
+                }
+
+                //comprobamos las sentencias
+                if(otras.getNodoSents() != null){
+                    ctrlSents(otras.getNodoSents());
+                }
+
+                break;
+
+            case 3: //switch
+
+                if(otras.getNodoCase() != null){
+                    ctrlCase(otras.getNodoCase());
+                }
+
+
+                break;
+            
+            case 4: //print
+
+                ctrlPrint(otras.getNodoPrint());
+
+                break;
+
+            case 5: //println
+
+                ctrlPrintln(otras.getNodoPrintln());
+                
+                    break;
+            
+            case 6: //llamada_func
+
+                ctrl_LlamadaFunc(otras.getNodoLlamadaFunc());
+
+                break;
+            
+            case 7: //In
+                
+                //¿?¿?¿?¿?¿?¿?
+
+                break;
+
+        
+            default:
+                break;
+        }
         
     }
 
