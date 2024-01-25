@@ -1,4 +1,6 @@
 package tsimbolos.descripciones;
+import java.util.ArrayList;
+
 import herramientas.*;
 public class Darray extends Descripcion {
     
@@ -7,14 +9,25 @@ public class Darray extends Descripcion {
     private int tam; // numero de la variable que está en la tabla de variables que contiene el total de ocupacion de bytes de la array
     private boolean init;
     private int dimensiones;
+    private ArrayList<Integer> bounds;
     
     public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init) {
-        super(TDesc.darray);
+        super(TDesc.darray);        
+        this.variableNumber = variableNumber;
+        this.tipus = tipus;
+        this.tam = -1;
+        this.init = init;
+        this.dimensiones = dimensiones;    
+    }
+
+    public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init, ArrayList<Integer> bounds) {
+        super(TDesc.darray);        
         this.variableNumber = variableNumber;
         this.tipus = tipus;
         this.tam = -1;
         this.init = init;
         this.dimensiones = dimensiones;
+        this.bounds = bounds;
     }
 
     public int getVariableNumber() {

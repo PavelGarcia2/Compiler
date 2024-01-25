@@ -1,6 +1,9 @@
 package semantico;
 
 import sintactico.arbol.*;
+
+import java.util.ArrayList;
+
 import herramientas.Tipo;
 import sintactico.Parser; 
 import tsimbolos.*;
@@ -25,6 +28,11 @@ public class Semantico {
 
     private void inicializarTablaSimbolos() {
         System.out.println("INIT TS");
+        
+
+        DTipus dv = new DTipus(Tipo.tsb_void,0,0);
+        ts.poner("tsb_void", dv, null);  
+
         //Inicializamos el bool
         DTipus d = new DTipus(Tipo.tsb_bool,-1,0);
         ts.poner("tsb_bool", d, null);    
@@ -207,13 +215,14 @@ public class Semantico {
         
         if(hijo!=null && !hijo.isEmpty()){
             ctrlDeclListVariables(hijo);
-        }else if(hijo.isEmpty()){} //Hemos llegado a la producción con lambda
-        else{    
-            ctrlVar(varList.getNodoDeclaracionVariable());
         }
+
+        ctrlVar(varList.getNodoDeclaracionVariable());
+        System.out.println("FIN DECLVARS");
     }
 
     public void ctrlVar(NodoVar var){
+        System.out.println("HOLA");
         NodoTipo tipo = var.getNodoTipo();
         NodoId id = var.getNodoId();
         NodoAsignacion asignacion = var.getNodoAsignacion();
@@ -234,16 +243,16 @@ public class Semantico {
             
             //Miramos las dimensiones del array
             int dimArray = dimensionArr(declaracionArray);
+            System.out.println("DIMENSIONES ARRAY "+ id.getNombre() +": "+dimArray);
             Darray da;
             //Mirar si estamos inicializando el array
-            if((asignacion.getNodoASignacionArray() != null && !asignacion.isEmpty()){                
-                
-                da = new Darray(0, dt.getTsb(),dimArray,false);
-                ts.poner(id.getName(), da, id);
+            
+            if(asignacion != null && !asignacion.isEmpty()){                
+                NodoAsignacionArray nAA = asignacion.getNodoTipoAsignacion().getNodoAsignacionArray(); 
+                ctrlAsignArray(dt, nAA,id, dimArray);
+                // da = new Darray(0, dt.getTsb(),dimArray,false);
+                // ts.poner(id.getNombre(), da, id);
 
-                //Si estamos inicializando tenemos que comprobar que init y decl tengan la misma dim
-                //NodoAsignacionArray nodoAsignacionArray = new
-                
             } else {
                 //Simplemente declaramos un array
                 da = new Darray(0, dt.getTsb(),dimArray,false);
@@ -264,19 +273,63 @@ public class Semantico {
 
     public int dimensionArr(NodoDeclArray declArray){
         //Contar dimensiones que tiene
-        Nodo masDimensiones = declArray.getNodoDeclArray();
         int dim = 0;
-        if(masDimensiones != null && !masDimensiones.isEmpty()){
-            ctrlDeclArray(declArray);
+        while(declArray != null && !declArray.isEmpty()){
+            dim++;
+            declArray = declArray.getNodoDeclArray();
         }
-        dim++;
         return dim;
     }
 
-    //metodo que controla la declaración de las tablas(arrays)
-    public void ctrlDeclArray(NodoDeclArray declArray){        
-       
-    }   
+    public void ctrlAsignArray(DTipus dt, NodoAsignacionArray asign, NodoId id, int dimIzq){
+        //Hay que comprobar que el tipo de la derecha sea igual que el de la izquierda
+        //El tipo de la izquierda lo tenemos en dt ahora miramos el tipo de la derecha que esta en asign
+        if(dt.getTsb() != asign.getNodoTipo().getTipo()) {
+            parser.report_error("Tipos incompatibles",asign);
+        }
+
+        //Hay que mirar que las dimensiones del array sean las mismas que las de la izquierda
+        //int a[][] = new int[2][3];
+        NodoDimArray dimArray = asign.getNodoDimArray();
+        int dimDer = dimensionesAsignArray(dimArray);
+        if(dimIzq != dimDer){
+            parser.report_error("Dimensiones incorrectas",asign);
+        }
+
+        // Hay que mirar si 2 y 3 son enteros
+        //int a[][] = new int[2][3];
+        NodoDimArray dimension = asign.getNodoDimArray();
+        ArrayList<Integer> bounds = new ArrayList();
+        do{
+            if(dimension.getNodoExpresion().getNodoLiteral() != null) {
+                if(dimension.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_int){
+                    parser.report_error("no se pueden asignar estas dimensiones",dimension);
+                }else{
+                    bounds.add(Integer.parseInt(dimension.getNodoExpresion().getNodoLiteral().getValor()));
+                }
+            }else{
+                parser.report_error("no se pueden asignar estas dimensiones",dimension);
+            }
+            if(dimension.getNodoDimensiones() != null){
+                dimension = dimension.getNodoDimensiones().getNodoDimArray();
+            }
+        }while(dimension.getNodoDimensiones() != null);            
+
+        // Hay que guardar el 2 y el 3 en alguna parte para luego poder calcular out of bounds
+        //int a[][] = new int[2][3];
+        Darray da = new Darray(0, dt.getTsb(),dimIzq,true,bounds);
+        ts.poner(id.getNombre(), da, id);  
+    }
+
+    public int dimensionesAsignArray(NodoDimArray dimArray){
+        int dim = 1;
+        NodoDimensiones nDimensiones = dimArray.getNodoDimensiones();
+        while(nDimensiones != null){
+            dim++;
+            nDimensiones = nDimensiones.getNodoDimArray().getNodoDimensiones();
+        }
+        return dim;
+    }
 
     public void ctrlAsignNormal(DTipus dt, NodoAsignacion asign, NodoId id){
         NodoExpresion nodo = asign.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion();
@@ -324,12 +377,12 @@ public class Semantico {
 
             case Tipo.tsb_char:
 
-                if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_char){
+                if(nodo.getNodoLiteral().getTipo() != Tipo.tsb_char && nodo.getNodoLiteral().getTipo() != Tipo.tsb_int){
                     parser.report_error("Estas asignando un valor incorrecto, no es char",nodo); 
                 }
 
                 valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
-                if(valor < dt.getLimiteInferior() && valor > dt.getLimiteSuperior()){
+                if(valor < dt.getLimiteInferior() || valor > dt.getLimiteSuperior()){
                     parser.report_error("Has excedido los limites",nodo);
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
@@ -394,7 +447,7 @@ public class Semantico {
         //comrpobar las delaraciones del array 
         NodoDeclArray declArray = func.getNodoDeclArray();
         if(declArray != null && !declArray.isEmpty()){ //signifca que tenemos una declaracion de array
-            ctrlDeclArray(declArray);
+            //ctrlDeclArray(declArray);
         }
 
         //compruebo el id
@@ -534,13 +587,13 @@ public class Semantico {
         switch (otras.getIdentificador()) {
             case 0: //if
 
-                ctrlParams(otras.getNodoParametros());
+                //ctrlParams(otras.getNodoParametros());
 
-                //comprobamos que los parametros sean booleanos ?¿?¿?¿?
-                if(otras.getNodoParametros().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool){
-                    parser.report_error("El parametro no es booleano",otras);
+                // //comprobamos que los parametros sean booleanos ?¿?¿?¿?
+                // if(otras.getNodoParametros().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool){
+                //     parser.report_error("El parametro no es booleano",otras);
 
-                }
+                // }
 
                 //comprobamos las sentencias
                 if(otras.getNodoSents() != null){
@@ -557,7 +610,7 @@ public class Semantico {
             case 1: //while
 
 
-                ctrlParams(otras.getNodoParametros());
+                // ctrlParams(otras.getNodoParametros());
 
                 //comprobamos que los parametros sean booleanos ?¿?¿?¿?
                 if(otras.getNodoParametros().getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool || otras.getNodoParametros().getNodoParamCompuesto().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_true || 
@@ -568,10 +621,10 @@ public class Semantico {
 
                 NodoParametros nParams = otras.getNodoParametros();
                 //Si es un solo parametro
-                if(nParams.getNodoParamSimple != null){
-                    //Miramos individualmente la expresion
-                }
-                comprobarParametrosBool(nParams.getNodoParamCompuesto);
+                // if(nParams.getNodoParamSimple != null){
+                //     //Miramos individualmente la expresion
+                // }
+                // comprobarParametrosBool(nParams.getNodoParamCompuesto);
 
                 //comprobamos las sentencias
                 if(otras.getNodoSents() != null){
@@ -588,9 +641,9 @@ public class Semantico {
 
                 }
 
-                if (otras.getNodoOpRapidos() != null) {
-                    ctrlOpRapidos(otras.getNodoOpRapidos()); 
-                }
+                // if (otras.getNodoOpRapidos() != null) {
+                //     ctrlOpRapidos(otras.getNodoOpRapidos()); 
+                // }
 
                 //comprobamos las sentencias
                 if(otras.getNodoSents() != null){
@@ -601,28 +654,31 @@ public class Semantico {
 
             case 3: //switch
 
-                if(otras.getNodoCase() != null){
-                    ctrlCase(otras.getNodoCase());
-                }
+                // if(otras.getNodoCase() != null){
+                //     ctrlCase(otras.getNodoCase());
+                // }
 
 
                 break;
             
             case 4: //print
 
-                ctrlPrint(otras.getNodoPrint());
+                if(otras.getNodoExpresion().getNodoLiteral() == null){
+                    
+
+                }
 
                 break;
 
             case 5: //println
 
-                ctrlPrintln(otras.getNodoPrintln());
+                // ctrlPrintln(otras.getNodoPrintln());
                 
                     break;
             
             case 6: //llamada_func
 
-                ctrl_LlamadaFunc(otras.getNodoLlamadaFunc());
+                // ctrl_LlamadaFunc(otras.getNodoLlamadaFunc());
 
                 break;
             
@@ -639,8 +695,37 @@ public class Semantico {
         
     }
 
+    public void ctrlElseSent(NodoElse elseSent){
+
+        //else 
+        if(elseSent.getNodoExpresion() == null){
+            if(elseSent.getNodoSents() != null){
+                ctrlSents(elseSent.getNodoSents());
+            }
+            
+        }else{//elseif
+
+            //verifico que expresion sea bool
+            if(elseSent.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool){
+                parser.report_error("El parametro no es booleano",elseSent);
+
+            }
+
+            //compruebo las sentencias
+            if(elseSent.getNodoSents() != null){
+                ctrlSents(elseSent.getNodoSents());
+            }
+
+            //compruebo el else
+            if(elseSent.getNodoElse() != null){
+                ctrlElseSent(elseSent.getNodoElse());
+            }
+            
+        }
+    }
+
     public void comprobarParametrosBool(NodoParamCompuesto nParams) {
-        if(nParams)
+        // if(nParams)
     }
 
     public void ctrlRealAsign(NodoRealAsign realAsign){
@@ -705,7 +790,7 @@ public class Semantico {
 
         //miro si hay un array o no
         if(funParam.getNodoDeclArray() != null){
-            ctrlDeclArray(funParam.getNodoDeclArray());
+            // ctrlDeclArray(funParam.getNodoDeclArray());
         }
     }
     

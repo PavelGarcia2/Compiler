@@ -120,7 +120,7 @@ parser code {:
 
 
     @Override
-    public void unrecovered_syntax_error(Symbol cur_token) throws Exception {
+    public void unrecovered_syntax_error(java_cup.runtime.Symbol cur_token) throws Exception {
         report_error("Error sintàctic catastròfic", cur_token);
         done_parsing();        
     }
@@ -132,7 +132,7 @@ parser code {:
     }
 
      @Override
-    public void syntax_error(Symbol cur_token) {
+    public void syntax_error(java_cup.runtime.Symbol cur_token) {
         report_error("de sintaxis", cur_token);
     }
 
@@ -210,6 +210,8 @@ non terminal NodoConst DECL_CON;
 non terminal NodoReturnParam RETURN_PARAM;
 
 non terminal NodoSigno SIGNO;
+
+non terminal NodoDimensiones DIMENSIONES;
 //non terminal NodoRealArrAsign REAL_ARRAY_ASSIGN;
 
 
@@ -236,13 +238,19 @@ MAIN ::= tMain:main tLbracket DECL_VARS:dvars SENTS:sents tRbracket             
 
 
 DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars                                                                                                                                                                 {: RESULT = new NodoDeclVars(dvars,dvar,dvar.getLine(),dvar.getColumn()); :}
+             | ASIGN_VAR DECL_VARS 
+             | ASIGNREAL_ARRAY DECL_VARS
              |                                                                                                                                                                                              {: RESULT = new NodoDeclVars(); :}
              ;
+             
+ASIGN_VAR ::= ID ASIGN tPuntocoma
+                ;
 
+ASIGNREAL_ARRAY ::= ID DIM_ARRAY tIgual                 
 DECL_VAR ::= TIPO:t ID:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma                                                                                                                                           {: RESULT = new NodoVar(t,id,darr,asign,t.getLine(),t.getColumn()); :}
           ;
 
-DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor                                                                                                                                              {: RESULT = new NodoDeclArray(dArr,dArr.getLine(),dArr.getColumn()); :}
+DECL_ARRAY ::= DECL_ARRAY:dArr tLcorchete:lCor tRcorchete:rCor                                                                                                                                              {: RESULT = new NodoDeclArray(dArr,extractLine(lCor),extractColumn(lCor)); :}
                |                                                                                                                                                                                            {: RESULT = new NodoDeclArray(); :}
 		       ;
 
@@ -259,10 +267,14 @@ ASIGN_NORMAL ::= EXPRESION:expr                                                 
 
 ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray                                                                                                                                                         {: RESULT = new NodoAsignacionArray(tipo,dimArray,extractLine(n),extractColumn(n)); :}
                 ;
+                
+DIM_ARRAY ::= DIMENSIONES:dimensiones tLcorchete:lCor EXPRESION:expr tRcorchete:rCor                                                                                                                        {: RESULT = new NodoDimArray(dimensiones,expr,extractLine(lCor),extractColumn(lCor)); :}
+                ;
 
-DIM_ARRAY ::= DIM_ARRAY:dimArr tLcorchete:lCor EXPRESION:expr tRcorchete:rCor                                                                                                                               {: RESULT = new NodoDimArray(dimArr,expr,dimArr.getLine(),dimArr.getColumn()); :}
-            |                                                                                                                                                                                               {: RESULT = new NodoDimArray(); :}
+DIMENSIONES ::= DIM_ARRAY:dimarr                                                                                                                                                                            {: RESULT = new NodoDimensiones(dimarr, dimarr.getLine(), dimarr.getColumn());:}                                                                                                                           
+            |                                                                                                                                                                                               {: RESULT = new NodoDimensiones();:}                                                                                                                                                                                   
 		    ;
+
 // TODO
 REAL_ASIGN ::= ID:id tIgual:igual EXPRESION:exp tPuntocoma:pcoma                                                                                                                                            {: RESULT= new NodoRealAsign(id,exp,id.getLine(),id.getColumn()); :}
             ;
@@ -449,12 +461,13 @@ PARAM_SIMPLE ::= EXPRESION:exp                                                  
 // TODO
 PARAM_COMPUESTO ::= PARAMETROS:param tComa EXPRESION:exp                                                                                                                                                    {: RESULT= new NodoParamCompuesto(param,exp,param.getLine(),param.getColumn()); :}
         ;
-
+/*
 PARAMETROS ::= EXPRESION CONTPARAM
 
 CONTPARAM ::= ,PARAMETROS
             | 
             ;
+*/
 ID ::= tId:valor                                                                                                                                                                                            {: RESULT = new NodoId((String)valor.getLiteral(), valor.getLinea(),valor.getColumna()); :}
     ;
 

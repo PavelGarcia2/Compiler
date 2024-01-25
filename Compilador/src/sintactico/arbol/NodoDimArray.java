@@ -2,13 +2,13 @@ package sintactico.arbol;
 
 public class NodoDimArray extends Nodo{
 
-    NodoDimArray nodoDimArray;          //PARA RECURSIVIDAD
+    NodoDimensiones nodoDimensiones;          //PARA RECURSIVIDAD
     NodoExpresion nodoExpresion;
 
 
-    public NodoDimArray(NodoDimArray nDimArr,NodoExpresion nExpr,int l, int c) {
+    public NodoDimArray(NodoDimensiones nodoDimensiones,NodoExpresion nExpr,int l, int c) {
         super("DIMARRAY", false, l, c);
-        nodoDimArray = nDimArr;
+        this.nodoDimensiones = nodoDimensiones;
         nodoExpresion = nExpr;
     }
 
@@ -16,8 +16,8 @@ public class NodoDimArray extends Nodo{
         super("DIMARRAY",true);
     }
 
-    public NodoDimArray getNodoDimArray() {
-        return nodoDimArray;
+    public NodoDimensiones getNodoDimensiones() {
+        return nodoDimensiones;
     }
 
     public NodoExpresion getNodoExpresion() {
