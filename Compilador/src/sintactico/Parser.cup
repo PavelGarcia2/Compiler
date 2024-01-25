@@ -246,7 +246,8 @@ DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars                                     
 ASIGN_VAR ::= ID ASIGN tPuntocoma
                 ;
 
-ASIGNREAL_ARRAY ::= ID DIM_ARRAY tIgual                 
+ASIGNREAL_ARRAY ::= ID DIM_ARRAY ASIGN tPuntocoma
+                
 DECL_VAR ::= TIPO:t ID:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma                                                                                                                                           {: RESULT = new NodoVar(t,id,darr,asign,t.getLine(),t.getColumn()); :}
           ;
 
