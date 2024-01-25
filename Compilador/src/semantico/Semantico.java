@@ -65,13 +65,13 @@ public class Semantico {
                 ctrlDeclConstantes(constList);
             }           
 
-            // //obtenemos todas las declaracioes de variables
-            // NodoDeclVars varList = arbol.getNodoDeclaracionVariables();
-            // //si la lista no esta vacia o es nula
-            // if(varList !=null && !varList.isEmpty()){
-            //     //controlamos todas las declaraciones de variables
-            //     ctrlDeclListVariables(varList);
-            // }
+            // obtenemos todas las declaracioes de variables
+            NodoDeclVars varList = arbol.getNodoDeclaracionVariables();
+            // si la lista no esta vacia o es nula
+            if(varList !=null && !varList.isEmpty()){
+            // controlamos todas las declaraciones de variables
+                 ctrlDeclListVariables(varList);
+            }
 
             // //obtenemos todas las declaraciones de procedures
             // NodoDeclFunc funcList = arbol.getNodoDeclaracionFunciones();
@@ -236,10 +236,10 @@ public class Semantico {
             int dimArray = dimensionArr(declaracionArray);
             Darray da;
             //Mirar si estamos inicializando el array
-            if(asignacion != null && !asignacion.isEmpty()){                
+            if((asignacion.getNodoASignacionArray() != null && !asignacion.isEmpty()){                
                 
-                // da = new Darray(0, dt.getTsb(),dimArray,false);
-                // ts.poner(id.getName(), da, id);
+                da = new Darray(0, dt.getTsb(),dimArray,false);
+                ts.poner(id.getName(), da, id);
 
                 //Si estamos inicializando tenemos que comprobar que init y decl tengan la misma dim
                 //NodoAsignacionArray nodoAsignacionArray = new
@@ -561,10 +561,17 @@ public class Semantico {
 
                 //comprobamos que los parametros sean booleanos ?¿?¿?¿?
                 if(otras.getNodoParametros().getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool || otras.getNodoParametros().getNodoParamCompuesto().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_true || 
-                    otras.getNodoParametros().getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_false){
+                    otras.getNodoParametros().getNodoParamCompuesto().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_false){
                     parser.report_error("El parametro no es booleano",otras);
 
                 }
+
+                NodoParametros nParams = otras.getNodoParametros();
+                //Si es un solo parametro
+                if(nParams.getNodoParamSimple != null){
+                    //Miramos individualmente la expresion
+                }
+                comprobarParametrosBool(nParams.getNodoParamCompuesto);
 
                 //comprobamos las sentencias
                 if(otras.getNodoSents() != null){
@@ -630,6 +637,10 @@ public class Semantico {
                 break;
         }
         
+    }
+
+    public void comprobarParametrosBool(NodoParamCompuesto nParams) {
+        if(nParams)
     }
 
     public void ctrlRealAsign(NodoRealAsign realAsign){

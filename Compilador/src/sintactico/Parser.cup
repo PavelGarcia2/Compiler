@@ -450,6 +450,11 @@ PARAM_SIMPLE ::= EXPRESION:exp                                                  
 PARAM_COMPUESTO ::= PARAMETROS:param tComa EXPRESION:exp                                                                                                                                                    {: RESULT= new NodoParamCompuesto(param,exp,param.getLine(),param.getColumn()); :}
         ;
 
+PARAMETROS ::= EXPRESION CONTPARAM
+
+CONTPARAM ::= ,PARAMETROS
+            | 
+            ;
 ID ::= tId:valor                                                                                                                                                                                            {: RESULT = new NodoId((String)valor.getLiteral(), valor.getLinea(),valor.getColumna()); :}
     ;
 
