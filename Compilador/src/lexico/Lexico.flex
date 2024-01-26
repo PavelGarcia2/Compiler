@@ -46,6 +46,7 @@ w_for       = "for"
 w_case      = "case"
 w_break     = "break"
 w_default   = "default"
+w_set       = "set"
 
 
 //============================//
@@ -167,6 +168,7 @@ decimal     = {digito}*{punto}{digito}+
 %%
 //Reglas
 
+{w_set}                                { return symbol(ParserSym.tSet); }
 {w_main}                               { return symbol(ParserSym.tMain); } 
 {w_return}                             { return symbol(ParserSym.tReturn); } 
 {w_void}                               { return symbol(ParserSym.tVoid); }
@@ -223,5 +225,6 @@ decimal     = {digito}*{punto}{digito}+
 {lcorchete}                            { return symbol(ParserSym.tLcorchete); }
 {coma}                                 { return symbol(ParserSym.tComa);}
 {puntoComa}                            { return symbol(ParserSym.tPuntocoma); }
-{dosPuntos}                            { return symbol(ParserSym.tDospuntos); }  
+{dosPuntos}                            { return symbol(ParserSym.tDospuntos); }
 .                                      { return symbol(ParserSym.tError); } 
+

@@ -9,7 +9,10 @@ package main;
  * Professor: Pere Palmer
  */
 import lexico.Scanner;
+import semantico.Semantico;
 import sintactico.Parser;
+import tsimbolos.visual.mainJframe;
+
 import java.io.CharArrayReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
@@ -40,6 +43,7 @@ public class Main {
             // Print the current working directory
             System.out.println("Current Working Directory: " + workingDirectory);
             if (args.length > 0) {
+                
                 System.out.println(args[0]);
                 input = new FileReader(args[0]);
                 SymbolFactory sf = new ComplexSymbolFactory();
@@ -47,6 +51,7 @@ public class Main {
                 Parser parser = new Parser(scanner, sf);
                 Symbol result = parser.parse();
                 System.out.println("Resultat: " + result.value);
+                new mainJframe(Semantico.getTs());
             } else {
                 System.out.println("No has introducido ningun archivo!");
             }
