@@ -51,7 +51,7 @@ public class Main {
                 Parser parser = new Parser(scanner, sf);
                 Symbol result = parser.parse();
                 System.out.println("Resultat: " + result.value);
-                new mainJframe(Semantico.getTs());
+                //new mainJframe(Semantico.getTs());
             } else {
                 System.out.println("No has introducido ningun archivo!");
             }
