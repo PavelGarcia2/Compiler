@@ -9,7 +9,7 @@ public class Darray extends Descripcion {
     private int tam; // numero de la variable que está en la tabla de variables que contiene el total de ocupacion de bytes de la array
     private boolean init;
     private int dimensiones;
-    private ArrayList<Integer> bounds;
+    private ArrayList<String> bounds;
     
     public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init) {
         super(TDesc.darray);        
@@ -20,7 +20,7 @@ public class Darray extends Descripcion {
         this.dimensiones = dimensiones;    
     }
 
-    public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init, ArrayList<Integer> bounds) {
+    public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init, ArrayList<String> bounds) {
         super(TDesc.darray);        
         this.variableNumber = variableNumber;
         this.tipus = tipus;
@@ -32,6 +32,10 @@ public class Darray extends Descripcion {
 
     public int getVariableNumber() {
         return variableNumber;
+    }
+
+    public int getDimensiones() {
+        return dimensiones;
     }
 
     public Tipo getTipus() {
