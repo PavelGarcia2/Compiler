@@ -56,6 +56,10 @@ public class Semantico {
         d = new DTipus(Tipo.tsb_float, Float.MIN_VALUE, Float.MAX_VALUE);
         ts.poner("tsb_float", d, null);
 
+        // Inicializamos el str
+        d = new DTipus(Tipo.tsb_str, 0, 1);
+        ts.poner("tsb_str", d, null);
+
         /* Para que las palabras reservadas queden en el ámbito 1 de forma exclusiva */
         ts.entrarBloque();
         System.out.println("HEMOS INIT TS");
@@ -317,7 +321,8 @@ public class Semantico {
 
                     if (ts.consultarTD(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
                             .getNodoExpresion().getNodoId().getNombre()) == null) {
-                        parser.report_error("La variable " + var.getNodoId().getNombre() + " no existe!",
+                        parser.report_error("La variable " + var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                        .getNodoExpresion().getNodoId().getNombre() + " no existe!",
                                 var.getNodoId());
                     }
                     Dvar dId = (Dvar) ts.consultarTD(var.getNodoAsignacion().getNodoTipoAsignacion()
@@ -326,7 +331,11 @@ public class Semantico {
                     Tipo tipoDer = dId.getTipus();
 
                     if (tipoIzq == Tipo.tsb_char) {
-                        if (tipoDer != Tipo.tsb_char || tipoDer != Tipo.tsb_int) {
+                        if (tipoDer != Tipo.tsb_char && tipoDer != Tipo.tsb_int) {
+                            parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
+                        }
+                    } else if (tipoIzq == Tipo.tsb_int || tipoIzq == Tipo.tsb_float) {
+                        if (tipoDer != Tipo.tsb_int && tipoDer != Tipo.tsb_float) {
                             parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
                         }
                     } else {
@@ -414,6 +423,7 @@ public class Semantico {
     }
 
     public void ctrlAsignNormal(DTipus dt, NodoAsignacion asign, NodoId id) {
+        // lo que tenemos a la derecha
         NodoExpresion nodo = asign.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion();
         // Comprovar que el tipo de NodoTipo y el tipo de NodoASignacion es compatible
         // El tipo de NodoTipo lo tenemos en dt
@@ -426,24 +436,30 @@ public class Semantico {
         switch (dt.getTsb()) {
 
             case Tipo.tsb_int:
+                if (nodo.getNodoLiteral() != null) {
 
-                if (nodo.getNodoLiteral().getTipo() != null) {
-                    if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_int) {
+                    if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_int && nodo.getNodoLiteral().getTipo() != Tipo.tsb_float) {
                         parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
                     }
-                    valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
+                    
+                    valor = (int) Float.parseFloat(nodo.getNodoLiteral().getValor());
+   
                     if (valor < dt.getLimiteInferior() && valor > dt.getLimiteSuperior()) {
                         parser.report_error("Has excedido los limites", nodo);
                     }
-                }else{
-                // a = b, primero consultar tabla de simbolos b tiene que existir
+
+                } else {
+                    // a = b, primero consultar tabla de simbolos b tiene que existir
+                
                     Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
-                    Tipo tipoder = dt.getTsb()
-
-                    
-                    if(d3.getTipus() != tipoder){
-
+                    if (d3 == null) {
+                        parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
                     }
+
+                    if (d3.getTipus() != Tipo.tsb_float && d3.getTipus() != Tipo.tsb_int) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
+                    }
+
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_int);
@@ -451,9 +467,18 @@ public class Semantico {
                 break;
 
             case Tipo.tsb_bool:
-                if (nodo.getNodoLiteral().getTipo() != null && (nodo.getNodoLiteral().getTipo() != Tipo.tsb_true
+                if (nodo.getNodoLiteral() != null && (nodo.getNodoLiteral().getTipo() != Tipo.tsb_true
                         || nodo.getNodoLiteral().getTipo() != Tipo.tsb_false)) {
                     parser.report_error("Estas asignando un valor incorrecto, no es bool", nodo);
+                } else {
+                    Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
+                    if (d3 == null) {
+                        parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
+                    }
+
+                    if (d3.getTipus() != dt.getTsb()) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es booleano", nodo);
+                    }
                 }
                 /*
                  * else if(nodo.getBool()!= 0 && nodo.getBool()!=1){
@@ -469,15 +494,27 @@ public class Semantico {
 
             case Tipo.tsb_char:
 
-                if (nodo.getNodoLiteral().getTipo() != null && (nodo.getNodoLiteral().getTipo() != Tipo.tsb_char
-                        && nodo.getNodoLiteral().getTipo() != Tipo.tsb_int)) {
-                    parser.report_error("Estas asignando un valor incorrecto, no es char", nodo);
+                if (nodo.getNodoLiteral() != null) {
+                    if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_int && nodo.getNodoLiteral().getTipo() != Tipo.tsb_char) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es char", nodo);
+                    }
+
+                    valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
+
+                    if (valor < dt.getLimiteInferior() || valor > dt.getLimiteSuperior()) {
+                        parser.report_error("Has excedido los limites", nodo);
+                    }
+                } else {
+                    Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
+                    if (d3 == null) {
+                        parser.report_error("Estas asignando un valor incorrecto la variable no existe", nodo);
+                    }
+
+                    if (d3.getTipus() != Tipo.tsb_int && d3.getTipus() != Tipo.tsb_char) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es int o char", nodo);
+                    }
                 }
 
-                valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
-                if (valor < dt.getLimiteInferior() || valor > dt.getLimiteSuperior()) {
-                    parser.report_error("Has excedido los limites", nodo);
-                }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_char);
                 ts.poner(id.getNombre(), d, nodo);
@@ -486,14 +523,35 @@ public class Semantico {
 
             case Tipo.tsb_float:
 
-                if (nodo.getNodoLiteral().getTipo() != null && (nodo.getNodoLiteral().getTipo() != Tipo.tsb_float)) {
-                    parser.report_error("Estas asignando un valor incorrecto, no es float", nodo);
+                if (nodo.getNodoLiteral() != null) {
+                    
+                    //int b =3;
+                    //float a = b;
+                    if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_int && nodo.getNodoLiteral().getTipo() != Tipo.tsb_float) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
+                    }
+
+                    float val;
+                    val = Float.parseFloat(nodo.getNodoLiteral().getValor());
+
+                    if (val < dt.getLimiteInferior() && val > dt.getLimiteSuperior()) {
+                            parser.report_error("Has excedido los limites", nodo);
+                    }
+
+                } else {
+                    
+                    //set a=b
+                    Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
+                    if (d3 == null) {
+                        parser.report_error("Estas asignando un valor incorrecto la variable no existe", nodo);
+                    }
+
+                    if (d3.getTipus() != Tipo.tsb_int && d3.getTipus() != Tipo.tsb_float) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es float", nodo);
+                    }
+
                 }
 
-                float val = Float.parseFloat(nodo.getNodoLiteral().getValor());
-                if (val < dt.getLimiteInferior() && val > dt.getLimiteSuperior()) {
-                    parser.report_error("Has excedido los limites", nodo);
-                }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_float);
                 ts.poner(id.getNombre(), d, nodo);
@@ -501,16 +559,30 @@ public class Semantico {
                 break;
 
             case Tipo.tsb_str:
+                if (nodo.getNodoLiteral() != null) {
+                    if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_str) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es str", nodo);
+                    }
+                } else {
 
-                if (nodo.getNodoLiteral().getTipo() != null && nodo.getNodoLiteral().getTipo() != Tipo.tsb_str) {
-                    parser.report_error("Estas asignando un valor incorrecto, no es str", nodo);
+                    Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
+                    if (d3 == null) {
+                        parser.report_error("Estas asignando un valor incorrecto la variable no existe", nodo);
+                    }
+
+                    if (d3.getTipus() != dt.getTsb()) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es str", nodo);
+                    }
+
                 }
+
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 d = new Dvar(0, Tipo.tsb_str);
                 ts.poner(id.getNombre(), d, nodo);
 
                 break;
         }
+
     }
 
     public void ctrlDeclListFunciones(NodoDeclFunc funcList) {

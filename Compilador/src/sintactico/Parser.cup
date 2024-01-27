@@ -42,39 +42,49 @@ parser code {:
 
     @Override
     public void report_error(String message, Object info) {
-        StringBuilder msg = new StringBuilder("ERROR");
-        if (info instanceof java_cup.runtime.Symbol) {
+        StringBuilder msg = new StringBuilder("");
+        if ((info != null) && (info instanceof java_cup.runtime.Symbol)) {
+           
             ComplexSymbol token = (ComplexSymbol) info;
             if(token == null){
                 System.out.println("Token nulo");
             }
             Location l = token.getLeft();
-            
             if (l != null) {
+                msg.append("ERROR: ");
                 msg.append(" (fila: ")
                    .append(l.getLine())
                    .append(", columna: ")
                    .append(l.getColumn())
                    .append(")");
             }
+            
         }
-        msg.append(": ").append(message);
-        
+
+        if ((info != null) && (info instanceof Nodo)) {
+            Nodo node = (Nodo)info;
+            msg.append("ERROR SEMANTICO: ")
+                .append(message + " en la ")
+                .append("linea: ")
+                .append(node.getLine())
+                .append(", columna: ")
+                .append(node.getColumn());
+        }
+
+        escribeEnFichero(msg.toString());
         System.err.println(msg);
         System.exit(0);
     }
 
     public void escribeEnFichero(String msg){
         try{
-            if(errores == 1){
-                bf = new BufferedWriter(new FileWriter(file));
-            }
+            bf = new BufferedWriter(new FileWriter(file));
             bf.write(msg);
+            bf.close();
         } catch( IOException e ){
 
         }
     }
-
 
     public int getErrores(){
         return errores;
@@ -131,7 +141,7 @@ parser code {:
         done_parsing();
     }
 
-     @Override
+    @Override
     public void syntax_error(java_cup.runtime.Symbol cur_token) {
         report_error("de sintaxis", cur_token);
     }

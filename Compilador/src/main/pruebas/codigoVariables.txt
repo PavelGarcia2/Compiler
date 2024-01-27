@@ -1,7 +1,16 @@
-//
+// Declaracion y setteo de variables 
 
-int a = 2;
-int b = ;
+int a = 3.1;
+float z = 2;
+str f = "adios";
+int b;
+
+set b = z;
+int k = 3;
+float l = k;
+set k=l;
+char mamapinga = alopresidente;
+
 
 main {
 
