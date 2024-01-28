@@ -965,8 +965,9 @@ public class Semantico {
                     
                     }else{ // parametros compuestos (No tienen ningun tipo de sentido aquí)¿?¿?¿?¿?¿?¿?¿?¿?
                     parser.report_error("No se pueden usar parametros compuestos",otras.getNodoParametros().getNodoParamCompuesto());
+                    }
                 }
-
+                
                 // comprobamos las sentencias
                 if (otras.getNodoSents() != null) {
                     ctrlSents(otras.getNodoSents());
@@ -978,9 +979,9 @@ public class Semantico {
                 }
             
                 break;
+            
 
             case 1: // while
-
                 // ctrlParams(otras.getNodoParametros());
 
                 // comprobamos que los parametros sean booleanos ?¿?¿?¿?
