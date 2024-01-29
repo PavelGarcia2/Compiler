@@ -159,7 +159,7 @@ De los terminales capaz falte definir cual es un int, char, string, etc.
 
 terminal ComplexSymbol tReturn,tMain,tFun,tIn,tAnd,tOr,tNot,tIgual;
 
-terminal ComplexSymbol tSuma,tResta,tMult,tDiv,tMod,tMayor,tMenor,tIgualMay,tIgualMenor,tIgualIgual;
+terminal ComplexSymbol tSuma,tResta,tMult,tDiv,tMod,tMayor,tMenor,tIgualMay,tIgualMenor,tIgualIgual,tDiferente;
 
 terminal ComplexSymbol tNew,tCase,tBreak,tDefault;
 
@@ -375,6 +375,7 @@ OP_LOG ::= tAnd:and                                                             
       | tIgualMay:imay                                                                                                                                                                                      {: RESULT= new NodoOpLog(TipoLog.IGUALMAYOR,extractLine(imay),extractColumn(imay)); :}
       | tIgualMenor:imen                                                                                                                                                                                    {: RESULT= new NodoOpLog(TipoLog.IGUALMENOR,extractLine(imen),extractColumn(imen)); :}
       | tIgualIgual:ii                                                                                                                                                                                      {: RESULT= new NodoOpLog(TipoLog.IGUALIGUAL,extractLine(ii),extractColumn(ii)); :}
+      | tDiferente:d                                                                                                                                                                                        {: RESULT= new NodoOpLog(TipoLog.DIFERENTE,extractLine(d),extractColumn(d)); :}
 	  ;
 // TODO
 OP_ARIT ::= tSuma:s                                                                                                                                                                                          {: RESULT= new NodoOpArit(TipoArit.SUMA, extractLine(s),extractColumn(s)); :}
@@ -460,6 +461,7 @@ LLAMADA_FUNC ::= ID:id tLparen PARAMETROS:param tRparen                         
 // TODO
 PARAMETROS ::= PARAM_SIMPLE:simple                                                                                                                                                                          {: RESULT= new NodoParametros(simple,simple.getLine(),simple.getColumn());:}
           | PARAM_COMPUESTO:compuesto                                                                                                                                                                       {: RESULT= new NodoParametros(compuesto, compuesto.getLine(),compuesto.getColumn());:}
+          |                                                                                                                                                                                                 {: RESULT= new NodoParametros(); :}            
 		  ;
 // TODO
 PARAM_SIMPLE ::= EXPRESION:exp                                                                                                                                                                              {: RESULT= new NodoParamSimple(exp,exp.getLine(),exp.getColumn()); :}

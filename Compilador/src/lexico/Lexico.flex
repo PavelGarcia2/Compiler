@@ -80,6 +80,7 @@ igualMay    = "=>"
 igualMen    = "=<"
 asignacion  = "="
 igual       = "=="
+diferente   = "!="
 
 
 //============================//
@@ -168,6 +169,7 @@ decimal     = {digito}*{punto}{digito}+
 %%
 //Reglas
 
+{diferente}                            { return symbol(ParserSym.tDiferente); }
 {w_set}                                { return symbol(ParserSym.tSet); }
 {w_main}                               { return symbol(ParserSym.tMain); } 
 {w_return}                             { return symbol(ParserSym.tReturn); } 

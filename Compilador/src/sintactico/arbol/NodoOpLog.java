@@ -9,7 +9,7 @@ TipoLog opLog;
         this.opLog = opLog;
     }
 
-    public TipoLog getOpLog() {
+    public TipoLog getTipusOpLog() {
         return opLog;
     }
 }
