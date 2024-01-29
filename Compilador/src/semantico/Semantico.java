@@ -23,7 +23,7 @@ public class Semantico {
         this.parser = parser;
         this.ts = new TablaSimbolos(parser);
         inicializarTablaSimbolos();
-        // runProgram();
+        //runProgram();
     }
 
     private void inicializarTablaSimbolos() {
@@ -69,7 +69,7 @@ public class Semantico {
         NodoMain main = arbol.getNodoMain();
         if (main != null) {
 
-            // System.out.println("INIT RUN PROGRAM");
+            //System.out.println("INIT RUN PROGRAM");
             // comprobar las constantes
             NodoDeclConst constList = arbol.getNodoDeclaracionConstantes();
             if (constList != null && !constList.isEmpty()) {
@@ -536,7 +536,7 @@ public class Semantico {
 
         switch (dt.getTsb()) {
 
-            case Tipo.tsb_int:
+            case tsb_int:
                 if (nodo.getNodoLiteral() != null) {
 
                     if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_int
@@ -568,7 +568,7 @@ public class Semantico {
                 ts.poner(id.getNombre(), d, nodo);
                 break;
 
-            case Tipo.tsb_bool:
+            case tsb_bool:
                 if (nodo.getNodoLiteral() != null && (nodo.getNodoLiteral().getTipo() != Tipo.tsb_true
                         || nodo.getNodoLiteral().getTipo() != Tipo.tsb_false)) {
                     parser.report_error("Estas asignando un valor incorrecto, no es bool", nodo);
@@ -594,7 +594,7 @@ public class Semantico {
 
                 break;
 
-            case Tipo.tsb_char:
+            case tsb_char:
 
                 if (nodo.getNodoLiteral() != null) {
                     if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_int
@@ -624,7 +624,7 @@ public class Semantico {
 
                 break;
 
-            case Tipo.tsb_float:
+            case tsb_float:
 
                 if (nodo.getNodoLiteral() != null) {
 
@@ -662,7 +662,7 @@ public class Semantico {
 
                 break;
 
-            case Tipo.tsb_str:
+            case tsb_str:
                 if (nodo.getNodoLiteral() != null) {
                     if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_str) {
                         parser.report_error("Estas asignando un valor incorrecto, no es str", nodo);
@@ -684,6 +684,9 @@ public class Semantico {
                 d = new Dvar(0, Tipo.tsb_str);
                 ts.poner(id.getNombre(), d, nodo);
 
+                break;
+            default:
+                System.out.println("Hay un error ctrlAsignNormal");
                 break;
         }
 

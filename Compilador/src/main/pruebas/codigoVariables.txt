@@ -1,6 +1,5 @@
 // Declaracion y seteo de variables 
-
-int a = 3.1;
+int a = 3;
 float z = 2;
 str f = "adios";
 int b;
@@ -13,7 +12,8 @@ char mamapinga = 23;
 
 int arr[][] = new int[5][3];
 
-set arr[a][b] = "ca";
+set arr[a][b] = 2;
+//set arr[a][b] = k; //Esto peta
 
 main {
 
