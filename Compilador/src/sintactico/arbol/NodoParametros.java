@@ -18,6 +18,10 @@ public class NodoParametros extends Nodo {
         this.nodoParamCompuesto = nodoParamCompuesto;
     }
 
+    public NodoParametros(){
+        super("PARAMETROS", true);
+    }
+
     public NodoParamSimple getNodoParamSimple() {
         return nodoParamSimple;
     }

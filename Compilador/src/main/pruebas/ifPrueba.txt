@@ -1,0 +1,14 @@
+// Declaracion y seteo de variables 
+
+int x = 3;
+    int z = 1;
+    
+main {
+    print("Fuciona");
+    
+    a(x,z);
+}
+
+func a (int b, int c) {
+
+}

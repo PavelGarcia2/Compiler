@@ -1,11 +1,10 @@
 // Declaracion y seteo de variables 
-
-int a = 3.1;
+int a = 3;
 float z = 2;
 str f = "adios";
 int b;
 
-set b = z;
+set b = z; 
 int k = 3;
 float l = k;
 set k=l;
@@ -13,11 +12,12 @@ char mamapinga = 23;
 
 int arr[][] = new int[5][3];
 
-set arr[a][b] = "ca";
+set arr[a][b] = 2;
+set arr[a][b] = k; 
 
 // MAIN
 main {
-    
+
 }
 
 

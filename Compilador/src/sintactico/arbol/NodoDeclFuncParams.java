@@ -24,5 +24,4 @@ public class NodoDeclFuncParams extends Nodo {
     public NodoDeclFuncParam getNodoDeclFuncParam() {
         return nodoDeclFuncParam;
     }
-
 }

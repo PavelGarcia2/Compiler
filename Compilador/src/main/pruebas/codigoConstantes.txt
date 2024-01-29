@@ -15,7 +15,7 @@ const char c = 257; char excede limite superior
 const int z = (int) 'x'; muy mal */
 
 const int pepe = -1;
-const char pepa = -2;
+const char pepa = '2';
 //const int min= -21474836484; //exceso inferior del rango
 //const int max= 21474836471; //exceso rango superior 
 main {
