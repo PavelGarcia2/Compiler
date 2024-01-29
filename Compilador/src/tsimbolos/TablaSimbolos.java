@@ -1,8 +1,7 @@
 package tsimbolos;
 
 import sintactico.Parser;
-import tsimbolos.auxi.DatosTE;
-import tsimbolos.auxi.DatosTD;
+import tsimbolos.auxi.Datos;
 import tsimbolos.descripciones.*;
 import sintactico.arbol.Nodo;
 
@@ -28,7 +27,7 @@ public class TablaSimbolos {
         this.parser = parser;
         ta.setAmbito(n, 0);
         n++;
-        ta.setAmbito(n, -1);
+        ta.setAmbito(n, 0);
     }
 
     public TablaSimbolos() {
@@ -51,9 +50,9 @@ public class TablaSimbolos {
         td = new TablaDescripcion();
         // Reseteamos la tabla de ambitos
         ta = new TablaAmbitos();
-        ta.setAmbito(n, 0);
+        ta.nuevoAmbito(0);
         n++;
-        ta.setAmbito(n, -1);
+        ta.nuevoAmbito(0);
     }
 
     /**
@@ -63,35 +62,22 @@ public class TablaSimbolos {
      * @return
      */
     public boolean poner(String id, Descripcion d, Nodo nodo) {
-        // Si el identificador ya existe en el nivel actual, error
+        // Si el identificador ya existe en la tabla de
+        if (td.getElemento(id) != null) {
 
-        if (td.getElemento(id) == null) {
-
-        } else {
-
-            if (td.getElemento(id).getnp() == n) {
+            if(td.getElemento(id).getNp() == n){
                 parser.report_error("Simbolo ya declarado en el nivel actual", nodo);
-                return false;
             }
+            int idxe = ta.getAmbito(n);
+            idxe++;
 
-            if (td.getElemento(id) != null) {
-                // existe en otro nivel distinto al actual
-                //Si su ambito es el 0
-                int idxe = ta.getAmbito(n);
-                if(idxe == 0){  //Significa que estamos redeclarando una variable global
-                     parser.report_error("Estas intentando sobreescribir una variable global", nodo);
-                }else{
-                    idxe++;
-                    ta.setAmbito(n, idxe);
-                    System.out.println("HOLA");
-                    te.put(idxe, new DatosTE(-1, id, d, td.getElemento(id).getnp()));
-                    System.out.println("Despues DatosTE");
-                }
-               
-            }
+            ta.setAmbito(n, idxe);
+            te.put(idxe, new Datos(td.getElemento(id).getDescripcion(), -1, id, td.getElemento(id).getNp(), -1));
+
         }
 
-        td.insertar(id, new DatosTD(-1, n, d));
+        System.out.println("Insertamos "+id+" en el nivel "+n);
+        td.insertar(id, new Datos(d,-1,id, n,-1));
 
         return true;
     }
@@ -133,8 +119,11 @@ public class TablaSimbolos {
     }
 
     public void entrarBloque() {
-        this.n++;
-        this.ta.setAmbito(n, this.ta.getAmbito(n - 1));
+        n++;
+        System.out.println("HOLA ENTRO BLOQUE "+n);
+        System.out.println("apuntando a "+ta.getAmbito(n - 1));
+        //ta.setAmbito(n, ta.getAmbito(n - 1));
+        ta.nuevoAmbito(ta.getAmbito(n-1));
     }
 
     public void salirBloque() {
@@ -147,9 +136,10 @@ public class TablaSimbolos {
             while (idxi != idxfi) {
                 if (te.get(idxi).getNp() != -1) {
                     String id = te.get(idxi).getIdcamp();
-                    td.getElemento(id).setnp(te.get(idxi).getNp());
-                    td.getElemento(id).setDescripcion(te.get(idxi).getD());
-                    td.getElemento(id).setFirst(te.get(idxi).getNext()); // next de l’entrada de la tupla a te és first
+                    td.insertar(id, new Datos(te.get(idxi).getDescripcion(), -1, te.get(idxi).getIdcamp(), te.get(idxi).getNp(), -1));
+                    //td.getElemento(id).setnp(te.get(idxi).getNp());
+                    //td.getElemento(id).setDescripcion(te.get(idxi).getD());
+                    //td.getElemento(id).setFirst(te.get(idxi).getNext()); // next de l’entrada de la tupla a te és first
                 }
                 idxi = idxi - 1;
             }

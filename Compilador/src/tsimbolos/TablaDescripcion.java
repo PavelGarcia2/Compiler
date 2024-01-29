@@ -3,21 +3,21 @@ package tsimbolos;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import tsimbolos.auxi.DatosTD;
+import tsimbolos.auxi.Datos;
 
 public class TablaDescripcion {
 
-    private HashMap<String,DatosTD> td;
+    private HashMap<String,Datos> td;
 
     public TablaDescripcion(){
         td = new HashMap<>();
     }
 
-    public void insertar(String id, DatosTD datos){
+    public void insertar(String id, Datos datos){
         td.put(id, datos);
     }
 
-    public DatosTD getElemento(String id){
+    public Datos getElemento(String id){
         return td.get(id);
     }
 

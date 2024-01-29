@@ -1,0 +1,14 @@
+main {
+    int hola;
+}
+
+//Decl funcs
+
+fun char sumaDosValores(int a, int b[]) {
+    int res;
+    return 'a';
+}
+
+fun void algunaFunc() {
+    int res = 1;
+}

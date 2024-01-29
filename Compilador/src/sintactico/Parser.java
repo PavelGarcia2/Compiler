@@ -1224,7 +1224,7 @@ class CUP$Parser$actions {
 		int funcleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int funcright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		NodoFunc func = (NodoFunc)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new NodoDeclFunc(declfunc,func,declfunc.getLine(),declfunc.getColumn()); 
+		 RESULT = new NodoDeclFunc(declfunc,func,func.getLine(),func.getColumn()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("DECL_FUNCIONES",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

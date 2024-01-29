@@ -316,7 +316,7 @@ DECL_FUNCPARAMS ::= DECL_FUNCPARAM:declparam                                    
 DECL_FUNCPARAM ::= TIPO:tipo ID:id DECL_ARRAY:declarr                                                                                                                                                       {: RESULT= new NodoDeclFuncParam(tipo,id,declarr,tipo.getLine(),tipo.getColumn()); :}
                 ;
 // TODO
-DECL_FUNCIONES ::= DECL_FUNCIONES:declfunc FUNC:func                                                                                                                                                        {: RESULT = new NodoDeclFunc(declfunc,func,declfunc.getLine(),declfunc.getColumn()); :}
+DECL_FUNCIONES ::= DECL_FUNCIONES:declfunc FUNC:func                                                                                                                                                        {: RESULT = new NodoDeclFunc(declfunc,func,func.getLine(),func.getColumn()); :}
               |                                                                                                                                                                                             {: RESULT = new NodoDeclFunc(); :}
 			  ;
 // TODO

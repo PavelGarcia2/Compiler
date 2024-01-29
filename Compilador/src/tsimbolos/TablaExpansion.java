@@ -1,16 +1,16 @@
 package tsimbolos;
 
 import java.util.ArrayList;
-import tsimbolos.auxi.DatosTE;
+import tsimbolos.auxi.Datos;
 
 public class TablaExpansion {
 
-    private ArrayList<DatosTE> te = new ArrayList<>();
+    private ArrayList<Datos> te = new ArrayList<>();
 
     public TablaExpansion() {
     }
 
-    public void put(int ind, DatosTE d) {
+    public void put(int ind, Datos d) {
         if (te.contains(d)) {
             te.set(ind, d);
         } else {
@@ -18,7 +18,7 @@ public class TablaExpansion {
         }
     }
 
-    public DatosTE get(int ind) {
+    public Datos get(int ind) {
         return te.get(ind);
     }
 
