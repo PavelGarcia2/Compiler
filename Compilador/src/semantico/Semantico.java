@@ -99,19 +99,19 @@ public class Semantico {
 
     public void ctrlDeclConstantes(NodoDeclConst constList) {
         //CAMBIAR A ITERATIVO
-        
+        System.out.println("INIT DECLCONSTS");
         NodoDeclConst hijoDeclaracions = constList.getNodoDeclConst();
         if (hijoDeclaracions != null && !hijoDeclaracions.isEmpty()) {
             ctrlDeclConstantes(hijoDeclaracions);
         }
         ctrlConst(constList.getNodoConst());
 
-        System.out.println("FIN DECLCONST");
+        //System.out.println("FIN DECLCONST");
     }
 
     public void ctrlConst(NodoConst constante) {
 
-        System.out.println("INIT CONST");
+        
   
         NodoSigno nodoSigno = constante.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
                 .getNodoExpresion().getNodoLiteral().getSigno();
@@ -165,6 +165,7 @@ public class Semantico {
         int signo = 1;
         if (nodoSigno != null && type == Tipo.tsb_int) {
             signo = nodoSigno.getSigno();
+            //System.out.println(constante.getNodoId());
         }
         // Mirar rango
         char aux;

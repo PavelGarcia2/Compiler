@@ -251,7 +251,7 @@ DECL_VARS ::= DECL_VAR:dvar DECL_VARS:dvars                                     
              |                                                                                                                                                                                              {: RESULT = new NodoDeclVars(); :}
              ;
 
-DECL_VAR ::= TIPO:t ID:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma                                                                                                                                           {: RESULT = new NodoVar(0,null,t,id,darr,asign,t.getLine(),t.getColumn()); :}
+DECL_VAR ::= TIPO:t ID:id DECL_ARRAY:darr ASIGN:asign tPuntocoma                                                                                                                                           {: RESULT = new NodoVar(0,null,t,id,darr,asign,t.getLine(),t.getColumn()); :}
           | tSet:t ID:id ASIGN:asign tPuntocoma                                                                                                                                                             {: RESULT = new NodoVar(1,null,null,id,null,asign,extractLine(t),extractColumn(t)); :}
           | tSet:t ID:id DIM_ARRAY:dim ASIGN:asign tPuntocoma                                                                                                                                               {: RESULT = new NodoVar(2,dim,null,id,null,asign,extractLine(t),extractColumn(t)); :}                                
           ;
@@ -282,7 +282,7 @@ DIMENSIONES ::= DIM_ARRAY:dimarr                                                
 		    ;
 
 // TODO
-REAL_ASIGN ::= ID:id tIgual:igual EXPRESION:exp tPuntocoma:pcoma                                                                                                                                            {: RESULT= new NodoRealAsign(id,exp,id.getLine(),id.getColumn()); :}
+REAL_ASIGN ::= ID:id DIMENSIONES:dim tIgual:igual EXPRESION:exp tPuntocoma:pcoma                                                                                                                            {: RESULT= new NodoRealAsign(id,dim,exp,id.getLine(),id.getColumn()); :}
             ;
 
 /*

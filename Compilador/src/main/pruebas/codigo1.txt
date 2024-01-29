@@ -1,14 +1,16 @@
 //DECL CONST
 
-const int a = -2;
+const int an = -2;
 const bool b = false;
 const bool a = true;
 const bool z = true;
 const char x = 255;
 
+set a[1] = 2;
 
 main {
-
+    a[1] = 2;
 }
 
 //DECL FUNCS
+

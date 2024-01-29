@@ -16,7 +16,7 @@ set arr[a][b] = 2;
 set arr[a][b] = k; 
 
 main {
-    
+    /*
     int barcelona = 0;
     
     set a=12;
@@ -26,4 +26,8 @@ main {
     if(f < b){
         
     }
+    */
 }
+
+
+
