@@ -2196,7 +2196,7 @@ class CUP$Parser$actions {
           case 114: // PARAMETROS ::= 
             {
               NodoParametros RESULT =null;
-		 RESULT= new NodoParametros();
+		 RESULT= new NodoParametros(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("PARAMETROS",33, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

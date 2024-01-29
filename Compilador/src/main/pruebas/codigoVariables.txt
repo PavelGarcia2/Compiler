@@ -16,7 +16,14 @@ set arr[a][b] = 2;
 set arr[a][b] = k; 
 
 main {
-    //print("Fuciona");
     
-
+    int barcelona = 0;
+    
+    set a=12;
+    set b=2;
+    set arr[a][b] = 34; 
+   
+    if(f < b){
+        
+    }
 }

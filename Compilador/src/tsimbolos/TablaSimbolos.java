@@ -76,10 +76,18 @@ public class TablaSimbolos {
 
             if (td.getElemento(id) != null) {
                 // existe en otro nivel distinto al actual
+                //Si su ambito es el 0
                 int idxe = ta.getAmbito(n);
-                idxe++;
-                ta.setAmbito(n, idxe);
-                te.put(idxe, new DatosTE(-1, id, d, td.getElemento(id).getnp()));
+                if(idxe == 0){  //Significa que estamos redeclarando una variable global
+                     parser.report_error("Estas intentando sobreescribir una variable global", nodo);
+                }else{
+                    idxe++;
+                    ta.setAmbito(n, idxe);
+                    System.out.println("HOLA");
+                    te.put(idxe, new DatosTE(-1, id, d, td.getElemento(id).getnp()));
+                    System.out.println("Despues DatosTE");
+                }
+               
             }
         }
 

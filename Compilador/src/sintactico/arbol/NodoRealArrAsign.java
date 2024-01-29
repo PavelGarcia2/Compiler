@@ -22,5 +22,9 @@ public class NodoRealArrAsign extends Nodo {
         return nodoExpresion;
     }
 
+    public NodoDimArray getNodoDimArray(){
+        return dim;
+    }
+
 
 }

@@ -10,7 +10,7 @@ public class NodoVar extends Nodo{
     NodoDeclArray nodoDeclArray; 
     //NODO ASIGN
     NodoAsignacion nodoAsignacion;
-    //NODO DIM ARRAY
+//NODO DIM ARRAY
     NodoDimArray nodoDimArray;
 
     int tipoNodo;
@@ -58,8 +58,8 @@ public class NodoVar extends Nodo{
     public NodoAsignacion getNodoAsignacion() {
         return nodoAsignacion;
     }
-    
-   /* 
+
+       /* 
     DECL_VAR ::= TIPO:t ID:id DECL_ARRAY:darr ASIGN:asign  tPuntocoma                                                                                                                                           {: RESULT = new NodoVar(t,id,darr,asign,t.getLine(),t.getColumn()); :}
           | tSet ID:id ASIGN:asign tPuntocoma
           | tSet ID:id DIM_ARRAY:dim ASIGN:asign tPuntocoma

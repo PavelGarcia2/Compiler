@@ -1,29 +1,14 @@
-    int edad1 = 1;
-    int edad2 = 2;
-    str nombre = "Hola";
-    int multEdad;
-    bool esmayor;
+//DECL CONST
 
-    main {
-        println(mayor(edad1,edad2));
-        multEdad = multiplicarEdad(edad1,3);
-        print("Edad multiplicada = ");
-        println(multEdad);
-        mayor(edad1, edad2);
-    }
+const int a = -2;
+const bool b = false;
+const bool a = true;
+const bool z = true;
+const char x = 255;
 
-    fun bool mayor (int edad1, int edad2) {
-        int jaja;
-        esmayor = false;
-        if(edad1 > edad2){2   
-            esmayor = true;
-        }
-        return esmayor;
-    }
 
-    fun int multiplicarEdad (int edad, int mult) {
-        return edad * mult;
-    }
+main {
 
-    
-    
+}
+
+//DECL FUNCS
