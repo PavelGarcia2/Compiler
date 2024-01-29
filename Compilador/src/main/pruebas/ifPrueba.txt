@@ -10,5 +10,9 @@ main {
         print("Fuciona");
 
     }
+
+    for(int i=54; i < 0; i++){
+
+    }
     
 }

@@ -6,10 +6,26 @@ const bool a = true;
 const bool z = true;
 const char x = 255;
 
-set a[1] = 2;
+int cdsa = 2;
+int y[] = new int[2];
+set y[0] = 1;
 
 main {
-    a[1] = 2;
+    int yx = 1;
+    int asf; 
+    set asf = 21;
+    bool uno = true;
+    bool dos = false;
+    bool fin = uno & dos;
+
+    if(x > l){
+        asf = 1;
+    }elif(uno == true){
+        uno=false;
+    }else{
+        set a = 2;
+    }
+    y[2] = 11;
 }
 
 //DECL FUNCS
