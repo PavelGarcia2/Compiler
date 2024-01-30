@@ -13,17 +13,33 @@ public class NodoExpresion extends Nodo{
     NodoLiteral nodoLiteral;
     int bool;
     NodoLlamadaFunc nodoLlamadaFunc;
+    NodoExpresion nodoExpresion1;
+    NodoExpresion nodoExpresion2;
+    NodoOperador nodoOperador;
 
-    public NodoExpresion(NodoExpresion conNegacion, NodoExpresionArit nodoExpresionArit, NodoExpresionLog nodoExpresionLog, 
+    public NodoExpresion(NodoExpresion conNegacion,NodoExpresion nodoExpresion1,NodoOperador nodoOperador,NodoExpresion nodoExpresion2, 
     NodoId nodoId, NodoLiteral nodoLiteral, int bool, NodoLlamadaFunc nodoLlamadaFunc,int l, int c) {
         super("EXPR", false, l ,c);        
         this.conNegacion = conNegacion;
-        this.nodoExpresionArit = nodoExpresionArit;
         this.nodoId = nodoId;
         this.nodoLiteral = nodoLiteral;
         this.bool = bool;
         this.nodoLlamadaFunc = nodoLlamadaFunc; 
-        this.nodoLlamadaFunc = nodoLlamadaFunc; 
+        this.nodoExpresion1 = nodoExpresion1;
+        this.nodoExpresion2 = nodoExpresion2;
+        this.nodoOperador = nodoOperador;
+    }
+
+    public NodoOperador getNodoOperador() {
+        return nodoOperador;
+    }
+
+    public NodoExpresion getNodoExpresion1() {
+        return nodoExpresion1;
+    }
+
+    public NodoExpresion getNodoExpresion2() {
+        return nodoExpresion2;
     }
 
     public NodoExpresion getNodoExpresionConParentesis() {

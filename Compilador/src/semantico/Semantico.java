@@ -84,13 +84,13 @@ public class Semantico {
                 ctrlDeclListVariables(varList);
             }
 
-            ctrlMain(main);
-
             // obtenemos todas las declaraciones de procedures
             NodoDeclFunc funcList = arbol.getNodoDeclaracionFunciones();
             if (funcList != null && !funcList.isEmpty()) {
                 ctrlDeclListFunciones(funcList);
             }
+
+            ctrlMain(main);
 
         } else {
             parser.report_error("No hemos encontrado el main", main);
@@ -577,7 +577,7 @@ public class Semantico {
 
             case tsb_bool:
 
-                ctrlExp(nodo);
+                ctrlExp(nodo,false);
                 // si tipo de izquierda es bool comprobamos deerecha
                 // if (nodo.getNodoLiteral() != null && nodo.getNodoLiteral().getTipo() !=
                 // Tipo.tsb_bool) {
@@ -1022,7 +1022,7 @@ public class Semantico {
                 System.out.println("Detectamos un if");
 
                 if (otras.getNodoExpresion() != null) {
-                    ctrlExp(otras.getNodoExpresion());
+                    ctrlExp(otras.getNodoExpresion(),false);
                 }
                 
 
@@ -1041,7 +1041,7 @@ public class Semantico {
             case 1: // while
 
                 if(otras.getNodoExpresion() != null){
-                    ctrlExp(otras.getNodoExpresion());
+                    ctrlExp(otras.getNodoExpresion(),false);
                 }
                 
 
@@ -1060,7 +1060,7 @@ public class Semantico {
                 }
 
                 // comprobamos que exp sera bool
-                ctrlExp(otras.getNodoExpresion());
+                ctrlExp(otras.getNodoExpresion(),false);
 
                 if (otras.getNodoOpRapidos() != null) {
                     ctrlOpRapidos(otras.getNodoOpRapidos());
@@ -1122,45 +1122,65 @@ public class Semantico {
 
     }
 
-    public void ctrlExp(NodoExpresion exp) {
+    public Tipo ctrlExp(NodoExpresion exp, boolean op) {
 
-        System.out.println("EXP log: "+exp.getNodoExpresionLog());
-        System.out.println("EXP id: "+exp.getNodoId());
-        // si tenemos un literal comprobamos que sea booleano
         System.out.println("Entro ctrlExp");
         System.out.println("");
+
         if (exp.getNodoLiteral() != null && exp.getNodoLiteral().getTipo() != Tipo.tsb_bool) {
-            
-            parser.report_error("El parametro literal no es booleano", exp.getNodoLiteral());
+
+            if(!op){
+                parser.report_error("El parametro no es correcto", exp.getNodoLiteral());
+            }else{
+                if(exp.getNodoLiteral().getTipo() != Tipo.tsb_bool && exp.getNodoLiteral().getTipo() != Tipo.tsb_int && exp.getNodoLiteral().getTipo() != Tipo.tsb_float){
+                    parser.report_error("El parametro no es correcto", exp.getNodoLiteral());
+                }
+            }
+            return exp.getNodoLiteral().getTipo();
 
         } else if (exp.getNodoId() != null) {// tenemos un id
+
             System.out.println("Entramos en id");
             // comprobamos que el id exista en la tabla de simbolos
             if (ts.consultarTD(exp.getNodoId().getNombre()) == null) {
                 parser.report_error("El parametro id no existe", exp.getNodoId());
             }
-
+            System.out.println("EXP id: "+exp.getNodoId().getNombre());
             Dvar d3 = (Dvar) ts.consultarTD(exp.getNodoId().getNombre());
 
             // si existe comprobamos que sea booleano
-            if (d3.getTipus() != Tipo.tsb_bool) {
+            if (!op && d3.getTipus() != Tipo.tsb_bool) {
                 parser.report_error("El parametro id no es booleano", exp.getNodoId());
             }
 
-        } else if (exp.getNodoExpresionArit() != null) {
+            if (op && d3.getTipus() != Tipo.tsb_bool && d3.getTipus() != Tipo.tsb_int) {
+                parser.report_error("El parametro no es correcto", exp.getNodoId());
+            }
+            return d3.getTipus();
 
-            parser.report_error("La expresion no es booleana", exp.getNodoExpresionArit());
+        } else if (exp.getNodoExpresion1() != null) {
+            //Tenemos una expresion op expresion
 
-        } else if (exp.getNodoExpresionLog() != null) {
-            // Habria que comprobar que el tipo en conjunto sea logico
-            ctrlExpLog(exp.getNodoExpresionLog());
+            //Primero miraremos si el operador es booleano si no lo es hay que saltar error
+            if(exp.getNodoOperador() != null && exp.getNodoOperador().getNodoOpArit() != null){
+                parser.report_error("Debe ser una expresion booleana",exp.getNodoOperador().getNodoOpArit());
+            }
 
+            //Como tenemos una expresion en termino1 y en termino 2 podemos llamar a que se evaluen
+            //Con op log
+            Tipo tipoTerm1 = ctrlExp(exp.getNodoExpresion1(),true);
+            Tipo tipoTerm2 = ctrlExp(exp.getNodoExpresion2(),true);
+            if(tipoTerm1 != tipoTerm2){
+                parser.report_error("Tipos incompatibles",exp.getNodoOperador());
+            }
+            
         } else if (exp.getNodoExpresionConNegacion() != null) {
-            ctrlExp(exp.getNodoExpresionConNegacion());
+            ctrlExp(exp.getNodoExpresionConNegacion(),false);
 
         } else if (exp.getNodoLlamadaFunc() != null) {
             ctrl_LlamadaFunc(exp.getNodoLlamadaFunc());
         }
+        return Tipo.tsb_void;
     }
 
     // public void ctrlParams(NodoExpresion params) {

@@ -214,7 +214,7 @@ non terminal NodoDeclFuncParam DECL_FUNCPARAM;
 non terminal NodoReturn RETURN;
 non terminal NodoId ID;
 non terminal NodoLiteral LITERAL;
-
+non terminal NodoOperador OPERADOR;
 non terminal NodoDeclConst DECL_CONST;
 non terminal NodoConst DECL_CON;
 non terminal NodoReturnParam RETURN_PARAM;
@@ -223,6 +223,10 @@ non terminal NodoSigno SIGNO;
 
 non terminal NodoDimensiones DIMENSIONES;
 
+precedence left tSuma, tResta;
+precedence left tMult, tDiv, tMod;
+precedence left tAnd, tOr;
+precedence left tIgualIgual, tDiferente, tMenor, tMayor, tIgualMay, tIgualMenor;
 
 start with PROGRAMA;
 
@@ -430,18 +434,22 @@ TERMINOLOG_2 ::= ID:id                                                          
 // PEDRO
 EXPRESION_ARITM ::= TERMINO_1:term1 OP_ARIT:oparit TERMINO_2:term2                                                                                                                                          {: RESULT= new NodoExpresionArit(term1,oparit,term2,term1.getLine(),term2.getColumn()); :}
                 ;
-
+/*
  // PEDRO
 EXPRESION_LOG ::= TERMINOLOG_1:tlog1 OP_LOG:oplog TERMINOLOG_2:tlog2                                                                                                                                        {: RESULT= new NodoExpresionLog(tlog1,oplog,tlog2,tlog1.getLine(),tlog1.getColumn()); :}
                 ;
+*/
 //PEDRO
-EXPRESION ::=tNot:v EXPRESION:e                                                                                                                                                                               {: RESULT = new NodoExpresion(e, null, null,null, null, -1, null, extractLine(v),extractColumn(v)); :}
-         | EXPRESION_LOG:elog                                                                                                                                                                               {: RESULT = new NodoExpresion( null, null, elog,null, null, -1, null, elog.getLine(), elog.getColumn()); :}
-         | EXPRESION_ARITM:earit                                                                                                                                                                            {: RESULT = new NodoExpresion( null, earit, null,null, null, -1, null, earit.getLine(), earit.getColumn()); :}
-         | ID:id                                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null,id, null, -1, null, id.getLine(), id.getColumn()); :}
-         | LITERAL:l                                                                                                                                                                                        {: RESULT = new NodoExpresion( null, null, null,null, l, -1, null, l.getLine(), l.getColumn()); :}
-         | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null,null, null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
-		 ;
+EXPRESION ::=tNot:v EXPRESION:e                                                                                                                                                                             {: RESULT = new NodoExpresion(e, null, null, null, null, null, -1, null, extractLine(v),extractColumn(v)); :}
+         | ID:id                                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null, null,id, null, -1, null, id.getLine(), id.getColumn()); :}
+         | LITERAL:l                                                                                                                                                                                        {: RESULT = new NodoExpresion( null, null, null, null,null, l, -1, null, l.getLine(), l.getColumn()); :}
+         | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null, null,null, null, -1, funcCall, funcCall.getLine(), funcCall.getColumn()); :}
+		 | EXPRESION:term1 OPERADOR:op EXPRESION:term2                                                                                                                                                      {: RESULT = new NodoExpresion( null, term1, op, term2, null, null, -1, null, term1.getLine(), term1.getColumn());:}
+         ;
+
+OPERADOR ::= OP_ARIT:op {: RESULT = new NodoOperador(null,op,op.getLine(),op.getColumn()); :}
+            | OP_LOG:op {: RESULT = new NodoOperador(op,null,op.getLine(),op.getColumn()); :}
+            ;
 
 LITERAL ::= SIGNO:s tEntero:i                                                                                                                                                                               {: RESULT = new NodoLiteral(s,(String) i.getLiteral(), Tipo.tsb_int, i.getLinea(), i.getColumna()); :}
          | SIGNO:s tDecimal:d                                                                                                                                                                               {: RESULT = new NodoLiteral(s,(String) d.getLiteral(), Tipo.tsb_float, d.getLinea(),d.getColumna()); :}

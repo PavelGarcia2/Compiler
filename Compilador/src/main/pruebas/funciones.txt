@@ -3,9 +3,16 @@
 main {
     int a = 0;
     int b = 1;
-    if(a < b){
+    bool c = true;
+   // char asf = 'a';
+
+    if(a < c > b){
         
     }
+
 }
 
 //Decl funcs
+fun int fuasd(){
+    return 0;
+}
