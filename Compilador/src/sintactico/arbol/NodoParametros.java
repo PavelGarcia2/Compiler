@@ -2,32 +2,20 @@ package sintactico.arbol;
 
 public class NodoParametros extends Nodo {
 
-    NodoParamSimple nodoParamSimple;
-    NodoParamCompuesto nodoParamCompuesto;
+    NodoPar nodoPar;
 
-
-    public NodoParametros(NodoParamSimple nodoParamSimple, int l, int c) {
+    public NodoParametros(NodoPar nodoPar, int l, int c) {
         super("PARAMETROS", false, l, c);
 
-        this.nodoParamSimple = nodoParamSimple;
-    }
-
-    public NodoParametros(NodoParamCompuesto nodoParamCompuesto, int l, int c) {
-        super("PARAMETROS", false, l, c);
-
-        this.nodoParamCompuesto = nodoParamCompuesto;
+        this.nodoPar = nodoPar;
     }
 
     public NodoParametros(){
         super("PARAMETROS", true);
     }
 
-    public NodoParamSimple getNodoParamSimple() {
-        return nodoParamSimple;
-    }
-
-    public NodoParamCompuesto getNodoParamCompuesto() {
-        return nodoParamCompuesto;
+    public NodoPar getNodoPar() {
+        return nodoPar;
     }
 
     

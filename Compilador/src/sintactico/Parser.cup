@@ -218,7 +218,8 @@ non terminal NodoOperador OPERADOR;
 non terminal NodoDeclConst DECL_CONST;
 non terminal NodoConst DECL_CON;
 non terminal NodoReturnParam RETURN_PARAM;
-
+non terminal NodoPar PAR;
+non terminal NodoContParam CONTPARAM;
 non terminal NodoSigno SIGNO;
 
 non terminal NodoDimensiones DIMENSIONES;
@@ -333,10 +334,10 @@ SENT ::= OTRAS_SENTS:otras                                                      
         ;
 
 // TODO
-OTRAS_SENTS ::= tIf:tif tLparen EXPRESION:parametros tRparen tLbracket SENTS:sents tRbracket ELSE_COND:elsecond                                                                                            {: RESULT= new NodoOtrasSent(0,parametros,sents,elsecond,extractLine(tif), extractColumn(tif)); :}
-           | tWhile:tw tLparen EXPRESION:parametros tRparen tLbracket SENTS:sents tRbracket                                                                                                                {: RESULT= new NodoOtrasSent(1,parametros,sents,extractLine(tw), extractColumn(tw)); :}
+OTRAS_SENTS ::= tIf:tif tLparen EXPRESION:parametros tRparen tLbracket SENTS:sents tRbracket ELSE_COND:elsecond                                                                                             {: RESULT= new NodoOtrasSent(0,parametros,sents,elsecond,extractLine(tif), extractColumn(tif)); :}
+           | tWhile:tw tLparen EXPRESION:parametros tRparen tLbracket SENTS:sents tRbracket                                                                                                                 {: RESULT= new NodoOtrasSent(1,parametros,sents,extractLine(tw), extractColumn(tw)); :}
            | tFor:tf tLparen ID:tid tPuntocoma EXPRESION:exp tPuntocoma OP_RAPIDOS:oprapidos tRparen tLbracket SENTS:sents tRbracket                                                                        {: RESULT= new NodoOtrasSent(2,tid,exp,oprapidos,sents,extractLine(tf), extractColumn(tf)); :}
-           | tSwitch:ts tLparen ID:tid tRparen tLbracket CASOS:casos tRbracket                                                                                                                              {: RESULT= new NodoOtrasSent(3,tid,casos,extractLine(ts), extractColumn(ts)); :}
+           | tSwitch:ts tLparen ID:tid tRparen tLbracket CASOS:casos CASO_DEFAULT:def tRbracket                                                                                                             {: RESULT= new NodoOtrasSent(3,tid,casos,def,extractLine(ts), extractColumn(ts)); :}
            | tPrint:tp tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                             {: RESULT= new NodoOtrasSent(4,exp,extractLine(tp), extractColumn(tp),-1); :}
            | tPrintln:tpl tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                          {: RESULT= new NodoOtrasSent(5,exp,extractLine(tpl), extractColumn(tpl)); :}
            | LLAMADA_FUNC:llamFunc tPuntocoma                                                                                                                                                               {: RESULT= new NodoOtrasSent(6,llamFunc,llamFunc.getLine(),llamFunc.getColumn()); :}
@@ -351,18 +352,18 @@ ELSE_COND ::= tElif:elif tLparen EXPRESION:exp tRparen tLbracket SENTS:sents tRb
           ;
 
 // TODO
-CASOS ::= CASOS:casos tCase INIT_CASES:icase tDospuntos SENTS:sents tBreak tPuntocoma                                                                                                                       {: RESULT= new NodoCase(casos,icase,sents,casos.getLine(), casos.getColumn()); :}
-     | CASO_DEFAULT:def                                                                                                                                                                                     {: RESULT= new NodoCase(def,def.getLine(),def.getColumn()); :}
+CASOS ::= CASOS:casos tCase:tcase INIT_CASES:icase tDospuntos SENTS:sents tBreak tPuntocoma                                                                                                                 {: RESULT= new NodoCase(casos,icase,sents,extractLine(tcase),extractColumn(tcase)); :}
      |                                                                                                                                                                                                      {: RESULT= new NodoCase(); :}
 	 ;
 
 // TODO
 CASO_DEFAULT ::= tDefault:def tDospuntos SENTS:sents tBreak tPuntocoma                                                                                                                                       {: RESULT= new NodoCaseDefault(sents,extractLine(def),extractColumn(def)); :}
+                |                                                                                                                                                                                            {: RESULT = new NodoCaseDefault(); :}
                 ;
 
 // TODO
-INIT_CASES ::= SIGNO:sg tEntero:e                                                                                                                                                                            {: RESULT= new NodoInitCases(Tipo.tsb_int,(String)e.getLiteral(), sg, sg.getLine(),sg.getColumn()); :}
-          | tLinea:s                                                                                                                                                                                        {: RESULT= new NodoInitCases(Tipo.tsb_str,(String)s.getLiteral(),null,s.getLinea(),s.getColumna()); :}
+INIT_CASES ::= SIGNO:sg tEntero:e                                                                                                                                                                            {: RESULT= new NodoInitCases(Tipo.tsb_int,(String)e.getLiteral(), sg, e.getLinea(),e.getColumna()); :}
+          | tLinea:s                                                                                                                                                                                        {: RESULT= new NodoInitCases(Tipo.tsb_str,(String)s.getLiteral(),null, s.getLinea(),s.getColumna()); :}
           | tCaracter:c                                                                                                                                                                                     {: RESULT= new NodoInitCases(Tipo.tsb_char,(String)c.getLiteral(),null,c.getLinea(),c.getColumna()); :}
 		  ;
 
@@ -463,17 +464,16 @@ LITERAL ::= SIGNO:s tEntero:i                                                   
 LLAMADA_FUNC ::= ID:id tLparen PARAMETROS:param tRparen                                                                                                                                                     {: RESULT= new NodoLlamadaFunc(id,param,id.getLine(),id.getColumn()); :}
                 ;
 // TODO
-PARAMETROS ::= PARAM_SIMPLE:simple                                                                                                                                                                          {: RESULT= new NodoParametros(simple,simple.getLine(),simple.getColumn());:}
-          | PARAM_COMPUESTO:compuesto                                                                                                                                                                       {: RESULT= new NodoParametros(compuesto, compuesto.getLine(),compuesto.getColumn());:}
-          |                                                                                                                                                                                                 {: RESULT= new NodoParametros(); :}            
-		  ;
+PARAMETROS ::= PAR:par                      {: RESULT = new NodoParametros(par, par.getLine(), par.getColumn()); :}
+            |                               {: RESULT = new NodoParametros(); :}
+            ;
+PAR ::= CONTPARAM:cont EXPRESION:expr      {: RESULT = new NodoPar(expr,cont,expr.getLine(), expr.getColumn()); :}
+        ;
+        
+CONTPARAM ::= PAR:par tComa:coma            {: RESULT = new NodoContParam(par, par.getLine(), par.getColumn()); :}
+            |                               {: RESULT = new NodoContParam(); :}
+            ; 
 
-// TODO
-PARAM_SIMPLE ::= EXPRESION:exp                                                                                                                                                                              {: RESULT= new NodoParamSimple(exp,exp.getLine(),exp.getColumn()); :}
-        ;
-// TODO
-PARAM_COMPUESTO ::= PARAMETROS:param tComa EXPRESION:exp                                                                                                                                                    {: RESULT= new NodoParamCompuesto(param,exp,param.getLine(),param.getColumn()); :}
-        ;
 
 ID ::= tId:valor                                                                                                                                                                                            {: RESULT = new NodoId((String)valor.getLiteral(), valor.getLinea(),valor.getColumna()); :}
     ;

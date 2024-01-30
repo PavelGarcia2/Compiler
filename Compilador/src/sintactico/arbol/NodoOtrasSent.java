@@ -14,6 +14,7 @@ public class NodoOtrasSent extends Nodo{
     NodoOpRapidos nodoOpRapidos;
     NodoCase nodoCase;
     NodoLlamadaFunc nodoLlamadaFunc;
+    NodoCaseDefault def;
 
     // IDENTIFICADOR
     int identificador;
@@ -57,11 +58,12 @@ public class NodoOtrasSent extends Nodo{
     }
 
     //switch
-    public NodoOtrasSent(int diff,NodoId nodoId, NodoCase nodoCase, int l, int c) {
+    public NodoOtrasSent(int diff,NodoId nodoId, NodoCase nodoCase, NodoCaseDefault def, int l, int c) {
         super("OtrasSents_SWITCH", false, l, c);
         this.nodoId = nodoId;
         this.nodoCase = nodoCase;
         identificador = diff;
+        this.def = def;
     }
 
     //print
@@ -122,6 +124,11 @@ public class NodoOtrasSent extends Nodo{
 
     public NodoLlamadaFunc getNodoLlamadaFunc() {
         return nodoLlamadaFunc;
+    }
+
+
+    public NodoCaseDefault getNodoCasoDefault() {
+        return def;
     }
 
 }

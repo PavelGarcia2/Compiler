@@ -6,8 +6,6 @@ public class NodoCase extends Nodo {
     NodoInitCases nodoInitCases;
     NodoSents nodoSents;
 
-    NodoCaseDefault nodoCaseDefault;
-
 
     public NodoCase(NodoCase nodoCase, NodoInitCases nodoInitCases, NodoSents nodoSents, int l, int c) {
         super("CASE", false, l, c);
@@ -17,10 +15,6 @@ public class NodoCase extends Nodo {
 
     }
 
-    public NodoCase(NodoCaseDefault nodoCaseDefault, int l, int c) {
-        super("CASE", false, l, c);
-        this.nodoCaseDefault = nodoCaseDefault;
-    }
 
     public NodoCase(){
         super("CASE",true);
@@ -36,10 +30,6 @@ public class NodoCase extends Nodo {
 
     public NodoSents getNodoSents() {
         return nodoSents;
-    }
-
-    public NodoCaseDefault getNodoCaseDefault() {
-        return nodoCaseDefault;
     }
     
 }
