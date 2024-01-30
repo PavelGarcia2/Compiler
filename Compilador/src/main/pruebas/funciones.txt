@@ -1,14 +1,11 @@
+
+
 main {
-    int hola;
+    int a = 0;
+    int b = 1;
+    if(a < b){
+        
+    }
 }
 
 //Decl funcs
-
-fun char sumaDosValores(int a, int b[]) {
-    int res;
-    return 'a';
-}
-
-fun void algunaFunc() {
-    int res = 1;
-}

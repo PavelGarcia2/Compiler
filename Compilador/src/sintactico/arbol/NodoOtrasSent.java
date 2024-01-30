@@ -7,11 +7,10 @@ package sintactico.arbol;
 public class NodoOtrasSent extends Nodo{
 
     
-    NodoParametros nodoParametros;
+    NodoExpresion nodoExpresion;
     NodoSents nodoSents;
     NodoElse nodoElse;
     NodoId nodoId;
-    NodoExpresion nodoExpresion;
     NodoOpRapidos nodoOpRapidos;
     NodoCase nodoCase;
     NodoLlamadaFunc nodoLlamadaFunc;
@@ -31,18 +30,18 @@ public class NodoOtrasSent extends Nodo{
     
 
     //if
-    public NodoOtrasSent(int diff, NodoParametros nodoParametros, NodoSents nodoSents,NodoElse nodoElse, int l, int c) {
+    public NodoOtrasSent(int diff, NodoExpresion nodoExpresion, NodoSents nodoSents,NodoElse nodoElse, int l, int c) {
         super("OtrasSents_IF", false, l, c);
-        this.nodoParametros = nodoParametros;
+        this.nodoExpresion = nodoExpresion;
         this.nodoSents = nodoSents;
         this.nodoElse = nodoElse;
         identificador = diff;
     }
 
     //while
-    public NodoOtrasSent(int diff,NodoParametros nodoParametros, NodoSents nodoSents, int l, int c) {
+    public NodoOtrasSent(int diff,NodoExpresion nodoExpresion, NodoSents nodoSents, int l, int c) {
         super("OtrasSents_WHILE", false, l, c);
-        this.nodoParametros = nodoParametros;
+        this.nodoExpresion = nodoExpresion;
         this.nodoSents = nodoSents;
         identificador = diff;
     }
@@ -96,10 +95,6 @@ public class NodoOtrasSent extends Nodo{
         return identificador;
     }
 
-    
-    public NodoParametros getNodoParametros() {
-        return nodoParametros;
-    }
 
     public NodoSents getNodoSents() {
         return nodoSents;

@@ -719,11 +719,14 @@ public class Semantico {
         System.out.println("INIT CTRL FUNC");
         NodoTipo tipo = func.getNodoTipo(); // cojo el tipo del nodo que me llega
         DTipus dt = (DTipus) ts.consultarTD(tipo.getTipo().toString()); // consulto dicho tipo en la tabla de simbolos
-
         // si el tipo no es null, es que es un tipo de los que tengo en la tabla de
         // simbolos, si no error.
         if (dt == null) { // NO EXISTE EL TIPO O NO ES UN TIPO
             parser.report_error("No existe el tipo", func);
+        }
+
+        if(tipo.getTipo() != Tipo.tsb_void && func.getNodoReturn() == null){
+            parser.report_error("Tienes que hacer el return", func);
         }
 
         // comrpobar si es una funcion que devuelve un array
@@ -731,14 +734,14 @@ public class Semantico {
         if (declArray != null && !declArray.isEmpty()) { // signifca que tenemos una declaracion de array
             // ctrlDeclArray(declArray);
         }
-
+        System.out.println("adios");
+        
         // compruebo el id
         NodoId id = func.getNodoId();
         // Este id no tiene que existir ya
         if (ts.consultarTD(id.getNombre()) != null) {
             parser.report_error("El id ya ha sido declarado", func.getNodoId());
         }
-
         ts.entrarBloque();
         // Antes de comprobar las declaraciones de las variables tenemos que poner en la
         // tabla de simbolos
@@ -1016,13 +1019,12 @@ public class Semantico {
         switch (otras.getIdentificador()) {
 
             case 0: // if
-
                 System.out.println("Detectamos un if");
-                // gestionamos los parametros
 
-                if (otras.getNodoParametros() != null) {
-                    ctrlParams(otras.getNodoParametros());
+                if (otras.getNodoExpresion() != null) {
+                    ctrlExp(otras.getNodoExpresion());
                 }
+                
 
                 // comprobamos las sentencias
                 if (otras.getNodoSents() != null) {
@@ -1038,7 +1040,10 @@ public class Semantico {
 
             case 1: // while
 
-                ctrlParams(otras.getNodoParametros());
+                if(otras.getNodoExpresion() != null){
+                    ctrlExp(otras.getNodoExpresion());
+                }
+                
 
                 // comprobamos las sentencias
                 if (otras.getNodoSents() != null) {
@@ -1119,15 +1124,17 @@ public class Semantico {
 
     public void ctrlExp(NodoExpresion exp) {
 
+        System.out.println("EXP log: "+exp.getNodoExpresionLog());
+        System.out.println("EXP id: "+exp.getNodoId());
         // si tenemos un literal comprobamos que sea booleano
-        System.out.println("Entro ctrlExpNeg");
-
+        System.out.println("Entro ctrlExp");
+        System.out.println("");
         if (exp.getNodoLiteral() != null && exp.getNodoLiteral().getTipo() != Tipo.tsb_bool) {
-
+            
             parser.report_error("El parametro literal no es booleano", exp.getNodoLiteral());
 
         } else if (exp.getNodoId() != null) {// tenemos un id
-
+            System.out.println("Entramos en id");
             // comprobamos que el id exista en la tabla de simbolos
             if (ts.consultarTD(exp.getNodoId().getNombre()) == null) {
                 parser.report_error("El parametro id no existe", exp.getNodoId());
@@ -1156,68 +1163,66 @@ public class Semantico {
         }
     }
 
-    public void ctrlParams(NodoParametros params) {
+    // public void ctrlParams(NodoExpresion params) {
 
-        System.out.println("Entro ctrlParams");
+    //     System.out.println("Entro ctrlParams");
+    //     System.out.println(params.getNodoExpresionLog());
+    //     if (params.getNodoParamSimple() != null) {// significa que tenemos solo un parametro
 
-        if (params.getNodoParamSimple() != null) {// significa que tenemos solo un parametro
+    //         // si tenemos un literal comprobamos que sea booleano
+    //         if (params.getNodoParamSimple().getNodoExpresion().getNodoLiteral() != null && params.getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool) {
 
-            // si tenemos un literal comprobamos que sea booleano
-            if (params.getNodoParamSimple().getNodoExpresion().getNodoLiteral() != null
-                    && params.getNodoParamSimple().getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool) {
+    //             parser.report_error("El parametro literal no es booleano",params.getNodoParamSimple().getNodoExpresion().getNodoLiteral());
 
-                parser.report_error("El parametro literal no es booleano",
-                        params.getNodoParamSimple().getNodoExpresion().getNodoLiteral());
+    //         } else if (params.getNodoParamSimple().getNodoExpresion().getNodoId() != null) {
 
-            } else if (params.getNodoParamSimple().getNodoExpresion().getNodoId() != null) {
-                // tenemos un id
-                // comprobamos que el id exista en la tabla de simbolos
-                if (ts.consultarTD(params.getNodoParamSimple().getNodoExpresion().getNodoId()
-                        .getNombre()) == null) {
-                    parser.report_error("El parametro id no existe",
-                            params.getNodoParamSimple().getNodoExpresion().getNodoId());
-                }
+    //             System.out.println("Entramos en id");
+    //             // tenemos un id
+    //             // comprobamos que el id exista en la tabla de simbolos
+    //             if (ts.consultarTD(params.getNodoParamSimple().getNodoExpresion().getNodoId().getNombre()) == null) {
 
-                Dvar d3 = (Dvar) ts.consultarTD(params.getNodoParamSimple().getNodoExpresion().getNodoId().getNombre());
+    //                 parser.report_error("El parametro id no existe", params.getNodoParamSimple().getNodoExpresion().getNodoId());
+    //             }
 
-                // si existe comprobamos que sea booleano
-                if (d3.getTipus() != Tipo.tsb_bool) {
-                    parser.report_error("El parametro id no es booleano",
-                            params.getNodoParamSimple().getNodoExpresion().getNodoId());
-                }
+    //             Dvar d3 = (Dvar) ts.consultarTD(params.getNodoParamSimple().getNodoExpresion().getNodoId().getNombre());
 
-            } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionArit() != null) {
+    //             // si existe comprobamos que sea booleano
+    //             if (d3.getTipus() != Tipo.tsb_bool) {
+    //                 parser.report_error("El parametro id no es booleano",
+    //                         params.getNodoParamSimple().getNodoExpresion().getNodoId());
+    //             }
 
-                parser.report_error("La expresion no es booleana",
-                        params.getNodoParamSimple().getNodoExpresion().getNodoExpresionArit());
+    //         } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionArit() != null) {
 
-            } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionLog() != null) {
+    //             parser.report_error("La expresion no es booleana",
+    //                     params.getNodoParamSimple().getNodoExpresion().getNodoExpresionArit());
 
-                // Habria que comprobar que el tipo en conjunto sea logico
-                ctrlExpLog(params.getNodoParamSimple().getNodoExpresion().getNodoExpresionLog());
+    //         } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionLog() != null) {
+                
+    //             // Habria que comprobar que el tipo en conjunto sea logico
+    //             ctrlExpLog(params.getNodoParamSimple().getNodoExpresion().getNodoExpresionLog());
 
-            } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionConNegacion() != null) {
+    //         } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionConNegacion() != null) {
 
-                ctrlExp(params.getNodoParamSimple().getNodoExpresion().getNodoExpresionConNegacion());
+    //             ctrlExp(params.getNodoParamSimple().getNodoExpresion().getNodoExpresionConNegacion());
 
-            } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionConParentesis() != null) {
-                // Parece ser una troleada espectacular
-            } else if (params.getNodoParamSimple().getNodoExpresion().getNodoLlamadaFunc() != null) {
+    //         } else if (params.getNodoParamSimple().getNodoExpresion().getNodoExpresionConParentesis() != null) {
+    //             // Parece ser una troleada espectacular
+    //         } else if (params.getNodoParamSimple().getNodoExpresion().getNodoLlamadaFunc() != null) {
 
-                ctrl_LlamadaFunc(params.getNodoParamSimple().getNodoExpresion().getNodoLlamadaFunc());
+    //             ctrl_LlamadaFunc(params.getNodoParamSimple().getNodoExpresion().getNodoLlamadaFunc());
 
-            }
+    //         }
+            
+    //     } else if (params.getNodoParamCompuesto() != null) { // parametros compuestos, no dejamos
 
-        } else if (params.getNodoParamCompuesto() != null) { // parametros compuestos, no dejamos
+    //         parser.report_error("No se pueden usar parametros compuestos", params.getNodoParamCompuesto());
 
-            parser.report_error("No se pueden usar parametros compuestos", params.getNodoParamCompuesto());
-
-        }
-    }
+    //     }
+    // }
 
     public void ctrlExpLog(NodoExpresionLog nodoLog) {
         // Habria que comprobar que el tipo en conjunto sea logico
-
         // AND OR
         // si o si T1 y T2 tienen que ser booleanos
         // comprobar que el tipo
@@ -1302,6 +1307,8 @@ public class Semantico {
             // caso de que sean id
             if (nodoLog.getTermino1().getNodoId() != null) {
                 // comprobamos que existan los id
+                System.out.println("El id es: " + nodoLog.getTermino1().getNodoId().getNombre());
+                
                 if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
                     parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
                 }
@@ -1666,6 +1673,9 @@ public class Semantico {
                     && (elseSent.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_bool)) {
                 parser.report_error("El parametro no es booleano", elseSent);
 
+            }else{
+                System.out.println("otro tipo param");
+                
             }
 
             // compruebo las sentencias

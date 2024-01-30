@@ -1,5 +1,9 @@
 package tsimbolos;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import sintactico.Parser;
 import tsimbolos.auxi.Datos;
 import tsimbolos.descripciones.*;
@@ -8,10 +12,13 @@ import sintactico.arbol.Nodo;
 public class TablaSimbolos {
 
     int n; // Nivel actual (indicador de ambito) apunta al nivel de la tabla de ambitos
-    TablaAmbitos ta;
-    TablaExpansion te;
+    private final int maxCap = 50;
+    private NodoExpansion[] ta; // Tabla de ambitos contiene apuntadores hacia NodosExpansion de la tabla de
+                                // expansion
+    private LinkedList<NodoExpansion> te; // Tabla de expansion contiene las declaraciones visibles y no visibles
+    private HashMap<String, Datos> td; // Tabla de descripcion contiene las descripciones visibles
+    private ArrayList<ArrayList<String>> toRemove; // Lista de listas de ids a eliminar
 
-    TablaDescripcion td;
     private final Parser parser;
 
     /**
@@ -21,38 +28,25 @@ public class TablaSimbolos {
      */
     public TablaSimbolos(Parser parser) {
         n = 0;
-        ta = new TablaAmbitos();
-        te = new TablaExpansion();
-        td = new TablaDescripcion();
+        ta = new NodoExpansion[maxCap]; // Init tabla de ambitos
+        te = new LinkedList<>(); // Init tabla de expansion
+        td = new HashMap<>(500); // Init tabla de descripcion
+        toRemove = new ArrayList<>(maxCap);
+        for (int i = 0; i < maxCap; i++) {
+            toRemove.add(new ArrayList<String>());
+        }
         this.parser = parser;
-        ta.setAmbito(n, 0);
-        n++;
-        ta.setAmbito(n, 0);
     }
-
-    public TablaSimbolos() {
-        n = 0;
-        ta = new TablaAmbitos();
-        te = new TablaExpansion();
-        td = new TablaDescripcion();
-        this.parser = null;
-        ta.setAmbito(n, 0);
-        n++;
-        ta.setAmbito(n, -1);
-    }
-
     /**
      * Vacía la tabla de símbolos
      */
     public void vaciar() {
-        n = 0;
-        // Reseteamos la tabla de descripcion
-        td = new TablaDescripcion();
-        // Reseteamos la tabla de ambitos
-        ta = new TablaAmbitos();
-        ta.nuevoAmbito(0);
-        n++;
-        ta.nuevoAmbito(0);
+        td.clear();
+        te.clear();
+        for(int i = n ; i >= 0 ; i--){
+            ta[i] = null;
+        }
+        n=0;
     }
 
     /**
@@ -61,166 +55,126 @@ public class TablaSimbolos {
      * @param id
      * @return
      */
-    public boolean poner(String id, Descripcion d, Nodo nodo) {
-        // Si el identificador ya existe en la tabla de
-        if (td.getElemento(id) != null) {
+    public void poner(String id, Descripcion d, Nodo nodo) {
 
-            if(td.getElemento(id).getNp() == n){
-                parser.report_error("Simbolo ya declarado en el nivel actual", nodo);
+        Datos elementoAntiguo = td.get(id);
+        Datos elementoNuevo = new Datos(d, id,n);
+        NodoExpansion nodoExp;
+        boolean cambio= false;
+
+        if(elementoAntiguo != null){
+            if(elementoAntiguo.getNp() == 1){
+                parser.report_error("Estas intentando sobreescribir una variable global", nodo);
             }
-            int idxe = ta.getAmbito(n);
-            idxe++;
-
-            ta.setAmbito(n, idxe);
-            te.put(idxe, new Datos(td.getElemento(id).getDescripcion(), -1, id, td.getElemento(id).getNp(), -1));
-
+            if(elementoAntiguo.getNp() == n){
+                //Error semántico
+                parser.report_error("El simbolo ya esta declarado en el nivel actual", nodo);
+            }else{
+                nodoExp = new NodoExpansion(elementoAntiguo,elementoNuevo);
+                te.add(nodoExp);
+                ta[n]= nodoExp;
+                cambio = true;
+            }
+            
         }
 
-        System.out.println("Insertamos "+id+" en el nivel "+n);
-        td.insertar(id, new Datos(d,-1,id, n,-1));
-
-        return true;
-    }
-
-    /**
-     * Mete las dimensiones del array en la tabla de símbolos
-     * 
-     * @param id
-     * @param d
-     * @return si se ha podido insertar
-     * 
-     */
-    public boolean ponerIndice(String id, Descripcion d) {
-        Descripcion da = td.getElemento(id).getDescripcion();
-        // Si no és una taula és un error
-        if (da.getTDescripcion() != "darray") {
-            throw new UnsupportedOperationException("TablaSimbolos.java: Error del compilador");
+        if(!cambio){
+            toRemove.get(n).add(id);
         }
-        int idxe = td.getElemento(id).getFirst();
-        // idxep és l’element anterior a idxe
-        int idxep = 0;
-        while (idxe != 0) {
-            idxep = idxe;
-            idxe = te.get(idxep).getNext();
-        }
-        idxe = ta.getAmbito(n);
-        idxe++;
-        ta.setAmbito(n, idxe);
-        // No és un camp, no té id
-        te.put(idxe, new DatosTE(0, "id_nul", d, -1));
-        // És el primer índex?
-        if (idxep == 0) {
-            td.getElemento(id).setFirst(idxe);
-        } else {
-            // L’índex anterior s’enllaça
-            te.get(idxep).setNext(idxe);
-        }
-        return true;
+        System.out.println("Hemos añadido a la tabla de simbolos "+id);
+        td.put(id, elementoNuevo);
     }
 
     public void entrarBloque() {
         n++;
-        System.out.println("HOLA ENTRO BLOQUE "+n);
-        System.out.println("apuntando a "+ta.getAmbito(n - 1));
-        //ta.setAmbito(n, ta.getAmbito(n - 1));
-        ta.nuevoAmbito(ta.getAmbito(n-1));
+        ta[n] = ta[n-1];
     }
 
     public void salirBloque() {
-        if (n == 0) {
-            throw new UnsupportedOperationException("TablaSimbolos.java: Error del compilador");
-        } else {
-            int idxi = ta.getAmbito(n);
-            n--;
-            int idxfi = ta.getAmbito(n);
-            while (idxi != idxfi) {
-                if (te.get(idxi).getNp() != -1) {
-                    String id = te.get(idxi).getIdcamp();
-                    td.insertar(id, new Datos(te.get(idxi).getDescripcion(), -1, te.get(idxi).getIdcamp(), te.get(idxi).getNp(), -1));
-                    //td.getElemento(id).setnp(te.get(idxi).getNp());
-                    //td.getElemento(id).setDescripcion(te.get(idxi).getD());
-                    //td.getElemento(id).setFirst(te.get(idxi).getNext()); // next de l’entrada de la tupla a te és first
-                }
-                idxi = idxi - 1;
-            }
+        if(n==0){
+            //Error del compilador
         }
+
+        for(String eliminar : toRemove.get(n)){
+            td.remove(eliminar);
+        }
+
+        toRemove.get(n).clear();
+
+        Iterator<NodoExpansion> iter = te.descendingIterator();
+        if(iter.hasNext()){
+            NodoExpansion actual = iter.next();
+            ta[n--] = null;
+
+            while(ta[n] != actual){
+                actual.visible.setNp(actual.notVisible.getNp());
+                actual.visible.setDescripcion(actual.notVisible.getDescripcion());
+                iter.remove();
+            
+                if(iter.hasNext()){
+                    actual = iter.next();
+                }else{
+                    break;
+                }
+            
+            }
+        }else{
+            n--;
+        }
+    }
+
+    public void salirBloqueFunc() {
+
     }
 
     public void ponerParam(String idPr, String idParam, Descripcion d) {
-        if (d.getTDescripcion() != "dproc") {
-            throw new UnsupportedOperationException("No existe el procedimiento/función con este nombre: " + idPr);
-        }
-        int idxe = td.getElemento(idPr).getFirst();
-        // idxep és l’element anterior a idxe
-        int idxep = 0;
-        while (idxe != 0) {
-            idxep = idxe;
-            idxe = te.get(idxep).getNext();
-        }
-        if (idxep != 0) {
-            throw new UnsupportedOperationException("Ya hay un parametro con este id: " + idxep);
-        }
-        idxep = ta.getAmbito(n);
-        idxep++;
-        ta.setAmbito(n, idxep);
-        te.get(idxe).setIdcamp(idParam);
-        te.get(idxe).setNp(-1);
-        te.get(idxe).setD(d);
-        te.get(idxe).setNext(0);
-        // És el primer índex?
-        if (idxep == 0) {
-            td.getElemento(idPr).setFirst(idxe);
-        } else {
-            // L’índex anterior s’enllaça
-            te.get(idxep).setNext(idxe);
-        }
+
     }
 
     public Descripcion consultarTD(String id) {
-        if (td.getElemento(id) != null) {
-            return td.getElemento(id).getDescripcion();
-        } else {
-            return null;
+        System.out.println("Consultamos la tabla de simbolos "+id);
+        if(td.get(id) != null){
+            return td.get(id).getDescripcion();
         }
+        return null;
     }
 
-    public Descripcion consultarTE(int idx) {
-        return te.get(idx).getD();
-    }
+    // public Descripcion consultarTE(int idx) {
 
-    public int consultarFirst(String id) {
-        if (td.getElemento(id).getDescripcion().getTDescripcion() != "darray") {
-            throw new UnsupportedOperationException("TablaSimbolos.java: Error del compilador");
-        }
-        return td.getElemento(id).getFirst();
-    }
+    // }
 
-    public int consultarNext(int idx) {
-        if (te.get(idx).getNext() == 0) {
-            throw new UnsupportedOperationException("TablaSimbolos.java: Error del compilador");
-        }
-        return te.get(idx).getNext();
-    }
+    // public int consultarFirst(String id) {
 
-    public boolean last(int idx) {
-        return te.get(idx).getNext() == 0;
-    }
+    // }
 
-    public String toString() {
-        String tabla = "TABLA DE SIMBOLOS\n.............................................\n";
-        tabla += ta; // mostramos la tabla de ambitos
-        tabla += te; // mostramos la tabla de expansion
-        tabla += td; // mostramos la tabla de descripcion
-        return tabla;
+    // public int consultarNext(int idx) {
 
-    }
+    // }
 
-    public TablaExpansion getTe() {
-        return te;
-    }
+    // public boolean last(int idx) {
 
-    public void setTe(TablaExpansion te) {
-        this.te = te;
-    }
+    // }
 
+    // public String toString() {
+
+    // }
+
+    // public TablaExpansion getTe() {
+
+    // }
+
+    // public void setTe(TablaExpansion te) {
+
+    // }
+
+    // /**
+    //  * Mete las dimensiones del array en la tabla de símbolos
+    //  * 
+    //  * @param id
+    //  * @param d
+    //  * @return si se ha podido insertar
+    //  * 
+    //  */
+    // public boolean ponerIndice(String id, Descripcion d) {
+    // }
 }

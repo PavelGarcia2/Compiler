@@ -14,10 +14,9 @@ public class NodoExpresion extends Nodo{
     int bool;
     NodoLlamadaFunc nodoLlamadaFunc;
 
-    public NodoExpresion(NodoExpresion conParentesis, NodoExpresion conNegacion, NodoExpresionArit nodoExpresionArit, NodoExpresionLog nodoExpresionLog, 
+    public NodoExpresion(NodoExpresion conNegacion, NodoExpresionArit nodoExpresionArit, NodoExpresionLog nodoExpresionLog, 
     NodoId nodoId, NodoLiteral nodoLiteral, int bool, NodoLlamadaFunc nodoLlamadaFunc,int l, int c) {
-        super("EXPR", false, l ,c);
-        this.conParentesis = conParentesis;        
+        super("EXPR", false, l ,c);        
         this.conNegacion = conNegacion;
         this.nodoExpresionArit = nodoExpresionArit;
         this.nodoId = nodoId;

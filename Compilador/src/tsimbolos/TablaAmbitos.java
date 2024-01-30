@@ -44,13 +44,13 @@ public class TablaAmbitos {
         int ambito = 0;
         if(n<=ind){
             ambito = ta[n];
+            System.out.println("cogo el ambito ");
         }
         if(n==-1){
             System.out.println("TablaAmbitos.java : Ambito no disponible");
         }
         return ambito;
     }
-
 
     @Override
     public String toString() {
@@ -61,7 +61,5 @@ public class TablaAmbitos {
         }
         return "{"+ data +"}\n";
     }
-
-
 
 }

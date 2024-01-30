@@ -7,15 +7,15 @@ public class TablaExpansion {
 
     private ArrayList<Datos> te = new ArrayList<>();
 
+
     public TablaExpansion() {
     }
 
     public void put(int ind, Datos d) {
         if (te.contains(d)) {
             te.set(ind, d);
-        } else {
-            te.add(ind, d);
         }
+        this.te.add(ind, d);
     }
 
     public Datos get(int ind) {

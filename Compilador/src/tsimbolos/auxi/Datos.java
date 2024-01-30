@@ -18,6 +18,12 @@ public class Datos {
         this.np = np;
     }
 
+    public Datos(Descripcion descripcion,String idcamp, int np){
+        this.descripcion = descripcion;
+        this.idcamp = idcamp;
+        this.np = np;
+    }
+
 
     public Descripcion getDescripcion() {
         return descripcion;

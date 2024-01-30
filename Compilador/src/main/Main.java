@@ -11,7 +11,6 @@ package main;
 import lexico.Scanner;
 import semantico.Semantico;
 import sintactico.Parser;
-import tsimbolos.visual.mainJframe;
 
 import java.io.CharArrayReader;
 import java.io.FileReader;
