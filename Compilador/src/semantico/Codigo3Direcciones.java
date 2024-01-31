@@ -98,10 +98,10 @@ public class Codigo3Direcciones {
                 genIntruccion(TipoInstruccion.OR, uno, dos, res);
             break;
             case MAYOR:
-                genIntruccion(TipoInstruccion.MAYOR, uno, dos, res);
+                genIntruccion(TipoInstruccion.IFMAYOR, uno, dos, res);
             break;
             case MENOR:
-                genIntruccion(TipoInstruccion.MENOR, uno, dos, res);
+                genIntruccion(TipoInstruccion.IFMENOR, uno, dos, res);
             break;
             case IGUALMAYOR:
                 genIntruccion(TipoInstruccion.IFMAYORIGUAL, uno, dos, res);
@@ -110,10 +110,10 @@ public class Codigo3Direcciones {
                 genIntruccion(TipoInstruccion.IFMENORIGUAL, uno, dos, res);
             break;
             case IGUALIGUAL:
-                genIntruccion(TipoInstruccion.MULTIPLICACION, uno, dos, res);
+                genIntruccion(TipoInstruccion.IFIGUAL , uno, dos, res);
             break;
             case DIFERENTE:
-                genIntruccion(TipoInstruccion.DIVISION, uno, dos, res);
+                genIntruccion(TipoInstruccion.IFDIFERENTE, uno, dos, res);
             break;
         }
     }
