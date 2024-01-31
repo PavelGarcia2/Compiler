@@ -81,7 +81,7 @@ public class TablaSimbolos {
         if(!cambio){
             toRemove.get(n).add(id);
         }
-        System.out.println("Hemos añadido a la tabla de simbolos "+id);
+        //System.out.println("Hemos añadido a la tabla de simbolos "+id);
         td.put(id, elementoNuevo);
     }
 
@@ -127,16 +127,28 @@ public class TablaSimbolos {
 
     }
 
-    public void ponerParam(String idPr, String idParam, Descripcion d) {
+    public int getAmbito(){
+        return n;
+    }
 
+    public void ponerParam(String idPr, String idParam, Dargin d) {
+        Descripcion d1 = this.consultarTD(idPr);
+        if(!(d1 instanceof Dproc)){
+            System.out.println("ERROR!");
+        }
+        Dproc dproc = (Dproc) this.consultarTD(idPr);
+       
     }
 
     public Descripcion consultarTD(String id) {
-        System.out.println("Consultamos la tabla de simbolos "+id);
+        //System.out.println("Consultamos la tabla de simbolos "+id);
         if(td.get(id) != null){
             return td.get(id).getDescripcion();
         }
+       // System.out.println("No lo hemos encontrado en la tabla de descripcion");
         return null;
+
+        //
     }
 
     // public Descripcion consultarTE(int idx) {

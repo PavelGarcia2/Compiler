@@ -1,32 +1,67 @@
-//DECL CONST
-
+//Declaracion de constantes
 const int an = -2;
-const bool b = false;
-const bool a = true;
+const bool b2 = false;
+const bool a2 = true;
 const bool z = true;
 const char x = 255;
 
+//Declaracion y setteo de variables
 int cdsa = 2;
 int y[] = new int[2];
 set y[0] = 1;
+
+//declaracion de variables con expresiones
+int suma = 1+2+3;
+char resta = 3;
+str gato= "Declaracion";
+set resta= 'a';
+set suma= 1*23+3-4/2;
 
 main {
     int yx = 1;
     int asf; 
     set asf = 21;
+    set y[yx+3] = 2;
     bool uno = true;
     bool dos = false;
     bool fin = uno & dos;
 
-    if(x > l){
+    if(a2 != b2){
         asf = 1;
     }elif(uno == true){
         uno=false;
     }else{
-        set a = 2;
+        cdsa = 2;
     }
     y[2] = 11;
+    asf= resultado(1,2,true);
 }
 
 //DECL FUNCS
+fun void kkkasd (){
+    int asdggasd;
+    asdggasd = resultado(1,2,true);
+}
 
+fun int resultado(int a,int b,bool correcto){
+
+    int resta2= 1;
+    int estadoActual;
+    int i=0;
+    int j=0;
+
+    estadoActual = 0;
+    estadoActual = a*b;
+
+    while (a > b){
+        if(!correcto & 23 != a*b){
+            estadoActual= estadoActual - resta2;
+        }
+
+        for(i; i >= a*b; i++){
+            print("Restando");
+            estadoActual= estadoActual - resta2;
+        }
+    }
+    return estadoActual;
+}

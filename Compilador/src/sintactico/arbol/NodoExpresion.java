@@ -16,6 +16,8 @@ public class NodoExpresion extends Nodo{
     NodoExpresion nodoExpresion1;
     NodoExpresion nodoExpresion2;
     NodoOperador nodoOperador;
+    int valorAritmetico;
+    int nv;
 
     public NodoExpresion(NodoExpresion conNegacion,NodoExpresion nodoExpresion1,NodoOperador nodoOperador,NodoExpresion nodoExpresion2, 
     NodoId nodoId, NodoLiteral nodoLiteral, int bool, NodoLlamadaFunc nodoLlamadaFunc,int l, int c) {
@@ -28,6 +30,14 @@ public class NodoExpresion extends Nodo{
         this.nodoExpresion1 = nodoExpresion1;
         this.nodoExpresion2 = nodoExpresion2;
         this.nodoOperador = nodoOperador;
+    }
+
+    public void setNv(int nv) {
+        this.nv = nv;
+    }
+
+    public int getNv() {
+        return nv;
     }
 
     public NodoOperador getNodoOperador() {

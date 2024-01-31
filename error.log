@@ -1,1 +1,1 @@
-ERROR SEMANTICO: El parametro no es correcto en la linea: 12, columna: 23
+ERROR SEMANTICO: Estas intentando sobreescribir una variable global en la linea: 7, columna: 10

@@ -2,37 +2,11 @@ const char asf = 'a';
 const int caquita = 2;
 
 main {
-    int a = 0;
-    int b = 1;
-    bool c = true;
-    str line = "hola";
-    char asfd = 'a';
+   //int a = fuasd();
+   if(true > 1 * 2){
 
-    //Se hacen primero las operaciones de derecha a izquierda
-    if(true | c & 1 > caquita){
-        
-    }elif(c != c){
-
-    }
-
-    while(c){
-
-    }
-
-    for(a; a > 10; a++){
-
-    }
-
-    switch(asfd){
-        case 'a':
-        break;
-        case 'b':
-        break;
-        default:
-        break;
-    }
+   }
 }
-
 
 //Decl funcs
 fun int fuasd(){

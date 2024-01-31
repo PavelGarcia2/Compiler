@@ -76,8 +76,8 @@ div         = \/
 modulo      = "mod"
 mayor       = \>
 menor       = \<
-igualMay    = "=>" 
-igualMen    = "=<"
+igualMay    = ">=" 
+igualMen    = "<="
 asignacion  = "="
 igual       = "=="
 diferente   = "!="
