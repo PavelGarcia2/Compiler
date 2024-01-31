@@ -10,7 +10,8 @@ bool x = true;
 
 
 int z = 1 + 2 - t + c;
-bool y = d;
+
+bool y = d | x;
 
 
 main {

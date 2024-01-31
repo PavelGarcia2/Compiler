@@ -1320,6 +1320,7 @@ public class Semantico {
             // evaluen
             TipoLog operador;
             TipoArit operador2;
+
             if (exp.getNodoOperador().getNodoOpLog() != null) {
                 operador = exp.getNodoOperador().getNodoOpLog().getTipusOpLog();
                 // Con op log
@@ -1327,9 +1328,20 @@ public class Semantico {
                 Tipo tipoTerm2 = ctrlExp(exp.getNodoExpresion2(), true, true);
                 System.out.println("\n\nTipo termino1 " + tipoTerm1);
                 System.out.println("Tipo termino2 " + tipoTerm2);
+
                 if (operador == TipoLog.AND || operador == TipoLog.OR) {
                     if (tipoTerm1 != Tipo.tsb_bool || tipoTerm2 != Tipo.tsb_bool) {
                         parser.report_error("Operacion booleana incorrecta", exp.getNodoOperador().getNodoOpLog());
+                    }
+                }
+                if (operador == TipoLog.IGUALMAYOR || operador == TipoLog.IGUALMENOR || operador == TipoLog.MAYOR || operador == TipoLog.MENOR){
+                    if ((tipoTerm1 == Tipo.tsb_int || tipoTerm1 == Tipo.tsb_float) && tipoTerm1 != tipoTerm2) {
+                        parser.report_error("Operacion comparativa incorrecta", exp.getNodoOperador().getNodoOpLog());
+                    }
+                }
+                if(operador == TipoLog.IGUALIGUAL || operador == TipoLog.DIFERENTE){
+                    if(tipoTerm1 != tipoTerm2){
+                        parser.report_error("Operacion comparativa incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
                 }
 
@@ -1345,6 +1357,13 @@ public class Semantico {
                 } else {
                     return Tipo.tsb_bool;
                 }
+                int nv = g.nuevaVariable(TipoVar.VARIABLE, tipoTerm2, false);
+                exp.setNv(nv);
+                //Tengo que coger los nv de la expresion 1 y expresion 2
+                g.generaInstruccionLogica(exp.getNodoOperador().getNodoOpLog().getTipusOpLog(),new Operador3Direcciones(exp.getNodoExpresion1().getNv(),""),new Operador3Direcciones(exp.getNodoExpresion2().getNv(),""),new Operador3Direcciones(nv,""));
+                //System.out.println("adios");
+                return tipoTerm1;
+
             } else if (exp.getNodoOperador().getNodoOpArit() != null) {
                 operador2 = exp.getNodoOperador().getNodoOpArit().getOpArit();
                 Tipo tipoTerm1 = ctrlExp(exp.getNodoExpresion1(), true, true);
@@ -1445,13 +1464,15 @@ public class Semantico {
 
     // }
     // }
-
+    /*
     public void ctrlExpLog(NodoExpresionLog nodoLog) {
         // Habria que comprobar que el tipo en conjunto sea logico
         // AND OR
         // si o si T1 y T2 tienen que ser booleanos
         // comprobar que el tipo
         if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.AND || nodoLog.getOpLog().getTipusOpLog() == TipoLog.OR) {
+            Tipo term1;
+            Tipo term2;
 
             if (nodoLog.getTermino1().getNodoId() != null) {
                 // verificamos que exista el id
@@ -1517,11 +1538,14 @@ public class Semantico {
                     parser.report_error("El return de la llamada a función no es booleana ",
                             nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
                 }
-            }
-
-            // si llegamos aqui es porque el termino 1 y el termino 2 son bool
+            }            
 
             // creo que lo que sea necesario
+            int nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+            exp.setNv(nv);
+            //Tengo que coger los nv de la expresion 1 y expresion 2
+            g.generaInstruccionAritmetica(exp.getNodoOperador().getNodoOpArit().getOpArit(),new Operador3Direcciones(exp.getNodoExpresion1().getNv(),""),new Operador3Direcciones(exp.getNodoExpresion2().getNv(),""),new Operador3Direcciones(nv,""));
+            //System.out.println("adios");
             
         } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.MAYOR
                 || nodoLog.getOpLog().getTipusOpLog() == TipoLog.MENOR
@@ -1738,7 +1762,7 @@ public class Semantico {
             }
         }
     }
-
+    */
     public void ctrlOpLog(NodoOpLog nodoOpLog) {
 
         switch (nodoOpLog.getTipusOpLog()) { // supongo que es crear lo del c3d
