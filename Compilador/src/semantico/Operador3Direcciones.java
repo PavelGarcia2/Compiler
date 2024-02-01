@@ -14,6 +14,7 @@ public class Operador3Direcciones{
     private String literal;
     private float valFloat = -2;
     private String valString = null;
+    private boolean proc;
 
     public static enum TipoCambio{
         INT, CHAR, BOOL, STRING;
@@ -54,9 +55,10 @@ public class Operador3Direcciones{
         this.operador = operador;
     }
 
-    public Operador3Direcciones(int referencia, String var){
+    public Operador3Direcciones(int referencia, boolean proc){
         this.tipo= TipoI.REFERENCIA;
         this.referencia = referencia;
+        this.proc = proc;
     }
 
     public Operador3Direcciones(int constante){
@@ -88,7 +90,11 @@ public class Operador3Direcciones{
         }else if(valConst != -2){
             return valConst+"";
         }else if(referencia != -2){
-            return "t"+referencia;
+            if(!proc){
+                return "t"+referencia;
+            }else{
+                return "p"+referencia;
+            }
         }else if(operador != null){
             return operador;
         }else if(literal != null){

@@ -19,14 +19,16 @@ public enum TipoInstruccion{
     IFMENORIGUAL("ifMenorIgual"),
     IFDIFERENTE("ifDiferente"),
     IFIGUALI("ifIgual"),
-    PREAMBULO("preambulo"),
+    PREAMBULO("pmb"),
     PRINT("print"),
     PRINTLN("println"),
     IN("in"),
     CALL("call"),
     RETURN("return"),
     GOTO("goto"),
-    SKIP("skip")
+    SKIP("skip"),
+    PARAM_SIMPLE("param_s"),
+    PARAM_COMPOST("param_c"),
     ;
 
 

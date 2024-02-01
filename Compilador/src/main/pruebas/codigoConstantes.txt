@@ -8,12 +8,29 @@ int y = a + 2 + c;
 int x = y;
 char asdg;
 
-set asdg = 'a';
-
-
-
-
+set asdg = 1 + 2;
 
 main {
-   
+   str s;
+
+   print(s);
+   s = "adasfd";
+   x = 2 + 2;
+   x = 532;
+   x = b;
+   haha(x);
+   haha2();
+}
+
+
+fun int haha(int sdf){
+
+    int pepe = 2;
+    pepe = 3;
+
+    return pepe;
+}
+
+fun void haha2(){
+
 }

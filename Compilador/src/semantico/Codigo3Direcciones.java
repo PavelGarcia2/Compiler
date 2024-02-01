@@ -27,7 +27,7 @@ public class Codigo3Direcciones {
     }
 
     public String nuevaEtiqueta(){
-        return etiqueta + contadorEtiquetas++;
+        return ""+contadorEtiquetas++;
     }
 
     public int nuevaVariable(TipoVar tipoVar,Tipo tipo,boolean esArray){
