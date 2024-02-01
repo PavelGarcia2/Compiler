@@ -12,6 +12,8 @@ public class Operador3Direcciones{
     int valConst = -2;
     private String operador = null;
     private String literal;
+    private float valFloat = -2;
+    private String valString = null;
 
     public static enum TipoCambio{
         INT, CHAR, BOOL, STRING;
@@ -43,6 +45,11 @@ public class Operador3Direcciones{
         this.tipo = TipoI.LITERAL;
     }
 
+    public Operador3Direcciones(String valString,float redundant){
+        this.operador = operador;
+        this.valString = valString;
+    }
+
     public Operador3Direcciones(String operador,int redundant){
         this.operador = operador;
     }
@@ -55,6 +62,11 @@ public class Operador3Direcciones{
     public Operador3Direcciones(int constante){
         this.tipo= TipoI.REFERENCIA;
         this.valConst = constante;
+    } 
+
+    public Operador3Direcciones(float valorFloat){
+        this.tipo= TipoI.REFERENCIA;
+        this.valFloat = valorFloat;
     } 
 
     public String getEtiqueta(){
@@ -81,6 +93,10 @@ public class Operador3Direcciones{
             return operador;
         }else if(literal != null){
             return literal;
+        } else if(valFloat != -2){
+            return valFloat+"";
+        } else if(valString != null){
+            return valString;
         }
         return "";
     }

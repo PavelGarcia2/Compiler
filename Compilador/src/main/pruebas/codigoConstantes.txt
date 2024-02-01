@@ -1,18 +1,16 @@
 //CODIGO CORRECTO
 /* Comprobación de constantes */
-const char a = 'b'; 
-const int c = 1235; 
-const bool d = true; 
+int a = 2;
+int b = a;
+int c = b;
 
-bool p = false;
-bool x = p;
-int t = 2;
+int y = a + 2 + c;
+int x = y;
 
-int z = 1 + 2 - t + c;
 
-bool y = d | 3 > t;
+
 
 
 main {
-    z = 2 + 4;
+   
 }
