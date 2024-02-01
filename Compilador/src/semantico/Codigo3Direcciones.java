@@ -82,7 +82,6 @@ public class Codigo3Direcciones {
                 genIntruccion(TipoInstruccion.DIVISION, uno, dos, res);
             break;
             case MOD:
-                System.out.println("HOLA SOY UN MODULO");
                 genIntruccion(TipoInstruccion.MODULO, uno, dos, res);
             break;
         }
@@ -110,7 +109,7 @@ public class Codigo3Direcciones {
                 genIntruccion(TipoInstruccion.IFMENORIGUAL, uno, dos, res);
             break;
             case IGUALIGUAL:
-                genIntruccion(TipoInstruccion.IFIGUAL , uno, dos, res);
+                genIntruccion(TipoInstruccion.IFIGUALI , uno, dos, res);
             break;
             case DIFERENTE:
                 genIntruccion(TipoInstruccion.IFDIFERENTE, uno, dos, res);

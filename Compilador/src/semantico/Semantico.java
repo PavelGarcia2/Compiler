@@ -31,14 +31,14 @@ public class Semantico {
         this.ts = new TablaSimbolos(parser);
         this.tablaVariables = new TablaVariables();
         this.tablaProcedimientos = new TablaProcedimientos();
-        this.g = new Codigo3Direcciones(tablaVariables,tablaProcedimientos);
-        
+        this.g = new Codigo3Direcciones(tablaVariables, tablaProcedimientos);
+
         inicializarTablaSimbolos();
         // runProgram();
     }
 
     private void inicializarTablaSimbolos() {
-        //System.out.println("INIT TS");
+        // System.out.println("INIT TS");
 
         DTipus dv = new DTipus(Tipo.tsb_void, 0, 0);
         ts.poner("tsb_void", dv, null);
@@ -52,7 +52,7 @@ public class Semantico {
         ts.poner("true", dC, null);
 
         // Inicializamos el valor false
-        dC = new DConst(Tipo.tsb_bool, 0, "false",null);
+        dC = new DConst(Tipo.tsb_bool, 0, "false", null);
         ts.poner("false", dC, null);
 
         // Inicializamos el char
@@ -73,7 +73,7 @@ public class Semantico {
 
         /* Para que las palabras reservadas queden en el ámbito 1 de forma exclusiva */
         ts.entrarBloque();
-        //System.out.println("HEMOS INIT TS");
+        // System.out.println("HEMOS INIT TS");
     }
 
     public void runProgram() {
@@ -116,7 +116,7 @@ public class Semantico {
 
     public void ctrlDeclConstantes(NodoDeclConst constList) {
 
-        while(constList != null){
+        while (constList != null) {
             ctrlConst(constList.getNodoConst());
             constList = constList.getNodoDeclConst();
         }
@@ -130,7 +130,7 @@ public class Semantico {
         NodoId id = constante.getNodoId();
         NodoAsignacion asignacion = constante.getNodoAsignacion();
         DTipus dt = (DTipus) ts.consultarTD(tipo.getTipo().toString());
-        
+
         // Comprovar que tipo es un tipo
         if (dt == null) { // NO EXISTE EL TIPO O NO ES UN TIPO
             parser.report_error("No existe el tipo", constante);
@@ -151,7 +151,6 @@ public class Semantico {
                 .getTipo();
         String valor = asignacion.getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral()
                 .getValor();
-
 
         // Mirar si el tipo de la izquierda y derecha son iguales
         if (type == Tipo.tsb_int) {
@@ -209,12 +208,13 @@ public class Semantico {
         // C3@
         DConst dc = new DConst(dt.getTsb(), rango, id.getNombre(), id);
         ts.poner(id.getNombre(), dc, constante);
-        System.out.println("GENERO NUEVA VARIABLE rango: "+rango);
+        System.out.println("GENERO NUEVA VARIABLE rango: " + rango);
         int nv = g.nuevaVariable(TipoVar.VARIABLE, dt.getTsb(), false);
-        System.out.println("GENERO NUEVA VARIABLE nv: "+nv);
-        System.out.println("GENERO NUEVA VARIABLE id: "+id.getNombre());
+        System.out.println("GENERO NUEVA VARIABLE nv: " + nv);
+        System.out.println("GENERO NUEVA VARIABLE id: " + id.getNombre());
         id.setNv(nv);
-        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(rango), null, new Operador3Direcciones(nv, id.getNombre()));
+        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(rango), null,
+                new Operador3Direcciones(nv, id.getNombre()));
     }
 
     public void ctrlMain(NodoMain nodo) {
@@ -258,7 +258,7 @@ public class Semantico {
     }
 
     public void ctrlVar(NodoVar var) {
-        
+
         if (var.getNodoTipo() != null) {
             NodoTipo tipo = var.getNodoTipo();
             NodoId id = var.getNodoId();
@@ -335,8 +335,10 @@ public class Semantico {
                     }
                     // Mirar si es una expresion logica (se puede mirar lo de tnot) o expresion
                     // aritm
-                } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion().getNodoExpresion1() != null) {
-                    Tipo tipoDer = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion(), false, true);
+                } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
+                        .getNodoExpresion1() != null) {
+                    Tipo tipoDer = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                            .getNodoExpresion(), false, true);
                     // si char izq , solo puede ser char o int der
                     if (tipoIzq == Tipo.tsb_char) {
                         if (tipoDer != Tipo.tsb_char && tipoDer != Tipo.tsb_int) {
@@ -382,7 +384,7 @@ public class Semantico {
 
             } else {
                 // AQUI HACEMOS set arr[2] = valor;
-                //marcador set array
+                // marcador set array
                 NodoDimArray dimension = var.getNodoDimArray();
                 NodoDimArray antiguo;
                 // System.out.println("Evaluando el array: "+var.getNodoId().getNombre());
@@ -412,8 +414,8 @@ public class Semantico {
                                     "La variable utilizada para asignar en un array no es del tipo correcto",
                                     dimension.getNodoExpresion().getNodoId());
                         }
-                    } else if(dimension.getNodoExpresion().getNodoExpresion1() != null){
-                        Tipo asign = ctrlExp(dimension.getNodoExpresion(),false,true);
+                    } else if (dimension.getNodoExpresion().getNodoExpresion1() != null) {
+                        Tipo asign = ctrlExp(dimension.getNodoExpresion(), false, true);
                         if (asign != Tipo.tsb_int) {
                             parser.report_error(
                                     "La variable utilizada para asignar en un array no es del tipo correcto",
@@ -457,11 +459,14 @@ public class Semantico {
                                 .getNodoAsignacionNormal().getNodoExpresion().getNodoId());
                     }
                 } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
-                .getNodoExpresion1() != null) {
-                    Tipo tipo = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion(), false, false);
+                        .getNodoExpresion1() != null) {
+                    Tipo tipo = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                            .getNodoExpresion(), false, false);
                     if (tipo != d.getTipus()) {
-                        parser.report_error("Valores no compatibles", var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
-                        .getNodoExpresion1());
+                        parser.report_error("Valores no compatibles",
+                                var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                                        .getNodoExpresion()
+                                        .getNodoExpresion1());
                     }
                 }
             }
@@ -527,7 +532,7 @@ public class Semantico {
         // Hay que guardar el 2 y el 3 en alguna parte para luego poder calcular out of
         // bounds
         // int a[][] = new int[2][3];
-        int nv = g.nuevaVariable(TipoVar.VARIABLE,dt.getTsb(),true);
+        int nv = g.nuevaVariable(TipoVar.VARIABLE, dt.getTsb(), true);
         Darray da = new Darray(nv, dt.getTsb(), dimIzq, true, bounds);
         ts.poner(id.getNombre(), da, id);
     }
@@ -572,16 +577,17 @@ public class Semantico {
 
                     nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false);
                     id.setNv(nv);
-                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(valor), null, new Operador3Direcciones(nv,id.getNombre()));
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(valor), null,
+                            new Operador3Direcciones(nv, id.getNombre()));
 
-                } else if(nodo.getNodoId() != null){
+                } else if (nodo.getNodoId() != null) {
                     // a = b, primero consultar tabla de simbolos b tiene que existir
                     // Si es un array no se puede
 
                     Descripcion desc = ts.consultarTD(nodo.getNodoId().getNombre());
                     if (desc.getTDescripcion() == Descripcion.TDesc.darray.toString()) {
                         parser.report_error("Estas asignando un valor incorrecto", nodo);
-                    }else if(desc.getTDescripcion() == Descripcion.TDesc.dconst.toString()){
+                    } else if (desc.getTDescripcion() == Descripcion.TDesc.dconst.toString()) {
                         DConst d3 = (DConst) ts.consultarTD(nodo.getNodoId().getNombre());
                         if (d3 == null) {
                             parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
@@ -590,12 +596,12 @@ public class Semantico {
                         if (d3.getTipo() != Tipo.tsb_float && d3.getTipo() != Tipo.tsb_int) {
                             parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
                         }
-                    }else if(desc.getTDescripcion() == Descripcion.TDesc.dvar.toString()){
+                    } else if (desc.getTDescripcion() == Descripcion.TDesc.dvar.toString()) {
                         Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
                         if (d3 == null) {
                             parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
                         }
-    
+
                         if (d3.getTipus() != Tipo.tsb_float && d3.getTipus() != Tipo.tsb_int) {
                             parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
                         }
@@ -603,56 +609,87 @@ public class Semantico {
 
                     nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false);
                     id.setNv(nv);
-                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNodoId().getNv(),nodo.getNodoId().getNombre()), null, new Operador3Direcciones(nv,id.getNombre()));
-                    
-                } else if(nodo.getNodoExpresion1() != null){
-                    //Tenemos que obtener el valor de esta expresion
-                    Tipo tipo = ctrlExp(nodo,false,true);
+                    g.genIntruccion(TipoInstruccion.COPIA,
+                            new Operador3Direcciones(nodo.getNodoId().getNv(), nodo.getNodoId().getNombre()), null,
+                            new Operador3Direcciones(nv, id.getNombre()));
+
+                } else if (nodo.getNodoExpresion1() != null) {
+                    // Tenemos que obtener el valor de esta expresion
+                    Tipo tipo = ctrlExp(nodo, false, true);
                     if (tipo != Tipo.tsb_float && tipo != Tipo.tsb_int) {
                         parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
                     }
                     nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false);
                     id.setNv(nv);
-                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(),id.getNombre()), null, new Operador3Direcciones(nv,id.getNombre()));
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(), id.getNombre()), null,
+                            new Operador3Direcciones(nv, id.getNombre()));
                 }
-                               
-                d = new Dvar(nv, Tipo.tsb_int,id);
+
+                d = new Dvar(nv, Tipo.tsb_int, id);
                 ts.poner(id.getNombre(), d, nodo);
                 break;
 
             case tsb_bool:
-
-                ctrlExp(nodo, false, true);
+                // System.out.println("LLAMO A CTRL EXP CON NODO");
+                // ctrlExp(nodo, false, true);
+                System.out.println("ENTRO EN UNA ASIGNACION BOOLEANA");
                 // si tipo de izquierda es bool comprobamos deerecha
-                // if (nodo.getNodoLiteral() != null && nodo.getNodoLiteral().getTipo() !=
-                // Tipo.tsb_bool) {
-                // parser.report_error("Estas asignando un valor incorrecto, no es bool", nodo);
-                // } else if(nodo.getNodoId() != null){
-                // Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
-                // if (d3 == null) {
-                // parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
-                // }
+                if (nodo.getNodoLiteral() != null) {
+                    if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_bool) {
+                        parser.report_error("Estas asignando un valor incorrecto, no es bool", nodo);
+                    }
 
-                // if (d3.getTipus() != dt.getTsb()) {
-                // parser.report_error("Estas asignando un valor incorrecto, no es booleano",
-                // nodo);
-                // }
+                    nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                    id.setNv(nv);
+                    d = new Dvar(nv, Tipo.tsb_bool, id);
+                    ts.poner(id.getNombre(), d, nodo);
+                    g.genIntruccion(TipoInstruccion.COPIA,
+                            new Operador3Direcciones(Integer.parseInt(nodo.getNodoLiteral().getValor())), null,
+                            new Operador3Direcciones(nv, ""));
 
-                // }else if(nodo.getNodoExpresionConNegacion() != null){
+                } else if (nodo.getNodoId() != null) {
+                    Descripcion d1 = ts.consultarTD(nodo.getNodoId().getNombre());
+                    if (d1.getTDescripcion() == Descripcion.TDesc.dvar.toString()) {
+                        Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
+                        if (d3 == null) {
+                            parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
+                        }
 
-                // ctrlExpNeg(nodo.getNodoExpresionConNegacion());
+                        if (d3.getTipus() != dt.getTsb()) {
+                            parser.report_error("Estas asignando un valor incorrecto, no es booleano",
+                                    nodo);
+                        }
+                        nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                        id.setNv(nv);
+                        d = new Dvar(nv, Tipo.tsb_bool, id);
+                        ts.poner(id.getNombre(), d, nodo);
+                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getnv(), ""), null,
+                                new Operador3Direcciones(nv, ""));
+                    } else {
+                        DConst d3 = (DConst) ts.consultarTD(nodo.getNodoId().getNombre());
+                        if (d3 == null) {
+                            parser.report_error("Estas asignando un valor incorrecto, no existe", nodo);
+                        }
 
-                // }else if(nodo.getNodoExpresionLog() != null){
-                // ctrlExpLog()
-                // }
-                
-                
-             
+                        if (d3.getTipo() != dt.getTsb()) {
+                            parser.report_error("Estas asignando un valor incorrecto, no es booleano",
+                                    nodo);
+                        }
+                        nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                        id.setNv(nv);
+                        d = new Dvar(nv, Tipo.tsb_bool, id);
+                        ts.poner(id.getNombre(), d, nodo);
+                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getNodoId().getNv(), ""), null,
+                                new Operador3Direcciones(nv, ""));
+                    }
+
+                } else if (nodo.getNodoExpresion1() != null) {
+                    System.out.println("LLAMO A CTRL EXP");
+                    ctrlExp(nodo, false, true);
+                }
+
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
-                //nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
-                //id.setNv(nv);
-                //d = new Dvar(nv, Tipo.tsb_bool,id);
-                //ts.poner(id.getNombre(), d, nodo);
+
                 break;
 
             case tsb_char:
@@ -664,7 +701,7 @@ public class Semantico {
                     }
 
                     System.out.println("ERROR");
-                    if(nodo.getNodoLiteral().getValor().length() > 1){
+                    if (nodo.getNodoLiteral().getValor().length() > 1) {
                         valor = (int) (nodo.getNodoLiteral().getValor().charAt(1));
                     }
                     valor = Integer.parseInt(nodo.getNodoLiteral().getValor());
@@ -672,8 +709,8 @@ public class Semantico {
                     if (valor < dt.getLimiteInferior() || valor > dt.getLimiteSuperior()) {
                         parser.report_error("Has excedido los limites", nodo);
                     }
-                    
-                } else if(nodo.getNodoId() != null){
+
+                } else if (nodo.getNodoId() != null) {
                     Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
                     if (d3 == null) {
                         parser.report_error("Estas asignando un valor incorrecto la variable no existe", nodo);
@@ -682,8 +719,8 @@ public class Semantico {
                     if (d3.getTipus() != Tipo.tsb_int && d3.getTipus() != Tipo.tsb_char) {
                         parser.report_error("Estas asignando un valor incorrecto, no es int o char", nodo);
                     }
-                }  else if(nodo.getNodoExpresion1() != null){
-                    Tipo tipo = ctrlExp(nodo,false,true);
+                } else if (nodo.getNodoExpresion1() != null) {
+                    Tipo tipo = ctrlExp(nodo, false, true);
                     if (tipo != Tipo.tsb_int && tipo != Tipo.tsb_char) {
                         parser.report_error("Estas asignando un valor incorrecto", nodo);
                     }
@@ -693,7 +730,8 @@ public class Semantico {
                 nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_char, false);
                 d = new Dvar(nv, Tipo.tsb_char, id);
                 ts.poner(id.getNombre(), d, nodo);
-                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(),id.getNombre()), null, new Operador3Direcciones(nv,id.getNombre()));
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(), id.getNombre()), null,
+                        new Operador3Direcciones(nv, id.getNombre()));
 
                 break;
 
@@ -715,7 +753,7 @@ public class Semantico {
                         parser.report_error("Has excedido los limites", nodo);
                     }
 
-                } else if(nodo.getNodoId() != null){
+                } else if (nodo.getNodoId() != null) {
 
                     // set a=b
                     Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
@@ -727,8 +765,8 @@ public class Semantico {
                         parser.report_error("Estas asignando un valor incorrecto, no es float", nodo);
                     }
 
-                } else if(nodo.getNodoExpresion1() != null){
-                    Tipo tipo = ctrlExp(nodo,false,true);
+                } else if (nodo.getNodoExpresion1() != null) {
+                    Tipo tipo = ctrlExp(nodo, false, true);
                     if (tipo != Tipo.tsb_int && tipo != Tipo.tsb_float) {
                         parser.report_error("Estas asignando un valor incorrecto", nodo);
                     }
@@ -736,9 +774,10 @@ public class Semantico {
 
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_float, false);
-                d = new Dvar(0, Tipo.tsb_float,id);
+                d = new Dvar(0, Tipo.tsb_float, id);
                 ts.poner(id.getNombre(), d, nodo);
-                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(),id.getNombre()), null, new Operador3Direcciones(nv,id.getNombre()));
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(), id.getNombre()), null,
+                        new Operador3Direcciones(nv, id.getNombre()));
                 break;
 
             case tsb_str:
@@ -746,7 +785,7 @@ public class Semantico {
                     if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_str) {
                         parser.report_error("Estas asignando un valor incorrecto, no es str", nodo);
                     }
-                } else if(nodo.getNodoId() != null) {
+                } else if (nodo.getNodoId() != null) {
 
                     Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
                     if (d3 == null) {
@@ -757,17 +796,18 @@ public class Semantico {
                         parser.report_error("Estas asignando un valor incorrecto, no es str", nodo);
                     }
 
-                } else if(nodo.getNodoExpresion1() != null) {
-                    Tipo tipo = ctrlExp(nodo,false,true);
+                } else if (nodo.getNodoExpresion1() != null) {
+                    Tipo tipo = ctrlExp(nodo, false, true);
                     if (tipo != dt.getTsb()) {
                         parser.report_error("Estas asignando un valor incorrecto", nodo);
                     }
                 }
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
                 nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_str, false);
-                d = new Dvar(nv, Tipo.tsb_str,id);
+                d = new Dvar(nv, Tipo.tsb_str, id);
                 ts.poner(id.getNombre(), d, nodo);
-                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(),id.getNombre()), null, new Operador3Direcciones(nv,id.getNombre()));
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(), id.getNombre()), null,
+                        new Operador3Direcciones(nv, id.getNombre()));
                 break;
             default:
                 System.out.println("Hay un error ctrlAsignNormal");
@@ -794,7 +834,7 @@ public class Semantico {
         // simbolos, si no error.
         g.pushFuncionActual(func.getNodoId().getNombre());
         String etiqueta = g.nuevaEtiqueta();
-        int nf = g.nuevoProcedimiento(func.getNodoId().getNombre(),ts.getAmbito(),etiqueta,0);
+        int nf = g.nuevoProcedimiento(func.getNodoId().getNombre(), ts.getAmbito(), etiqueta, 0);
 
         if (dt == null) { // NO EXISTE EL TIPO O NO ES UN TIPO
             parser.report_error("No existe el tipo", func);
@@ -829,7 +869,7 @@ public class Semantico {
         }
 
         // comprobar las declaraciones de las variables
-        g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones(etiqueta)); 
+        g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones(etiqueta));
         g.genIntruccion(TipoInstruccion.PREAMBULO, null, null, new Operador3Direcciones(id.getNombre()));
 
         NodoDeclVars declVars = func.getNodoDeclVars();
@@ -1245,7 +1285,8 @@ public class Semantico {
             }
             int nv = g.nuevaVariable(TipoVar.VARIABLE, exp.getNodoLiteral().getTipo(), false);
             exp.setNv(nv);
-            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(exp.getNodoLiteral().getValor(),true), null, new Operador3Direcciones(nv,""));
+            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(exp.getNodoLiteral().getValor(), true),
+                    null, new Operador3Direcciones(nv, ""));
 
             return exp.getNodoLiteral().getTipo();
 
@@ -1254,6 +1295,7 @@ public class Semantico {
             System.out.println("Entramos en id");
 
             // comprobamos que el id exista en la tabla de simbolos
+            System.out.println(exp.getNodoId().getNombre());
             if (ts.consultarTD(exp.getNodoId().getNombre()) == null) {
                 parser.report_error("El parametro id no existe", exp.getNodoId());
             }
@@ -1274,8 +1316,9 @@ public class Semantico {
                 System.out.println("EXP id: " + exp.getNodoId().getNombre());
                 int nv = g.nuevaVariable(TipoVar.VARIABLE, d3.getTipo(), false);
                 exp.setNv(nv);
-                System.out.println("EXP nv: "+ exp.getNodoId().getNv());
-                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getNodoId().getNv(),""), null, new Operador3Direcciones(nv,""));
+                System.out.println("EXP nv: " + d3.getNodoId().getNv());
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getNodoId().getNv(), ""), null,
+                        new Operador3Direcciones(nv, ""));
 
                 return d3.getTipo();
             } else {
@@ -1290,24 +1333,25 @@ public class Semantico {
                     parser.report_error("El parametro no es correcto", exp.getNodoId());
                 }
                 System.out.println("EXP id: " + exp.getNodoId().getNombre());
-                
+                System.out.println("EXP nv: " + d3.getNodoId().getNv());
                 int nv = g.nuevaVariable(TipoVar.VARIABLE, d3.getTipus(), false);
                 exp.setNv(nv);
-                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getNodoId().getNv(), ""), null, new Operador3Direcciones(nv,""));
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getNodoId().getNv(), ""), null,
+                        new Operador3Direcciones(nv, ""));
 
                 return d3.getTipus();
             }
-           
 
         } else if (exp.getNodoExpresionConNegacion() != null) {
             Tipo tipo = ctrlExp(exp.getNodoExpresionConNegacion(), false, true);
-            if(tipo != Tipo.tsb_bool){
+            if (tipo != Tipo.tsb_bool) {
                 parser.report_error("No se puede negar cosas que no son bool", exp.getNodoExpresionConNegacion());
             }
             //
-            //obtenemos primero el id
-            //int nv = g.nuevaVariable(TipoVar.VARIABLE, exp.getNodoLiteral().getTipo(), false);
-            //exp.setNv(nv);
+            // obtenemos primero el id
+            // int nv = g.nuevaVariable(TipoVar.VARIABLE, exp.getNodoLiteral().getTipo(),
+            // false);
+            // exp.setNv(nv);
             return Tipo.tsb_bool;
 
         } else if (exp.getNodoLlamadaFunc() != null) {
@@ -1324,62 +1368,61 @@ public class Semantico {
             if (exp.getNodoOperador().getNodoOpLog() != null) {
                 operador = exp.getNodoOperador().getNodoOpLog().getTipusOpLog();
                 // Con op log
+                System.out.println("ESTOY EN UNA OPERACION LOGICA");
                 Tipo tipoTerm1 = ctrlExp(exp.getNodoExpresion1(), true, true);
                 Tipo tipoTerm2 = ctrlExp(exp.getNodoExpresion2(), true, true);
                 System.out.println("\n\nTipo termino1 " + tipoTerm1);
                 System.out.println("Tipo termino2 " + tipoTerm2);
-
+                
                 if (operador == TipoLog.AND || operador == TipoLog.OR) {
                     if (tipoTerm1 != Tipo.tsb_bool || tipoTerm2 != Tipo.tsb_bool) {
                         parser.report_error("Operacion booleana incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
                 }
-                if (operador == TipoLog.IGUALMAYOR || operador == TipoLog.IGUALMENOR || operador == TipoLog.MAYOR || operador == TipoLog.MENOR){
+                if (operador == TipoLog.IGUALMAYOR || operador == TipoLog.IGUALMENOR || operador == TipoLog.MAYOR
+                        || operador == TipoLog.MENOR) {
                     if ((tipoTerm1 == Tipo.tsb_int || tipoTerm1 == Tipo.tsb_float) && tipoTerm1 != tipoTerm2) {
                         parser.report_error("Operacion comparativa incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
                 }
-                if(operador == TipoLog.IGUALIGUAL || operador == TipoLog.DIFERENTE){
-                    if(tipoTerm1 != tipoTerm2){
+                if (operador == TipoLog.IGUALIGUAL || operador == TipoLog.DIFERENTE) {
+                    if (tipoTerm1 != tipoTerm2) {
                         parser.report_error("Operacion comparativa incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
                 }
-
-                // if (operador == TipoLog.AND 
-                //         || operador == TipoLog.OR) {
-                //     if (tipoTerm1 != Tipo.tsb_bool || tipoTerm2 != Tipo.tsb_bool) {
-                //         parser.report_error("Operacion booleana incorrecta", exp.getNodoOperador().getNodoOpLog());
-                //     }
-                // }
-
+               
                 if (tipoTerm1 != tipoTerm2) {
                     parser.report_error("Tipos incompatibles", exp.getNodoOperador());
                 } else {
+                    int nv = g.nuevaVariable(TipoVar.VARIABLE, tipoTerm2, false);
+                    exp.setNv(nv);
+                    // Tengo que coger los nv de la expresion 1 y expresion 2
+                    g.generaInstruccionLogica(exp.getNodoOperador().getNodoOpLog().getTipusOpLog(),
+                            new Operador3Direcciones(exp.getNodoExpresion1().getNv(), ""),
+                            new Operador3Direcciones(exp.getNodoExpresion2().getNv(), ""),
+                            new Operador3Direcciones(nv, ""));
                     return Tipo.tsb_bool;
                 }
-                int nv = g.nuevaVariable(TipoVar.VARIABLE, tipoTerm2, false);
-                exp.setNv(nv);
-                //Tengo que coger los nv de la expresion 1 y expresion 2
-                g.generaInstruccionLogica(exp.getNodoOperador().getNodoOpLog().getTipusOpLog(),new Operador3Direcciones(exp.getNodoExpresion1().getNv(),""),new Operador3Direcciones(exp.getNodoExpresion2().getNv(),""),new Operador3Direcciones(nv,""));
-                //System.out.println("adios");
-                return tipoTerm1;
 
             } else if (exp.getNodoOperador().getNodoOpArit() != null) {
                 operador2 = exp.getNodoOperador().getNodoOpArit().getOpArit();
                 Tipo tipoTerm1 = ctrlExp(exp.getNodoExpresion1(), true, true);
                 Tipo tipoTerm2 = ctrlExp(exp.getNodoExpresion2(), true, true);
-                
+
                 System.out.println("\n\nTipo termino1 " + tipoTerm1);
                 System.out.println("Tipo termino2 " + tipoTerm2);
                 if (tipoTerm1 != tipoTerm2) {
                     parser.report_error("Tipos incompatibles", exp.getNodoOperador());
                 }
-                System.out.println("OPERADOR = "+exp.getNodoOperador().getNodoOpArit().getOpArit());
+                System.out.println("OPERADOR = " + exp.getNodoOperador().getNodoOpArit().getOpArit());
                 int nv = g.nuevaVariable(TipoVar.VARIABLE, tipoTerm2, false);
                 exp.setNv(nv);
-                //Tengo que coger los nv de la expresion 1 y expresion 2
-                g.generaInstruccionAritmetica(exp.getNodoOperador().getNodoOpArit().getOpArit(),new Operador3Direcciones(exp.getNodoExpresion1().getNv(),""),new Operador3Direcciones(exp.getNodoExpresion2().getNv(),""),new Operador3Direcciones(nv,""));
-                //System.out.println("adios");
+                // Tengo que coger los nv de la expresion 1 y expresion 2
+                g.generaInstruccionAritmetica(exp.getNodoOperador().getNodoOpArit().getOpArit(),
+                        new Operador3Direcciones(exp.getNodoExpresion1().getNv(), ""),
+                        new Operador3Direcciones(exp.getNodoExpresion2().getNv(), ""),
+                        new Operador3Direcciones(nv, ""));
+                // System.out.println("adios");
                 return tipoTerm1;
             }
         }
@@ -1465,304 +1508,358 @@ public class Semantico {
     // }
     // }
     /*
-    public void ctrlExpLog(NodoExpresionLog nodoLog) {
-        // Habria que comprobar que el tipo en conjunto sea logico
-        // AND OR
-        // si o si T1 y T2 tienen que ser booleanos
-        // comprobar que el tipo
-        if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.AND || nodoLog.getOpLog().getTipusOpLog() == TipoLog.OR) {
-            Tipo term1;
-            Tipo term2;
-
-            if (nodoLog.getTermino1().getNodoId() != null) {
-                // verificamos que exista el id
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
-                    parser.report_error("El parametro id no existe", nodoLog.getTermino1().getNodoId());
-                }
-
-                // si existe comprobamos que sea booleano
-                Dvar d3 = (Dvar) ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
-
-                // si existe comprobamos que sea booleano
-                if (d3.getTipus() != Tipo.tsb_bool) {
-                    parser.report_error("El parametro id no es booleano", nodoLog.getTermino1().getNodoId());
-                }
-            }
-
-            if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
-                // termino 1 es una llamada a funcion
-
-                // tengo que verificar que esta funcion existe en la ts y que el tipo de retorno
-                // es booleano
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("La funcion no existe", nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-
-                // si existe comprobamos que sea su return sea booleano
-                DFunc d3 = (DFunc) ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre());
-
-                if (d3.getTipo() != Tipo.tsb_bool) {
-                    parser.report_error("El return de la llamada a función no es booleana ",
-                            nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-            }
-
-            if (nodoLog.getTermino2().getNodoId() != null) {
-                // verificamos que exista el id
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
-                    parser.report_error("El parametro id no existe", nodoLog.getTermino2().getNodoId());
-                }
-
-                // si existe comprobamos que sea booleano
-                Dvar d3 = (Dvar) ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
-
-                // si existe comprobamos que sea booleano
-                if (d3.getTipus() != Tipo.tsb_bool) {
-                    parser.report_error("El parametro id no es booleano", nodoLog.getTermino2().getNodoId());
-                }
-            }
-
-            if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
-                // termino 1 es una llamada a funcion
-
-                // tengo que verificar que esta funcion existe en la ts y que el tipo de retorno
-                // es booleano
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("La funcion no existe", nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
-                }
-
-                // si existe comprobamos que sea su return sea booleano
-                DFunc d3 = (DFunc) ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre());
-
-                if (d3.getTipo() != Tipo.tsb_bool) {
-                    parser.report_error("El return de la llamada a función no es booleana ",
-                            nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
-                }
-            }            
-
-            // creo que lo que sea necesario
-            int nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
-            exp.setNv(nv);
-            //Tengo que coger los nv de la expresion 1 y expresion 2
-            g.generaInstruccionAritmetica(exp.getNodoOperador().getNodoOpArit().getOpArit(),new Operador3Direcciones(exp.getNodoExpresion1().getNv(),""),new Operador3Direcciones(exp.getNodoExpresion2().getNv(),""),new Operador3Direcciones(nv,""));
-            //System.out.println("adios");
-            
-        } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.MAYOR
-                || nodoLog.getOpLog().getTipusOpLog() == TipoLog.MENOR
-                || nodoLog.getOpLog().getTipusOpLog() == TipoLog.IGUALMAYOR
-                || nodoLog.getOpLog().getTipusOpLog() == TipoLog.IGUALMENOR) {// si es < > <= >= solo puede ser int o
-                                                                              // float o char
-
-            // caso de que sean id
-            if (nodoLog.getTermino1().getNodoId() != null) {
-                // comprobamos que existan los id
-                System.out.println("El id es: " + nodoLog.getTermino1().getNodoId().getNombre());
-
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
-                }
-
-                Dvar termino1 = (Dvar) ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
-                // verificamos que el tipo del id sea int o float
-                if (termino1.getTipus() != Tipo.tsb_int || termino1.getTipus() != Tipo.tsb_float) {
-                    parser.report_error("El termino introducido no puede compararse",
-                            nodoLog.getTermino1().getNodoId());
-                }
-            } else if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-
-                DFunc termino1 = (DFunc) ts
-                        .consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre());
-                // verificamos que el retorno de la función sea int o float
-                if (termino1.getTipo() != Tipo.tsb_int || termino1.getTipo() != Tipo.tsb_float) {
-                    parser.report_error("El termino introducido no puede compararse",
-                            nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-            }
-
-            if (nodoLog.getTermino2().getNodoId() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino2().getNodoId());
-                }
-
-                Dvar termino2 = (Dvar) ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
-                // verificamos que el tipo del id sea int o float
-                if (termino2.getTipus() != Tipo.tsb_int || termino2.getTipus() != Tipo.tsb_float) {
-                    parser.report_error("El termino introducido no puede compararse",
-                            nodoLog.getTermino2().getNodoId());
-                }
-            } else if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
-                // comprobamos que existan las llamadas a función
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
-                }
-
-                DFunc termino2 = (DFunc) ts
-                        .consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre());
-                // verificamos que el retorno de la función sea int o float
-                if (termino2.getTipo() != Tipo.tsb_int || termino2.getTipo() != Tipo.tsb_float) {
-                    parser.report_error("El termino introducido no puede compararse",
-                            nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-            }
-
-            // Termino t1 y t2 son int o float
-        } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.IGUALIGUAL) {
-
-            Dvar termino1 = null;
-            DFunc termino1Func = null;
-            Dvar termino2 = null;
-            DFunc termino2Func = null;
-            // caso de que sean id
-            if (nodoLog.getTermino1().getNodoId() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
-                }
-
-                termino1 = (Dvar) ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
-
-            } else if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("La funcion no existe", nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-
-                termino1Func = (DFunc) ts
-                        .consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre());
-            }
-
-            if (nodoLog.getTermino2().getNodoId() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino2().getNodoId());
-                }
-
-                termino2 = (Dvar) ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
-
-            } else if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("La funcion no existe", nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
-                }
-
-                termino2Func = (DFunc) ts
-                        .consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre());
-            }
-
-            if (termino1 != null) {
-
-                if (termino2 != null) {
-
-                    if (termino1.getTipus() != termino2.getTipus()) {
-
-                        parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
-
-                    }
-
-                    // codigo 3d
-
-                } else if (termino2Func != null) {
-
-                    if (termino1.getTipus() != termino2Func.getTipo()) {
-
-                        parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
-
-                    }
-
-                    // codigo 3d
-
-                }
-
-            } else if (termino1Func != null) {
-
-                if (termino2 != null) {
-
-                    if (termino1Func.getTipo() != termino2.getTipus()) {
-
-                        parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
-
-                    }
-
-                    // codigo 3d
-
-                } else if (termino2Func != null) {
-
-                    if (termino1Func.getTipo() != termino2Func.getTipo()) {
-
-                        parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
-
-                    }
-
-                    // codigo 3d
-
-                }
-
-            }
-
-        } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.DIFERENTE) {
-
-            Dvar termino1 = null;
-            DFunc termino1f = null;
-            Dvar termino2 = null;
-            DFunc termino2f = null;
-
-            if (nodoLog.getTermino1().getNodoId() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
-                }
-
-                termino1 = (Dvar) ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
-            } else if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-                termino1f = (DFunc) ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre());
-            }
-
-            if (nodoLog.getTermino2().getNodoId() != null) {
-                // comprobamos que existan los id
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino2().getNodoId());
-                }
-
-                termino2 = (Dvar) ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
-            } else if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
-                // comprobamos que existan las llamadas a función
-                if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre()) == null) {
-                    parser.report_error("El id no existe", nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
-                }
-
-                termino2f = (DFunc) ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre());
-            }
-            if (termino1 != null && termino2 != null) {
-                if (termino1.getTipus() != termino2.getTipus()) {
-                    parser.report_error("Los terminos no son iguales", nodoLog.getTermino1().getNodoId());
-                }
-            } else if (termino1f != null && termino2 != null) {
-                if (termino1f.getTipo() != termino2.getTipus()) {
-                    parser.report_error("Los terminos no son iguales",
-                            nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-            } else if (termino1 != null && termino2f != null) {
-                if (termino1.getTipus() != termino2f.getTipo()) {
-                    parser.report_error("Los terminos no son iguales", nodoLog.getTermino1().getNodoId());
-                }
-            } else {
-                if (termino1f.getTipo() != termino2f.getTipo()) {
-                    parser.report_error("Los terminos no son iguales",
-                            nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
-                }
-            }
-        }
-    }
-    */
+     * public void ctrlExpLog(NodoExpresionLog nodoLog) {
+     * // Habria que comprobar que el tipo en conjunto sea logico
+     * // AND OR
+     * // si o si T1 y T2 tienen que ser booleanos
+     * // comprobar que el tipo
+     * if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.AND ||
+     * nodoLog.getOpLog().getTipusOpLog() == TipoLog.OR) {
+     * Tipo term1;
+     * Tipo term2;
+     * 
+     * if (nodoLog.getTermino1().getNodoId() != null) {
+     * // verificamos que exista el id
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
+     * parser.report_error("El parametro id no existe",
+     * nodoLog.getTermino1().getNodoId());
+     * }
+     * 
+     * // si existe comprobamos que sea booleano
+     * Dvar d3 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
+     * 
+     * // si existe comprobamos que sea booleano
+     * if (d3.getTipus() != Tipo.tsb_bool) {
+     * parser.report_error("El parametro id no es booleano",
+     * nodoLog.getTermino1().getNodoId());
+     * }
+     * }
+     * 
+     * if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
+     * // termino 1 es una llamada a funcion
+     * 
+     * // tengo que verificar que esta funcion existe en la ts y que el tipo de
+     * retorno
+     * // es booleano
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("La funcion no existe",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * // si existe comprobamos que sea su return sea booleano
+     * DFunc d3 = (DFunc)
+     * ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().
+     * getNombre());
+     * 
+     * if (d3.getTipo() != Tipo.tsb_bool) {
+     * parser.report_error("El return de la llamada a función no es booleana ",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * }
+     * 
+     * if (nodoLog.getTermino2().getNodoId() != null) {
+     * // verificamos que exista el id
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
+     * parser.report_error("El parametro id no existe",
+     * nodoLog.getTermino2().getNodoId());
+     * }
+     * 
+     * // si existe comprobamos que sea booleano
+     * Dvar d3 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
+     * 
+     * // si existe comprobamos que sea booleano
+     * if (d3.getTipus() != Tipo.tsb_bool) {
+     * parser.report_error("El parametro id no es booleano",
+     * nodoLog.getTermino2().getNodoId());
+     * }
+     * }
+     * 
+     * if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
+     * // termino 1 es una llamada a funcion
+     * 
+     * // tengo que verificar que esta funcion existe en la ts y que el tipo de
+     * retorno
+     * // es booleano
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("La funcion no existe",
+     * nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * // si existe comprobamos que sea su return sea booleano
+     * DFunc d3 = (DFunc)
+     * ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().
+     * getNombre());
+     * 
+     * if (d3.getTipo() != Tipo.tsb_bool) {
+     * parser.report_error("El return de la llamada a función no es booleana ",
+     * nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
+     * }
+     * }
+     * 
+     * // creo que lo que sea necesario
+     * int nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+     * exp.setNv(nv);
+     * //Tengo que coger los nv de la expresion 1 y expresion 2
+     * g.generaInstruccionAritmetica(exp.getNodoOperador().getNodoOpArit().getOpArit
+     * (),new Operador3Direcciones(exp.getNodoExpresion1().getNv(),""),new
+     * Operador3Direcciones(exp.getNodoExpresion2().getNv(),""),new
+     * Operador3Direcciones(nv,""));
+     * //System.out.println("adios");
+     * 
+     * } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.MAYOR
+     * || nodoLog.getOpLog().getTipusOpLog() == TipoLog.MENOR
+     * || nodoLog.getOpLog().getTipusOpLog() == TipoLog.IGUALMAYOR
+     * || nodoLog.getOpLog().getTipusOpLog() == TipoLog.IGUALMENOR) {// si es < > <=
+     * >= solo puede ser int o
+     * // float o char
+     * 
+     * // caso de que sean id
+     * if (nodoLog.getTermino1().getNodoId() != null) {
+     * // comprobamos que existan los id
+     * System.out.println("El id es: " +
+     * nodoLog.getTermino1().getNodoId().getNombre());
+     * 
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
+     * parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
+     * }
+     * 
+     * Dvar termino1 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
+     * // verificamos que el tipo del id sea int o float
+     * if (termino1.getTipus() != Tipo.tsb_int || termino1.getTipus() !=
+     * Tipo.tsb_float) {
+     * parser.report_error("El termino introducido no puede compararse",
+     * nodoLog.getTermino1().getNodoId());
+     * }
+     * } else if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("El id no existe",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * DFunc termino1 = (DFunc) ts
+     * .consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre
+     * ());
+     * // verificamos que el retorno de la función sea int o float
+     * if (termino1.getTipo() != Tipo.tsb_int || termino1.getTipo() !=
+     * Tipo.tsb_float) {
+     * parser.report_error("El termino introducido no puede compararse",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * }
+     * 
+     * if (nodoLog.getTermino2().getNodoId() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
+     * parser.report_error("El id no existe", nodoLog.getTermino2().getNodoId());
+     * }
+     * 
+     * Dvar termino2 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
+     * // verificamos que el tipo del id sea int o float
+     * if (termino2.getTipus() != Tipo.tsb_int || termino2.getTipus() !=
+     * Tipo.tsb_float) {
+     * parser.report_error("El termino introducido no puede compararse",
+     * nodoLog.getTermino2().getNodoId());
+     * }
+     * } else if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
+     * // comprobamos que existan las llamadas a función
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("El id no existe",
+     * nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * DFunc termino2 = (DFunc) ts
+     * .consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre
+     * ());
+     * // verificamos que el retorno de la función sea int o float
+     * if (termino2.getTipo() != Tipo.tsb_int || termino2.getTipo() !=
+     * Tipo.tsb_float) {
+     * parser.report_error("El termino introducido no puede compararse",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * }
+     * 
+     * // Termino t1 y t2 son int o float
+     * } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.IGUALIGUAL) {
+     * 
+     * Dvar termino1 = null;
+     * DFunc termino1Func = null;
+     * Dvar termino2 = null;
+     * DFunc termino2Func = null;
+     * // caso de que sean id
+     * if (nodoLog.getTermino1().getNodoId() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
+     * parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
+     * }
+     * 
+     * termino1 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
+     * 
+     * } else if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("La funcion no existe",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * termino1Func = (DFunc) ts
+     * .consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().getNombre
+     * ());
+     * }
+     * 
+     * if (nodoLog.getTermino2().getNodoId() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
+     * parser.report_error("El id no existe", nodoLog.getTermino2().getNodoId());
+     * }
+     * 
+     * termino2 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
+     * 
+     * } else if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("La funcion no existe",
+     * nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * termino2Func = (DFunc) ts
+     * .consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().getNombre
+     * ());
+     * }
+     * 
+     * if (termino1 != null) {
+     * 
+     * if (termino2 != null) {
+     * 
+     * if (termino1.getTipus() != termino2.getTipus()) {
+     * 
+     * parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
+     * 
+     * }
+     * 
+     * // codigo 3d
+     * 
+     * } else if (termino2Func != null) {
+     * 
+     * if (termino1.getTipus() != termino2Func.getTipo()) {
+     * 
+     * parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
+     * 
+     * }
+     * 
+     * // codigo 3d
+     * 
+     * }
+     * 
+     * } else if (termino1Func != null) {
+     * 
+     * if (termino2 != null) {
+     * 
+     * if (termino1Func.getTipo() != termino2.getTipus()) {
+     * 
+     * parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
+     * 
+     * }
+     * 
+     * // codigo 3d
+     * 
+     * } else if (termino2Func != null) {
+     * 
+     * if (termino1Func.getTipo() != termino2Func.getTipo()) {
+     * 
+     * parser.report_error("Los tipos de los terminos no son iguales", nodoLog);
+     * 
+     * }
+     * 
+     * // codigo 3d
+     * 
+     * }
+     * 
+     * }
+     * 
+     * } else if (nodoLog.getOpLog().getTipusOpLog() == TipoLog.DIFERENTE) {
+     * 
+     * Dvar termino1 = null;
+     * DFunc termino1f = null;
+     * Dvar termino2 = null;
+     * DFunc termino2f = null;
+     * 
+     * if (nodoLog.getTermino1().getNodoId() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre()) == null) {
+     * parser.report_error("El id no existe", nodoLog.getTermino1().getNodoId());
+     * }
+     * 
+     * termino1 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino1().getNodoId().getNombre());
+     * } else if (nodoLog.getTermino1().getNodoLlamadaFunc() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("El id no existe",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * termino1f = (DFunc)
+     * ts.consultarTD(nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId().
+     * getNombre());
+     * }
+     * 
+     * if (nodoLog.getTermino2().getNodoId() != null) {
+     * // comprobamos que existan los id
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre()) == null) {
+     * parser.report_error("El id no existe", nodoLog.getTermino2().getNodoId());
+     * }
+     * 
+     * termino2 = (Dvar)
+     * ts.consultarTD(nodoLog.getTermino2().getNodoId().getNombre());
+     * } else if (nodoLog.getTermino2().getNodoLlamadaFunc() != null) {
+     * // comprobamos que existan las llamadas a función
+     * if (ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().
+     * getNombre()) == null) {
+     * parser.report_error("El id no existe",
+     * nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId());
+     * }
+     * 
+     * termino2f = (DFunc)
+     * ts.consultarTD(nodoLog.getTermino2().getNodoLlamadaFunc().getNodoId().
+     * getNombre());
+     * }
+     * if (termino1 != null && termino2 != null) {
+     * if (termino1.getTipus() != termino2.getTipus()) {
+     * parser.report_error("Los terminos no son iguales",
+     * nodoLog.getTermino1().getNodoId());
+     * }
+     * } else if (termino1f != null && termino2 != null) {
+     * if (termino1f.getTipo() != termino2.getTipus()) {
+     * parser.report_error("Los terminos no son iguales",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * } else if (termino1 != null && termino2f != null) {
+     * if (termino1.getTipus() != termino2f.getTipo()) {
+     * parser.report_error("Los terminos no son iguales",
+     * nodoLog.getTermino1().getNodoId());
+     * }
+     * } else {
+     * if (termino1f.getTipo() != termino2f.getTipo()) {
+     * parser.report_error("Los terminos no son iguales",
+     * nodoLog.getTermino1().getNodoLlamadaFunc().getNodoId());
+     * }
+     * }
+     * }
+     * }
+     */
     public void ctrlOpLog(NodoOpLog nodoOpLog) {
 
         switch (nodoOpLog.getTipusOpLog()) { // supongo que es crear lo del c3d
@@ -1801,7 +1898,7 @@ public class Semantico {
         // Marcador
         // Aqui tenemos los parametros correctos
         int nParamsBuenos = 0;
-        Stack<NodoDeclFuncParam> pila= new Stack(); 
+        Stack<NodoDeclFuncParam> pila = new Stack();
         if (d.getNodoFunc().getNodoDeclFuncP() != null) {
             NodoDeclFuncParams n = d.getNodoFunc().getNodoDeclFuncP().getNodoDeclFuncParams();
             while (n != null) {
@@ -1839,12 +1936,11 @@ public class Semantico {
             NodoPar n1 = llamadaFunc.getNodoParams().getNodoPar();
             NodoContParam n2 = n1.getNodoContParam();
 
-
             while (n4 != null) {
 
                 NodoDeclFuncParam declFuncParam = n4.getNodoDeclFuncParam();
                 System.out.println("hola");
-                //funcion = declFuncParam.getNodoTipo().getTipo();
+                // funcion = declFuncParam.getNodoTipo().getTipo();
                 funcion = pila.pop().getNodoTipo().getTipo();
                 System.out.println("hola2");
 
@@ -1860,8 +1956,8 @@ public class Semantico {
                     // MIRAR que es tenemos un literal dentro de la llamada de la funcion
                     // Vamos a sacar el tipo del literal
                     llamada = n1.getNodoExpresion().getNodoLiteral().getTipo();
-                    System.out.println("Tipo llamada: "+ llamada);
-                    System.out.println("Tipo funcion: "+ funcion);
+                    System.out.println("Tipo llamada: " + llamada);
+                    System.out.println("Tipo funcion: " + funcion);
                     if (funcion != llamada) {
                         parser.report_error("Parametro incorrecto", n1.getNodoExpresion().getNodoLiteral());
                     }
@@ -1887,7 +1983,7 @@ public class Semantico {
                 } else if (n1.getNodoExpresion().getNodoId() != null) {
                     System.out.println("COMPROBAMOS EL ID");
                     Descripcion d3 = ts.consultarTD(n1.getNodoExpresion().getNodoId().getNombre());
-                    if(d3 == null){
+                    if (d3 == null) {
                         parser.report_error("No existe el id", n1.getNodoExpresion().getNodoId());
                     }
                     if (d3.getTDescripcion() == Descripcion.TDesc.dconst.toString()) {

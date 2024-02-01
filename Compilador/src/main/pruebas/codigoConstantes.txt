@@ -3,17 +3,16 @@
 const char a = 'b'; 
 const int c = 1235; 
 const bool d = true; 
+
+bool p = false;
+bool x = p;
 int t = 2;
-
-bool x = true;
-
-
 
 int z = 1 + 2 - t + c;
 
-bool y = d | x;
+bool y = d | 3 > t;
 
 
 main {
-    
+    z = 2 + 4;
 }
