@@ -300,8 +300,10 @@ public class Semantico {
                     // System.out.println("ENTRA?2");
                     ctrlAsignNormal(dt, asignacion, id);
                 } else {
+                    int nv = g.nuevaVariable(TipoVar.VARIABLE, tipo.getTipo(), false);
                     Dvar d;
-                    d = new Dvar(0, dt.getTsb(), id);
+                    d = new Dvar(nv, dt.getTsb(), id);
+                    id.setNv(nv);
                     ts.poner(id.getNombre(), d, id);
                     // System.out.println("Metemos la variable " + id.getNombre() + " en la TS");
                 }

@@ -6,8 +6,9 @@ int c = b;
 
 int y = a + 2 + c;
 int x = y;
+char asdg;
 
-set x = 1+4;
+set asdg = 'a';
 
 
 
