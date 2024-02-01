@@ -19,6 +19,7 @@ public enum TipoInstruccion{
     IFMENORIGUAL("ifMenorIgual"),
     IFDIFERENTE("ifDiferente"),
     IFIGUALI("ifIgual"),
+    IFTRUEGOTO("ifTrueGoTo"),
     PREAMBULO("pmb"),
     PRINT("print"),
     PRINTLN("println"),

@@ -1,0 +1,15 @@
+main{
+    
+    int numr = 24;
+    int b = 5;
+
+    int i;
+
+    for(i;b > numr;i++){
+        print("Dentro del for");
+        println(2);
+        print('a'); //sale el valor asci en vez de la letra 
+        print(b);
+    }
+
+}
