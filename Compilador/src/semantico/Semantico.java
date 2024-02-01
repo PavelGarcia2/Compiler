@@ -328,13 +328,52 @@ public class Semantico {
                         if (tipoDer != Tipo.tsb_char && tipoDer != Tipo.tsb_int) {
                             parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
                         }
+                    } else if (tipoIzq == Tipo.tsb_float || tipoIzq == Tipo.tsb_int) {
+                        if (tipoDer != Tipo.tsb_float && tipoDer != Tipo.tsb_int) {
+                            parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
+                        }
                     } else {
                         if (tipoIzq != tipoDer) {
                             parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
                         }
                     }
-                    // Mirar si es una expresion logica (se puede mirar lo de tnot) o expresion
-                    // aritm
+                    String valor = var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                            .getNodoExpresion()
+                            .getNodoLiteral().getValor();
+
+                    // id.setNv(nv);
+                    switch (tipoDer) {
+                        case tsb_int:
+                            int vali = Integer.parseInt(valor);
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(vali), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
+                            break;
+                        case tsb_bool:
+                            int valb = Integer.parseInt(valor);
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(valb), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
+                            break;
+                        case tsb_char:
+                            int valc;
+                            if (tipoDer != Tipo.tsb_int) {
+                                valc = (int) (valor.charAt(1));
+                            } else {
+                                valc = Integer.parseInt(valor);
+                            }
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(valc), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
+                            break;
+                        case tsb_float:
+                            Float valf = Float.parseFloat(valor);
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(valf), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
+                            break;
+                        case tsb_str:
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(valor, 0f), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
+                            break;
+                    }
+
                 } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
                         .getNodoExpresion1() != null) {
                     Tipo tipoDer = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
@@ -344,11 +383,18 @@ public class Semantico {
                         if (tipoDer != Tipo.tsb_char && tipoDer != Tipo.tsb_int) {
                             parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
                         }
+                    } else if (tipoIzq == Tipo.tsb_float || tipoIzq == Tipo.tsb_int) {
+                        if (tipoDer != Tipo.tsb_float && tipoDer != Tipo.tsb_int) {
+                            parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
+                        }
                     } else {
                         if (tipoIzq != tipoDer) {
                             parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
                         }
                     }
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                    .getNodoExpresion().getNv(), ""), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
                     // Mirar si es un id
                 } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
                         .getNodoId() != null) {
@@ -380,6 +426,8 @@ public class Semantico {
                             parser.report_error("Error estas asignando un valor incorrecto", var.getNodoAsignacion());
                         }
                     }
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(dId.getnv(), ""), null,
+                                    new Operador3Direcciones(d.getnv(), ""));
                 }
 
             } else {
@@ -600,8 +648,8 @@ public class Semantico {
                         nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false);
                         id.setNv(nv);
                         g.genIntruccion(TipoInstruccion.COPIA,
-                            new Operador3Direcciones(d3.getNodoId().getNv(), nodo.getNodoId().getNombre()), null,
-                            new Operador3Direcciones(nv, id.getNombre()));
+                                new Operador3Direcciones(d3.getNodoId().getNv(), nodo.getNodoId().getNombre()), null,
+                                new Operador3Direcciones(nv, id.getNombre()));
                     } else if (desc.getTDescripcion() == Descripcion.TDesc.dvar.toString()) {
                         Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
 
@@ -609,13 +657,11 @@ public class Semantico {
                             parser.report_error("Estas asignando un valor incorrecto, no es int", nodo);
                         }
                         nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false);
-                    id.setNv(nv);
-                    g.genIntruccion(TipoInstruccion.COPIA,
-                            new Operador3Direcciones(d3.getnv(), nodo.getNodoId().getNombre()), null,
-                            new Operador3Direcciones(nv, id.getNombre()));
+                        id.setNv(nv);
+                        g.genIntruccion(TipoInstruccion.COPIA,
+                                new Operador3Direcciones(d3.getnv(), nodo.getNodoId().getNombre()), null,
+                                new Operador3Direcciones(nv, id.getNombre()));
                     }
-
-                    
 
                 } else if (nodo.getNodoExpresion1() != null) {
 
@@ -760,7 +806,8 @@ public class Semantico {
                         d = new Dvar(nv, Tipo.tsb_char, id);
                         d.getNodoId().setNv(nv);
                         ts.poner(id.getNombre(), d, id);
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getNodoId().getNv(), id.getNombre()),
+                        g.genIntruccion(TipoInstruccion.COPIA,
+                                new Operador3Direcciones(d3.getNodoId().getNv(), id.getNombre()),
                                 null,
                                 new Operador3Direcciones(nv, id.getNombre()));
 
@@ -812,9 +859,9 @@ public class Semantico {
 
                     // set a=b
                     Descripcion d1 = ts.consultarTD(nodo.getNodoId().getNombre());
-                    if(d1 == null){
+                    if (d1 == null) {
                         parser.report_error("Estas asignando un valor incorrecto la variable no existe", nodo);
-                    }else if(d1.getTDescripcion() == Descripcion.TDesc.dvar.toString()){
+                    } else if (d1.getTDescripcion() == Descripcion.TDesc.dvar.toString()) {
                         Dvar d3 = (Dvar) ts.consultarTD(nodo.getNodoId().getNombre());
                         System.out.println(nodo.getNodoId().getNombre());
                         System.out.println(d3.getTipus());
@@ -832,7 +879,6 @@ public class Semantico {
                     } else {
                         parser.report_error("Estas asignando un valor incorrecto", nodo);
                     }
-                    
 
                 } else if (nodo.getNodoExpresion1() != null) {
                     Tipo tipo = ctrlExp(nodo, false, true);
@@ -840,12 +886,12 @@ public class Semantico {
                         parser.report_error("Estas asignando un valor incorrecto", nodo);
                     }
                     nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_float, false);
-                        d = new Dvar(nv, Tipo.tsb_float, id);
-                        d.getNodoId().setNv(nv);
-                        ts.poner(id.getNombre(), d, id);
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(), id.getNombre()),
-                                null,
-                                new Operador3Direcciones(nv, id.getNombre()));
+                    d = new Dvar(nv, Tipo.tsb_float, id);
+                    d.getNodoId().setNv(nv);
+                    ts.poner(id.getNombre(), d, id);
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNv(), id.getNombre()),
+                            null,
+                            new Operador3Direcciones(nv, id.getNombre()));
                 }
 
                 break;
@@ -857,15 +903,16 @@ public class Semantico {
                     }
                     nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_str, false);
                     id.setNv(nv);
-                    System.out.println("NOMBRE: "+id.getNombre());
-                    System.out.println("NOMBRE: "+id.getNv());
+                    System.out.println("NOMBRE: " + id.getNombre());
+                    System.out.println("NOMBRE: " + id.getNv());
                     d = new Dvar(nv, Tipo.tsb_str, id);
                     ts.poner(id.getNombre(), d, id);
-                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nodo.getNodoLiteral().getValor(),1.0f), null,
+                    g.genIntruccion(TipoInstruccion.COPIA,
+                            new Operador3Direcciones(nodo.getNodoLiteral().getValor(), 1.0f), null,
                             new Operador3Direcciones(nv, id.getNombre()));
                 } else if (nodo.getNodoId() != null) {
-                    Descripcion d1 = ts.consultarTD(nodo.getNodoId().getNombre()); 
-                    
+                    Descripcion d1 = ts.consultarTD(nodo.getNodoId().getNombre());
+
                     if (d1 == null) {
                         parser.report_error("Estas asignando un valor incorrecto la variable no existe", nodo);
                     }
@@ -878,14 +925,14 @@ public class Semantico {
                     id.setNv(nv);
                     d = new Dvar(nv, Tipo.tsb_str, id);
                     ts.poner(id.getNombre(), d, id);
-       
-                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getnv(),""), null,
+
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(d3.getnv(), ""), null,
                             new Operador3Direcciones(nv, id.getNombre()));
 
                 } else if (nodo.getNodoExpresion1() != null) {
                     // Tipo tipo = ctrlExp(nodo, false, true);
                     // if (tipo != dt.getTsb()) {
-                    //     parser.report_error("Estas asignando un valor incorrecto", nodo);
+                    // parser.report_error("Estas asignando un valor incorrecto", nodo);
                     // }
                 }
                 break;
@@ -1390,7 +1437,8 @@ public class Semantico {
                     parser.report_error("El parametro id no es booleano", exp.getNodoId());
                 }
 
-                if (op && d3.getTipo() != Tipo.tsb_bool && d3.getTipo() != Tipo.tsb_int && d3.getTipo() != Tipo.tsb_float) {
+                if (op && d3.getTipo() != Tipo.tsb_bool && d3.getTipo() != Tipo.tsb_int
+                        && d3.getTipo() != Tipo.tsb_float) {
                     parser.report_error("El parametro no es correcto", exp.getNodoId());
                 }
                 System.out.println("EXP id: " + exp.getNodoId().getNombre());
@@ -1409,7 +1457,8 @@ public class Semantico {
                     parser.report_error("El parametro id no es booleano", exp.getNodoId());
                 }
 
-                if (op && d3.getTipus() != Tipo.tsb_bool && d3.getTipus() != Tipo.tsb_int && d3.getTipus() != Tipo.tsb_float) {
+                if (op && d3.getTipus() != Tipo.tsb_bool && d3.getTipus() != Tipo.tsb_int
+                        && d3.getTipus() != Tipo.tsb_float) {
                     parser.report_error("El parametro no es correcto", exp.getNodoId());
                 }
                 System.out.println("EXP id: " + exp.getNodoId().getNombre());
