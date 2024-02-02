@@ -38,11 +38,12 @@ main {
 }
 
 //DECL FUNCS
+/*
 fun void kkkasd (){
     int asdggasd;
     asdggasd = resultado(1,2,true);
 }
-
+*/
 fun int resultado(int a,int b,bool correcto){
 
     int resta2= 1;

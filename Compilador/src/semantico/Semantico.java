@@ -209,10 +209,11 @@ public class Semantico {
         // C3@
         DConst dc = new DConst(dt.getTsb(), rango, id.getNombre(), id);
         ts.poner(id.getNombre(), dc, constante);
-        System.out.println("GENERO NUEVA VARIABLE rango: " + rango);
+        //System.out.println("GENERO NUEVA VARIABLE rango: " + rango);
         int nv = g.nuevaVariable(TipoVar.VARIABLE, dt.getTsb(), false);
-        System.out.println("GENERO NUEVA VARIABLE nv: " + nv);
-        System.out.println("GENERO NUEVA VARIABLE id: " + id.getNombre());
+        //System.out.println("GENERO NUEVA VARIABLE nv: " + nv);
+        System.out.println("GENERO NUEVA VARIABLE(nv: "+nv+", id: " + id.getNombre()+", rango: "+rango+" )");
+
         id.setNv(nv);
         g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(rango), null,
                 new Operador3Direcciones(nv, false));
