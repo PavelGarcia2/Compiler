@@ -30,6 +30,8 @@ public class Darray extends Descripcion {
         this.bounds = bounds;
     }
 
+    
+
     public int getVariableNumber() {
         return variableNumber;
     }

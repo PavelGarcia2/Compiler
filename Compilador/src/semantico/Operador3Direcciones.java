@@ -15,6 +15,8 @@ public class Operador3Direcciones{
     private float valFloat = -2;
     private String valString = null;
     private boolean proc;
+    private String id;
+
 
     public static enum TipoCambio{
         INT, CHAR, BOOL, STRING;
@@ -32,43 +34,51 @@ public class Operador3Direcciones{
         return cambio;
     }
 
-    public Operador3Direcciones(String etiqueta){
+    public Operador3Direcciones(String id,String etiqueta){
         this.etiqueta = etiqueta;
+        this.id=id;
     }
 
-    public Operador3Direcciones(String literal,boolean redundant){
+    public Operador3Direcciones(String id,String literal,boolean redundant){
         this.literal = literal;
+        this.id=id;
     }
 
-    public Operador3Direcciones(Object valor, TipoCambio cambio){
+    public Operador3Direcciones(String id,Object valor, TipoCambio cambio){
         this.valor = valor;
         this.cambio = cambio;
         this.tipo = TipoI.LITERAL;
+        this.id=id;
     }
 
-    public Operador3Direcciones(String valString,float redundant){
+    public Operador3Direcciones(String id,String valString,float redundant){
         this.operador = operador;
         this.valString = valString;
+        this.id=id;
     }
 
-    public Operador3Direcciones(String operador,int redundant){
+    public Operador3Direcciones(String id,String operador,int redundant){
         this.operador = operador;
+        this.id=id;
     }
 
-    public Operador3Direcciones(int referencia, boolean proc){
+    public Operador3Direcciones(String id,int referencia, boolean proc){
         this.tipo= TipoI.REFERENCIA;
         this.referencia = referencia;
         this.proc = proc;
+        this.id=id;
     }
 
-    public Operador3Direcciones(int constante){
+    public Operador3Direcciones(String id,int constante){
         this.tipo= TipoI.REFERENCIA;
         this.valConst = constante;
+        this.id=id;
     } 
 
-    public Operador3Direcciones(float valorFloat){
+    public Operador3Direcciones(String id,float valorFloat){
         this.tipo= TipoI.REFERENCIA;
         this.valFloat = valorFloat;
+        this.id=id;
     } 
 
     public String getEtiqueta(){
@@ -81,6 +91,23 @@ public class Operador3Direcciones{
 
     public int getReferencia(){
         return referencia;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public int getValConst(){
+        return valConst;
+    }
+
+    
+    public float getValFloat() {
+        return valFloat;
+    }
+
+    public String getValString() {
+        return valString;
     }
 
     @Override

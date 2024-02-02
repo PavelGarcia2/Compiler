@@ -1,24 +1,11 @@
-
+int a = 2;
 
 
 main {
-    str entrada;
-    int a = 2;
-    in(entrada);
-
-    switch(entrada){
-        case "alba":
-            print("Hola soy alba");
-            println(a);
-        break;
-        case "p":
-            print("Hola soy p");
-        break;
-    }
+    
 }
 
-fun int suma(int a, int b){
-    int x = a;
-    int z = x + b;
-    return z;
-}
+
+
+
+

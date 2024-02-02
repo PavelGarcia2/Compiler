@@ -16,7 +16,7 @@ import herramientas.Tipo;
 import semantico.*;
 import semantico.Operador3Direcciones.TipoI;
 import tsimbolos.*;
-import tsimbolos.descripciones.Dvar;
+import tsimbolos.descripciones.*;
 
 public class GeneradorEnsamblado{
 
@@ -36,7 +36,7 @@ public class GeneradorEnsamblado{
     private boolean mainCreado = false;
     private final String main= "main";
     private String filename;
-    private final String folder = "pruebas/Tests_68K/";
+    private final String folder = "Compilador/src/main/pruebas/Tests_68K/"; 
     private final String extension = ".X68";
     private boolean isParam = false;
     private int actualParam = 1;
@@ -123,7 +123,7 @@ public class GeneradorEnsamblado{
 
         ensamblado.append(espacioEtiqueta + "END" + espacioNormal + "globals");
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(folder + filename.substring(0, filename.length() - 4) + extension)))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(folder + nombreArchivo.substring(0, nombreArchivo.length() - 4) + extension)))) {
             bufferedWriter.write(ensamblado.toString());
             //For overwritting avoidance
             Thread.sleep(2000);
@@ -151,12 +151,8 @@ public class GeneradorEnsamblado{
                 
 				break;
 
-			case ASIGNACION:
-				break;
-
-
 			case CALL:
-
+            
                 actualParam = 1;
                 if (instruccion.getOperadores()[0].getEtiqueta() == main) { //Main case
                     ensamblado.append(main + ':' + "                                                       \n");
@@ -181,17 +177,30 @@ public class GeneradorEnsamblado{
 
 				break;
 			case COPIA:
+                //System.out.println(instruccion.getOperadores()[0]);  
+                System.out.println(instruccion.getOperadores()[2].getId());  
 
-                  LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                Descripcion d = tablaSimbolos.consultarTD(instruccion.getOperadores()[2].getId());
+                Tipo tipo = null;
+                if(d instanceof Dvar){
+                    LOAD(instruccion.getOperadores()[0],instruccion.getOperadores()[2].getReferencia(),null, "D0");
+                    Dvar dvar = (Dvar) d;
+                    tipo = dvar.getTipus();
+                }else if( d instanceof DConst){
+                    LOAD(instruccion.getOperadores()[0],instruccion.getOperadores()[2].getReferencia(),null, "D0");
+                    DConst dcons = (DConst) d;
+                    tipo = dcons.getTipo();
+                }
+                  
+               // System.out.println("hola");
 
-                if (((tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getTipo() == Tipo.tsb_str) 
-                        && (tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getTipo() == Tipo.tsb_str))
-                        || (instruccion.getOperadores()[0].getTipo() != TipoI.LITERAL && tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getTipo() == Tipo.tsb_str)) {
+                if (((tipo == Tipo.tsb_str))) {
 
                     isString = true;
                 }
 
-                STORE("D0", tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getIdProcedimiento(), instruccion.getOperadores()[2].getReferencia());
+                System.out.println("PETA");
+                STORE("D0", null, instruccion.getOperadores()[2].getReferencia());
                 isString = false;
 
 
@@ -222,7 +231,7 @@ public class GeneradorEnsamblado{
 
 				break;
 
-			case IFIGUALI:
+			case IFTRUEGOTO:
 
                 LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
                 LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
@@ -343,14 +352,14 @@ public class GeneradorEnsamblado{
                     ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "A6" + ", " + (prof4x - 4) + "(A7) ; DISP(prof) = BP\n");
                     ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "A6" + ", D0 ; D0=EBP\n");
 
-                    ArrayList<ArgDescripcion> params = tablaSimbolos.consultarParams(instruccion.getOperadores()[2].getEtiqueta(), null);
+                    ArrayList<Dargin> params = tablaSimbolos.obtenerParams(instruccion.getOperadores()[2].getEtiqueta());
                     int contadorStrings = 0;
                     int contadorVars = 0;
                     for (int i = 0; i < params.size(); i++) {
-                        Dvar desc = (Dvar) tablaSimbolos.consultaId(params.get(i).getName());
-                        if (desc.getTipus() == Tipo.tsb_str) {
+                        //Dvar desc = (Dvar) tablaSimbolos.consultaId(params.get(i).getNombre());
+                        if (params.get(i).getTipus() == Tipo.tsb_str) {
                             ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "SParam" + contadorStrings + ", " + "A0 ; Param gest\n");
-                            ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "Variable" + desc.getnv() + ", " + "A1 ; Param gest\n");
+                            ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "Variable" + params.get(i).getnv() + ", " + "A1 ; Param gest\n");
                             ensamblado.append(".loop" + contadorStrings + ':' + '\n');
                             ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "(A0)+, (A1)+ \n");
                             ensamblado.append(espacioEtiqueta + "TST.B (A0) \n");
@@ -358,7 +367,7 @@ public class GeneradorEnsamblado{
                             ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "#0, (A1)+ \n");
                             contadorStrings++;
                         } else {
-                            ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "(Param" + contadorVars++ + "), " + "(Variable" + desc.getnv() + ") ; Param gest\n");
+                            ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "(Param" + contadorVars++ + "), " + "(Variable" + params.get(i).getnv() + ") ; Param gest\n");
                         }
                     }
                 }
@@ -570,6 +579,7 @@ public class GeneradorEnsamblado{
             profx = tablaProcedimientos.get(variable.getIdProcedimiento()).getAmbito();
             profp = tablaProcedimientos.get(procedureId).getAmbito();
         }
+        
         int dx = tablaVariables.get(variableId).getDimension();
         if (isParam) {
             dx = tablaVariables.get(variableId).getBytes() * actualParam; //12 = DISP (4) + BP (4) + RETURN (4)

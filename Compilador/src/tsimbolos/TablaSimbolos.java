@@ -69,13 +69,12 @@ public class TablaSimbolos {
             if(elementoAntiguo.getNp() == n){
                 //Error semántico
                 parser.report_error("El simbolo ya esta declarado en el nivel actual", nodo);
-            }else{
+            } else {
                 nodoExp = new NodoExpansion(elementoAntiguo,elementoNuevo);
                 te.add(nodoExp);
                 ta[n]= nodoExp;
                 cambio = true;
             }
-            
         }
 
         if(!cambio){
@@ -131,31 +130,48 @@ public class TablaSimbolos {
         return n;
     }
 
-    public void ponerParam(String idPr, String idParam, Dargin d) {
-        Descripcion d1 = this.consultarTD(idPr);
-        if(!(d1 instanceof Dproc)){
-            System.out.println("ERROR!");
+    // public void ponerParam(String idPr, String idParam, Dargin d) {
+    //     Descripcion d1 = this.consultarTD(idPr);
+    //     if(!(d1 instanceof Dproc)){
+    //         System.out.println("ERROR!");
+    //     }
+    //     Dproc dproc = (Dproc) this.consultarTD(idPr);  
+    // }
+
+    public void ponerParam(String idpr, Dargin dArgumento, DFunc d){
+        if(consultarTD(idpr) == null){
+            parser.report_error("El procedimiento no existe", null);
+        } else {
+            d.addArg(dArgumento);
         }
-        Dproc dproc = (Dproc) this.consultarTD(idPr);
-       
+    }
+
+    public ArrayList<Dargin> obtenerParams(String idpr){
+        DFunc d = (DFunc) consultarTD(idpr);
+        return d.getArgumentos();
     }
 
     public Descripcion consultarTD(String id) {
-        //System.out.println("Consultamos la tabla de simbolos "+id);
         if(td.get(id) != null){
             return td.get(id).getDescripcion();
         }
-       // System.out.println("No lo hemos encontrado en la tabla de descripcion");
         return null;
+    }
 
-        //
+    //Pone una dimension del array
+    public void ponerIndice(String id, Nodo nodo){
+        if(consultarTD(id) == null){
+            parser.report_error("El id no existe", nodo);
+        }else if (!(consultarTD(id) instanceof Darray)){
+            parser.report_error("Debe ser un array", nodo);
+        }
+
+        Darray d = (Darray) consultarTD(id);
+      //  int idxe = ;
+        
     }
 
     // public Descripcion consultarTE(int idx) {
-
-    // }
-
-    // public int consultarFirst(String id) {
 
     // }
 

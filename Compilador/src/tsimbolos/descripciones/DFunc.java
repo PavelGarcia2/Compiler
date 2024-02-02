@@ -1,4 +1,6 @@
 package tsimbolos.descripciones;
+import java.util.ArrayList;
+
 import herramientas.Tipo;
 import sintactico.arbol.NodoFunc;
 
@@ -8,17 +10,27 @@ public class DFunc extends Descripcion {
     Tipo tipo;
     NodoFunc nodoFunc;
     int retVal;
+    private ArrayList<Dargin> argumentos;
 
-    public DFunc(int np, Tipo tipo, NodoFunc nodoFunc,int retVal) {
+    public DFunc(int np, Tipo tipo, NodoFunc nodoFunc) {
         super(TDesc.dfunc);
         this.np = np;
         this.tipo = tipo;
         this.nodoFunc = nodoFunc;
-        this.retVal = retVal;
+        argumentos = new ArrayList<Dargin>();
+
     }
 
     public int getRetVal() {
         return retVal;
+    }
+
+    public ArrayList<Dargin> getArgumentos(){
+        return argumentos;
+    }
+
+    public void setRetVal(int r){
+        retVal = r;
     }
 
     public NodoFunc getNodoFunc() {
@@ -35,6 +47,10 @@ public class DFunc extends Descripcion {
     
     public void setNp(int np) {
         this.np = np;
+    }
+    
+     public void addArg(Dargin dargin){
+        argumentos.add(dargin);
     }
 
 }
