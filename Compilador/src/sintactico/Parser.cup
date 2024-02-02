@@ -221,7 +221,7 @@ non terminal NodoReturnParam RETURN_PARAM;
 non terminal NodoPar PAR;
 non terminal NodoContParam CONTPARAM;
 non terminal NodoSigno SIGNO;
-
+non terminal NodoDevuelto DEVUELTO;
 non terminal NodoDimensiones DIMENSIONES;
 
 precedence left tSuma, tResta;
@@ -341,9 +341,12 @@ OTRAS_SENTS ::= tIf:tif tLparen EXPRESION:parametros tRparen tLbracket SENTS:sen
            | tPrint:tp tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                             {: RESULT= new NodoOtrasSent(4,exp,extractLine(tp), extractColumn(tp),-1); :}
            | tPrintln:tpl tLparen EXPRESION:exp tRparen tPuntocoma                                                                                                                                          {: RESULT= new NodoOtrasSent(5,exp,extractLine(tpl), extractColumn(tpl)); :}
            | LLAMADA_FUNC:llamFunc tPuntocoma                                                                                                                                                               {: RESULT= new NodoOtrasSent(6,llamFunc,llamFunc.getLine(),llamFunc.getColumn()); :}
-           | tIn:in tLparen tRparen tPuntocoma                                                                                                                                                              {: RESULT= new NodoOtrasSent(7,extractLine(in),extractColumn(in)); :}
+           | tIn:in tLparen DEVUELTO:d tRparen tPuntocoma                                                                                                                                                   {: RESULT= new NodoOtrasSent(7,d,extractLine(in),extractColumn(in)); :}
            ;
 
+DEVUELTO ::= ID:id                                                                                                                                                                                          {: RESULT= new NodoDevuelto(id,id.getLine(),id.getColumn()); :}
+            |                                                                                                                                                                                               {: RESULT= new NodoDevuelto(); :}
+            ;
 
 // TODO
 ELSE_COND ::= tElif:elif tLparen EXPRESION:exp tRparen tLbracket SENTS:sents tRbracket  ELSE_COND:elsecond                                                                                                  {: RESULT= new NodoElse(exp,sents,elsecond,extractLine(elif),extractColumn(elif)); :}

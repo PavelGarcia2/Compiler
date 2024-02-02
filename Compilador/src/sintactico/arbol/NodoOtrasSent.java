@@ -15,6 +15,7 @@ public class NodoOtrasSent extends Nodo{
     NodoCase nodoCase;
     NodoLlamadaFunc nodoLlamadaFunc;
     NodoCaseDefault def;
+    NodoDevuelto nodoDevuelto;
 
     // IDENTIFICADOR
     int identificador;
@@ -88,9 +89,10 @@ public class NodoOtrasSent extends Nodo{
     }
 
     //In
-    public NodoOtrasSent(int diff, int l, int c) {
+    public NodoOtrasSent(int diff,NodoDevuelto nodoDevuelto, int l, int c) {
         super("OtrasSents_IN", false, l, c);
         identificador = diff;
+        this.nodoDevuelto = nodoDevuelto;
     }
 
     public int getIdentificador() {
@@ -129,6 +131,10 @@ public class NodoOtrasSent extends Nodo{
 
     public NodoCaseDefault getNodoCasoDefault() {
         return def;
+    }
+
+    public NodoDevuelto getNodoDevuelto() {
+        return nodoDevuelto;
     }
 
 }

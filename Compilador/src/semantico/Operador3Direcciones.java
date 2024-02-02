@@ -9,7 +9,7 @@ public class Operador3Direcciones{
     private Object valor;
     private int referencia = -2;
     private TipoCambio cambio;
-    int valConst = -2;
+    Integer valConst = null;
     private String operador = null;
     private String literal;
     private float valFloat = -2;
@@ -87,7 +87,7 @@ public class Operador3Direcciones{
     public String toString() {
         if(etiqueta != null){
             return "e"+etiqueta;
-        }else if(valConst != -2){
+        }else if(valConst != null){
             return valConst+"";
         }else if(referencia != -2){
             if(!proc){

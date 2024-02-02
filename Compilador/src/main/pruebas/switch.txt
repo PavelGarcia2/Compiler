@@ -1,0 +1,21 @@
+char b = 0;
+set b = 'b';
+int sasd = -2;
+
+
+main {
+    char a = 25;
+    int z = -1;
+    a = 255;
+    z = -23;
+
+    switch(a){
+        case 'a':
+            print("Hola soy a");
+        break;
+        case 'b':
+            print("Hola soy b");
+        break;
+    }
+    
+}
