@@ -5,13 +5,15 @@ int b = 1;
 main {
     
     int c = 54;
+    int i=54;
     if(a<b){
         
         print("Fuciona");
 
     }
 
-    for(int i=54; i < 0; i++){
+    
+    for(i; i < 0; i++){
 
     }
     

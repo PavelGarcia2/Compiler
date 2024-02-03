@@ -1,6 +1,6 @@
 package semantico;
 
-
+import tsimbolos.descripciones.Descripcion;
 
 public class Operador3Direcciones{
 
@@ -15,11 +15,12 @@ public class Operador3Direcciones{
     private float valFloat = -2;
     private String valString = null;
     private boolean proc;
-    private String id;
+    private String id = "";
+    private Descripcion d;
 
 
     public static enum TipoCambio{
-        INT, CHAR, BOOL, STRING;
+        INT, CHAR, BOOL, STRING, FLOAT;
     }
 
     public enum TipoI{
@@ -55,6 +56,7 @@ public class Operador3Direcciones{
         this.operador = operador;
         this.valString = valString;
         this.id=id;
+        cambio = TipoCambio.STRING;
     }
 
     public Operador3Direcciones(String id,String operador,int redundant){
@@ -62,31 +64,42 @@ public class Operador3Direcciones{
         this.id=id;
     }
 
-    public Operador3Direcciones(String id,int referencia, boolean proc){
+    public Operador3Direcciones(String id,int referencia, boolean proc, Descripcion d){
         this.tipo= TipoI.REFERENCIA;
         this.referencia = referencia;
         this.proc = proc;
         this.id=id;
+        this.d = d;
     }
 
-    public Operador3Direcciones(String id,int constante){
-        this.tipo= TipoI.REFERENCIA;
+    public Operador3Direcciones(String id,int constante, TipoCambio tipo){
+        this.tipo= TipoI.LITERAL;
         this.valConst = constante;
         this.id=id;
+        this.cambio = tipo;
     } 
 
     public Operador3Direcciones(String id,float valorFloat){
-        this.tipo= TipoI.REFERENCIA;
+        this.tipo= TipoI.LITERAL;
         this.valFloat = valorFloat;
         this.id=id;
+        this.cambio = TipoCambio.FLOAT;
     } 
 
     public String getEtiqueta(){
         return etiqueta;
     }
 
+    public void setTipoI(TipoI tipo) {
+        this.tipo = tipo;
+    }
+
     public Object getValor(){
         return valor;
+    }
+
+    public Descripcion getD() {
+        return d;
     }
 
     public int getReferencia(){

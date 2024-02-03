@@ -7,6 +7,8 @@
 ;-----------------------------------------------------------
 ; Labels to memory space reserved for variables:            
 ;-----------------------------------------------------------
+Variable0	DS.L 1
+Variable1	DS.L 1
 SParam0	DS.B 128
 	DC.B 0
 SParam1	DS.B 128
@@ -37,4 +39,19 @@ globals:
 	JMP main ; Declared all globals
 main:                                                       
 	MOVE.L A7, A6
+; Instruction of type: COPIA
+;Operator 1 -> -2, Store in -> 0
+
+	MOVE.L #1, D0 ; Load variable
+	MOVE.L D0, (Variable0) ; Store local variable
+; Instruction of type: COPIA
+;Operator 1 -> -2, Store in -> 1
+
+	MOVE.L #6, D0 ; Load variable
+	MOVE.L D0, (Variable1) ; Store local variable
+; Instruction of type: COPIA
+;Operator 1 -> 1, Store in -> 0
+
+	MOVE.L (Variable1), D0 ; Load variable
+	MOVE.L D0, (Variable0) ; Store local variable
 	END globals

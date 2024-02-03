@@ -1,0 +1,12 @@
+/*En principio funciona bien todas las variables*/
+int a;
+char car ;
+bool b;
+str x ;
+
+int arr[][] = new int[1][2]; //esto se la pela al c3d
+
+set a = 5;
+set x = "asd";
+set car = 'm';
+set b= false;

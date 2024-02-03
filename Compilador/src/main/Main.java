@@ -53,6 +53,7 @@ public class Main {
                 //System.out.println("Resultat: " + result.value);
                 //System.out.println(Semantico.getTs());
                 
+                
             } else {
                 System.out.println("No has introducido ningun archivo!");
             }

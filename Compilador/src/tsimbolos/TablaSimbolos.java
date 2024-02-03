@@ -155,6 +155,7 @@ public class TablaSimbolos {
         if(td.get(id) != null){
             return td.get(id).getDescripcion();
         }
+        //System.out.println("No lo he encotrado");
         return null;
     }
 
@@ -205,4 +206,13 @@ public class TablaSimbolos {
     //  */
     // public boolean ponerIndice(String id, Descripcion d) {
     // }
+
+  
+        public void displayTS() {
+            System.out.println("Tabla de símbolos");
+            for (String key : td.keySet()) {
+                System.out.println(key + " : " + td.get(key).toString());
+            }
+        }
+    
 }

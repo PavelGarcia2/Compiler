@@ -1,9 +1,14 @@
-int a = 2;
 
+main {    
 
-main {
-    
+    int a2=1;
+    int b2=6;
+
+    set a2 = b2;    
 }
+
+
+
 
 
 
