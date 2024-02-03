@@ -1,6 +1,5 @@
-
-
+int a[] = new int[15];
 
 main {
-
+    a[0]=2;
 }

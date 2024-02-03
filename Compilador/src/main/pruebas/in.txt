@@ -1,15 +1,16 @@
 
+
 main {
     int z;
     char x;
-    suma();
-
+    z = suma(1,2);
 }
 
 
-fun void suma(int a,int b){
-    a = 235;
-    b = 32;
+fun int suma(int a,int b){
+    int res = a + b;
+    //res = a+b;
+    return res;
 }
 
 
