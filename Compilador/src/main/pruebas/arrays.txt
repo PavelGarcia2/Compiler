@@ -1,5 +1,7 @@
-int a[] = new int[15];
+int a[][] = new int[21][2315];
 
 main {
-    a[0]=2;
+    //set a[0]=2;
+
+   // a[2]= 1;
 }

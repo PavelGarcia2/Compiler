@@ -2,6 +2,7 @@ package tsimbolos.descripciones;
 import java.util.ArrayList;
 
 import herramientas.*;
+import sintactico.arbol.NodoId;
 public class Darray extends Descripcion {
     
     private final int variableNumber;
@@ -10,6 +11,7 @@ public class Darray extends Descripcion {
     private boolean init;
     private int dimensiones;
     private ArrayList<String> bounds;
+    private NodoId nodoId;
     
     public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init) {
         super(TDesc.darray);        
@@ -20,7 +22,7 @@ public class Darray extends Descripcion {
         this.dimensiones = dimensiones;    
     }
 
-    public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init, ArrayList<String> bounds) {
+    public Darray(int variableNumber, Tipo tipus, int dimensiones, boolean init, ArrayList<String> bounds, NodoId nodoId) {
         super(TDesc.darray);        
         this.variableNumber = variableNumber;
         this.tipus = tipus;
@@ -28,11 +30,15 @@ public class Darray extends Descripcion {
         this.init = init;
         this.dimensiones = dimensiones;
         this.bounds = bounds;
+        this.nodoId = nodoId;
     }
 
+    public NodoId getNodoId() {
+        return nodoId;
+    }
     
 
-    public int getVariableNumber() {
+    public int getNv() {
         return variableNumber;
     }
 

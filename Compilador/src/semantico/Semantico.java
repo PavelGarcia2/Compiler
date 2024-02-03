@@ -314,6 +314,7 @@ public class Semantico {
                     // ts.poner(id.getNombre(), da, id);
 
                 } else {
+                    //CUANDO NO QUERAMOS HACER ASIGNACION 
                     parser.report_error("Se debe declarar el array", declaracionArray);
                 }
 
@@ -639,12 +640,21 @@ public class Semantico {
         // Hay que mirar si 2 y 3 son enteros
         // int a[][] = new int[2][3];
         NodoDimArray dimension = asign.getNodoDimArray();
+        // BOUNDS ES COMO PONER INDICE
         ArrayList<String> bounds = new ArrayList();
+        NodoDimensiones dimensiones = dimension.getNodoDimensiones();
+        int i = 0;
+
+        //anterior = gc.nuevaVar
+        //Anterior HACEMOS UN COPY DE UN 1 a anterior para poder empezar
         do {
             if (dimension.getNodoExpresion().getNodoLiteral() != null) {
                 if (dimension.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_int) {
                     parser.report_error("no se pueden asignar estas dimensiones", dimension);
                 } else {
+                  //  nuevaVar = g.nuevaVariable(null, null, false)
+                  //  g.genIntruccion(TipoInstruccion.MULTIPLICACION, anterior, Literal, nuevaVar);
+                  //  anterior = nuevaVar
                     bounds.add((dimension.getNodoExpresion().getNodoLiteral().getValor()));
                 }
             } else if (dimension.getNodoExpresion().getNodoId() != null) {
@@ -656,6 +666,9 @@ public class Semantico {
                     parser.report_error("La variable usada para declarar las dimensiones del array no es un entero",
                             dimension);
                 }
+                //  g.nuevaVariable(null, null, false)
+               // g.genIntruccion(TipoInstruccion.MULTIPLICACION, anterior, nv ID, nuevaVar);
+               //  anterior = nuevaVar
                 bounds.add((dimension.getNodoExpresion().getNodoId().getNombre()));
             } else {
                 parser.report_error("no se pueden asignar estas dimensiones", dimension);
@@ -663,13 +676,36 @@ public class Semantico {
             if (dimension.getNodoDimensiones() != null) {
                 dimension = dimension.getNodoDimensiones().getNodoDimArray();
             }
-        } while (dimension.getNodoDimensiones() != null);
+            System.out.println("ITERACION");
+            i++;
+        } while (i<dimDer);
 
+        // for (String str : bounds) {
+        //     //System.out.println("BOUNDS "+str);
+        //     //generar el 
+        //     // int nv = handleDimArray(dimArray.getNextDim(), id);
+          
+            
+        //     int variableActual;
+        //     int variableSIguiente;
+        //     g.genIntruccion(TipoInstruccion.SUMA, null, null, null);
+            
+        //     variableActual = res;
+        //     // gc.generate(InstructionType.ADD, new Operator3Address(nv), new Operator3Address(dimArray.getDim().getReference()), new Operator3Address(res));
+        // }
+        //int tamBytes;
+        //for(int j=0; j < bounds.size(); j++){
+        //     tamBytes = Integer.parseInt(bounds.get(j)) * tamBytes;
+        //}
+        
         // Hay que guardar el 2 y el 3 en alguna parte para luego poder calcular out of
         // bounds
-        // int a[][] = new int[2][3];
+        // [1][2]  
+        // int a[][] = new int[2][3]; [[1]2][3]][[4][5][6]] * 4 = 
+
         int nv = g.nuevaVariable(TipoVar.VARIABLE, dt.getTsb(), true);
-        Darray da = new Darray(nv, dt.getTsb(), dimIzq, true, bounds);
+        id.setNv(nv);
+        Darray da = new Darray(nv, dt.getTsb(), dimIzq, true, bounds, id);
         ts.poner(id.getNombre(), da, id);
     }
 
@@ -1354,7 +1390,6 @@ public class Semantico {
         // AQUI HACEMOS set arr[2] = valor;
 
         NodoDimArray antiguo;
-        //System.out.println("Evaluando el array: "+var.getNodoId().getNombre());
 
         int dim = 0;
 
@@ -1395,7 +1430,7 @@ public class Semantico {
         // hay que mirar si estamos haciendo la asignacion con las dimensiones correctas
         Darray d = (Darray) ts.consultarTD(id.getNombre());
         // System.out.println(d.getDimensiones());
-        // System.out.println(dim);
+        //System.out.println(dim);
         if (d.getDimensiones() != dim) {
             parser.report_error("Estas asignando valores a un array con las dimensiones incorrectas",
                     id);
@@ -2362,29 +2397,37 @@ public class Semantico {
         if (d == null) {
             parser.report_error("No existe el id", id);
         }
-
+        System.out.println("ENTRO POR AQUI");
         Dvar dvar = null;
         Dargin dargin = null;
+        Darray darr = null;
 
         if (d instanceof Dargin) {
             dargin = (Dargin) d;
-        }else{
-            dvar = (Dvar) d;  
-        }
+        }else if(d instanceof Darray){
+            System.out.println("ENTRO POR AQUI2.1");
+            darr = (Darray) d;
+        }else{ 
+            dvar = (Dvar) d; 
+        } 
         
        
         if (expresion.getNodoExpresion1() != null) {
-            
+            System.out.println("ENTRO POR AQUI2");
             Tipo expr = ctrlExp(expresion, false, true);
             if (dvar != null) {
                 g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNv(), false, null),
                         null,
                         new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
-            } else {
+            } else if(dargin != null){
                 // Tipo expr = ctrlExp(expresion, false, true);
                 g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNv(), false, null),
                         null, new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                 false, dargin));
+            } else {
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNv(), false, null),
+                        null, new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                false, darr));
             }
 
         } else if (expresion.getNodoLlamadaFunc() != null) {
@@ -2402,12 +2445,18 @@ public class Semantico {
                                 dfunc.getRetVal(), false, null),
                         null,
                         new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
-            } else {
+            } else if(dargin != null) {
                 g.genIntruccion(TipoInstruccion.COPIA,
                         new Operador3Direcciones(expresion.getNodoLlamadaFunc().getNodoId().getNombre(),
                                 dfunc.getRetVal(), false, null),
                         null, new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                 false, dargin));
+            }else{
+                g.genIntruccion(TipoInstruccion.COPIA,
+                new Operador3Direcciones(expresion.getNodoLlamadaFunc().getNodoId().getNombre(),
+                        dfunc.getRetVal(), false, null),
+                null, new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                        false, darr));
             }
         } else {
             
@@ -2432,7 +2481,7 @@ public class Semantico {
             // si es una constante o una variable
 
             if (expresion.getNodoLiteral() != null) {
-                
+                System.out.println("ENTRO POR AQUI2.2");
                 Tipo tipoExpr = expresion.getNodoLiteral().getTipo();
 
                 if (var == Tipo.tsb_int || var == Tipo.tsb_float) {
@@ -2466,11 +2515,16 @@ public class Semantico {
                                     null,
                                     new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(),
                                             false, dvar));
-                        } else {
+                        } else if(dargin != null){
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", vali, TipoCambio.INT),
                                     null,
                                     new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                             false, dargin));
+                        } else {
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", vali, TipoCambio.INT),
+                                    null,
+                                    new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                            false, darr));
                         }
 
                         break;
@@ -2482,11 +2536,16 @@ public class Semantico {
                                     null,
                                     new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(),
                                             false, dvar));
-                        } else {
+                        } else if(dargin != null){
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valb, TipoCambio.BOOL),
                                     null,
                                     new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                             false, dargin));
+                        } else {
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valb, TipoCambio.BOOL),
+                                    null,
+                                    new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                            false, darr));
                         }
 
                         break;
@@ -2510,11 +2569,16 @@ public class Semantico {
                                     null,
                                     new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(),
                                             false, dvar));
-                        } else {
+                        } else if(dargin != null){
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valc, TipoCambio.CHAR),
                                     null,
                                     new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                             false, dargin));
+                        } else {
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valc, TipoCambio.CHAR),
+                                    null,
+                                    new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                            false, darr));
                         }
 
                         break;
@@ -2532,10 +2596,14 @@ public class Semantico {
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valf), null,
                                     new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(),
                                             false, dvar));
-                        } else {
+                        } else if(dargin != null){
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valf), null,
                                     new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                             false, dargin));
+                        } else{
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valf), null,
+                                    new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                            false, darr));
                         }
 
                         break;
@@ -2545,10 +2613,14 @@ public class Semantico {
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, 0f), null,
                                     new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(),
                                             false, dvar));
-                        } else {
+                        } else if(dargin != null){
                             g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, 0f), null,
                                     new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                             false, dargin));
+                        } else {
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, 0f), null,
+                                    new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                            false, darr));
                         }
 
                         break;
@@ -2590,10 +2662,14 @@ public class Semantico {
                         g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre, nv, false, dt), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false,
                                         dvar));
-                    } else {
+                    } else if(dargin != null){
                         g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre, nv, false, dt), null,
                                 new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                         false, dargin));
+                    } else {
+                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre, nv, false, dt), null,
+                                new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                        false, darr));
                     }
                 } else if(d1.getTDescripcion() == Descripcion.TDesc.dargin.toString()){
                     System.out.println("HOLA");
@@ -2620,10 +2696,14 @@ public class Semantico {
                         g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre, nv, false, dt), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false,
                                         dvar));
-                    } else {
+                    } else if(dargin!=null){
                         g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre, nv, false, dt), null,
                                 new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                         false, dargin));
+                    }else{
+                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre, nv, false, dt), null,
+                                new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                                        false, darr));
                     }
                 }
             } else if (expresion.getNodoLlamadaFunc() != null) {
@@ -2654,11 +2734,16 @@ public class Semantico {
                             new Operador3Direcciones("", expresion.getNodoExpresionConNegacion().getNv(), false, null),
                             null,
                             new Operador3Direcciones(id.getNombre(), dvar.getNodoId().getNv(), false, d));
-                } else {
+                } else if(dargin!=null){
                     g.genIntruccion(TipoInstruccion.COPIA,
                             new Operador3Direcciones("", expresion.getNodoExpresionConNegacion().getNv(), false, null),
                             null,
                             new Operador3Direcciones(id.getNombre(), dargin.getNodoId().getNv(), false, d));
+                }else{
+                    g.genIntruccion(TipoInstruccion.COPIA,
+                    new Operador3Direcciones("", expresion.getNodoExpresionConNegacion().getNv(), false, null),
+                    null,
+                    new Operador3Direcciones(id.getNombre(), darr.getNodoId().getNv(), false, d)); 
                 }
 
                 // int nv;
