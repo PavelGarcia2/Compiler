@@ -9,6 +9,11 @@
 ;-----------------------------------------------------------
 Variable0	DS.L 1
 Variable1	DS.L 1
+Variable2	DS.L 1
+Variable3	DS.L 1
+Variable4	DS.L 1
+Variable5	DS.L 1
+Variable6	DS.L 1
 SParam0	DS.B 128
 	DC.B 0
 SParam1	DS.B 128
@@ -42,16 +47,81 @@ main:
 ; Instruction of type: COPIA
 ;Operator 1 -> -2, Store in -> 0
 
-	MOVE.L #1, D0 ; Load variable
+	MOVE.L #0, D0 ; Load variable
 	MOVE.L D0, (Variable0) ; Store local variable
-; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 1
+; Instruction of type: SKIP
+;, Store in -> -2
 
-	MOVE.L #6, D0 ; Load variable
+0:
+; Instruction of type: COPIA
+;Operator 1 -> 0, Store in -> 1
+
+	MOVE.L (Variable0), D0 ; Load variable
 	MOVE.L D0, (Variable1) ; Store local variable
 ; Instruction of type: COPIA
-;Operator 1 -> 1, Store in -> 0
+;Operator 1 -> -2, Store in -> 2
+
+	MOVE.L #100, D0 ; Load variable
+	MOVE.L D0, (Variable2) ; Store local variable
+; Instruction of type: IFMENOR
+;Operator 1 -> 1, Operator 2 -> t2, Store in -> 3
 
 	MOVE.L (Variable1), D0 ; Load variable
+	MOVE.L (Variable2), D1 ; Load variable
+	CMP.L D0, D1
+	BLT salto0
+	MOVE.L #0, D0 ; Load variable
+	MOVE.L D0, (Variable3) ; Store local variable
+	JMP fsalto0; Instruction of type: SKIP
+salto0:
+	MOVE.L #-1, D0 ; Load variable
+	MOVE.L D0, (Variable3) ; Store local variable
+; Instruction of type: SKIP
+fsalto0:
+
+; Instruction of type: IFTRUEGOTO
+;Operator 1 -> 3, Operator 2 -> 0, Store in -> -2
+
+	MOVE.L (Variable3), D0 ; Load variable
+	MOVE.L #-1,D1
+	CMP.L D1, D0
+	BEQ 1
+; Instruction of type: GOTO
+;, Store in -> -2
+
+	JMP 2
+; Instruction of type: SKIP
+;, Store in -> -2
+
+1:
+; Instruction of type: COPIA
+;Operator 1 -> 0, Store in -> 4
+
+	MOVE.L (Variable0), D0 ; Load variable
+	MOVE.L D0, (Variable4) ; Store local variable
+; Instruction of type: COPIA
+;Operator 1 -> -2, Store in -> 5
+
+	MOVE.L #1, D0 ; Load variable
+	MOVE.L D0, (Variable5) ; Store local variable
+; Instruction of type: SUMA
+;Operator 1 -> 4, Operator 2 -> t5, Store in -> 6
+
+	MOVE.L (Variable4), D0 ; Load variable
+	MOVE.L (Variable5), D1 ; Load variable
+	ADDM D0, D1
+	MOVE.L D1, (Variable6) ; Store local variable
+; Instruction of type: COPIA
+;Operator 1 -> 6, Store in -> 0
+
+	MOVE.L (Variable6), D0 ; Load variable
 	MOVE.L D0, (Variable0) ; Store local variable
+; Instruction of type: GOTO
+;, Store in -> -2
+
+	JMP 0
+; Instruction of type: SKIP
+;, Store in -> -2
+
+2:
 	END globals

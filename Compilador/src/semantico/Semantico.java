@@ -1435,14 +1435,14 @@ public class Semantico {
                 if (otras.getNodoExpresion() != null) {
                     ctrlExp(otras.getNodoExpresion(), false, true);
                 }
+                //System.out.println("SIGO");
 
                 String sentsWhile = g.nuevaEtiqueta();
                 String etiquetaPostWhile = g.nuevaEtiqueta();
                 g.genIntruccion(TipoInstruccion.IFTRUEGOTO, 
-                new Operador3Direcciones(otras.getNodoId().getNombre(),otras.getNodoExpresion().getNv(),false,null),
+                new Operador3Direcciones("",otras.getNodoExpresion().getNv(),false,null),
                 new Operador3Direcciones("",0, TipoCambio.INT), 
                 new Operador3Direcciones("",sentsWhile));
-
                 g.genIntruccion(TipoInstruccion.GOTO,null,null, new Operador3Direcciones("",etiquetaPostWhile));
                 g.genIntruccion(TipoInstruccion.SKIP,null,null, new Operador3Direcciones("",sentsWhile));
                 // comprobamos las sentencias
@@ -1825,14 +1825,13 @@ public class Semantico {
                 Tipo tipoTerm2 = ctrlExp(exp.getNodoExpresion2(), true, true);
                 //System.out.println("\n\nTipo termino1 " + tipoTerm1);
                 //System.out.println("Tipo termino2 " + tipoTerm2);
-                System.out.println("HOLA TENGO LOS DOS TERMINOS");
                 if (operador == TipoLog.AND || operador == TipoLog.OR) {
                     if (tipoTerm1 != Tipo.tsb_bool || tipoTerm2 != Tipo.tsb_bool) {
                         parser.report_error("Operacion booleana incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
                 }
                 if (operador == TipoLog.IGUALMAYOR || operador == TipoLog.IGUALMENOR || operador == TipoLog.MAYOR
-                        || operador == TipoLog.MENOR) {
+                || operador == TipoLog.MENOR) {
                     if ((tipoTerm1 == Tipo.tsb_int || tipoTerm1 == Tipo.tsb_float) && tipoTerm1 != tipoTerm2) {
                         parser.report_error("Operacion comparativa incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
@@ -1842,7 +1841,7 @@ public class Semantico {
                         parser.report_error("Operacion comparativa incorrecta", exp.getNodoOperador().getNodoOpLog());
                     }
                 }
-
+                
                 if (tipoTerm1 != tipoTerm2) {
                     parser.report_error("Tipos incompatibles", exp.getNodoOperador());
                 } else {
@@ -1850,9 +1849,10 @@ public class Semantico {
                     exp.setNv(nv);
                     // Tengo que coger los nv de la expresion 1 y expresion 2
                     g.generaInstruccionLogica(exp.getNodoOperador().getNodoOpLog().getTipusOpLog(),
-                            new Operador3Direcciones("", exp.getNodoExpresion1().getNv(), false, null),
-                            new Operador3Direcciones("", exp.getNodoExpresion2().getNv(), false, null),
-                            new Operador3Direcciones("", nv, false, null));
+                    new Operador3Direcciones("", exp.getNodoExpresion1().getNv(), false, null),
+                    new Operador3Direcciones("", exp.getNodoExpresion2().getNv(), false, null),
+                    new Operador3Direcciones("", nv, false, null));
+                    System.out.println("HOLA TENGO LOS DOS TERMINOS");
                     return Tipo.tsb_bool;
                 }
 
@@ -1860,7 +1860,7 @@ public class Semantico {
                 operador2 = exp.getNodoOperador().getNodoOpArit().getOpArit();
                 Tipo tipoTerm1 = ctrlExp(exp.getNodoExpresion1(), true, true);
                 Tipo tipoTerm2 = ctrlExp(exp.getNodoExpresion2(), true, true);
-
+                
                 //System.out.println("\n\nTipo termino1 " + tipoTerm1);
                 //System.out.println("Tipo termino2 " + tipoTerm2);
                 if (tipoTerm1 != tipoTerm2) {
@@ -1870,10 +1870,12 @@ public class Semantico {
                 int nv = g.nuevaVariable(TipoVar.VARIABLE, tipoTerm2, false);
                 exp.setNv(nv);
                 // Tengo que coger los nv de la expresion 1 y expresion 2
+                
                 g.generaInstruccionAritmetica(exp.getNodoOperador().getNodoOpArit().getOpArit(),
-                        new Operador3Direcciones("",exp.getNodoExpresion1().getNv(), false, null),
-                        new Operador3Direcciones("",exp.getNodoExpresion2().getNv(), false, null),
-                        new Operador3Direcciones("", nv, false, null));
+                new Operador3Direcciones("",exp.getNodoExpresion1().getNv(), false, null),
+                new Operador3Direcciones("",exp.getNodoExpresion2().getNv(), false, null),
+                new Operador3Direcciones("", nv, false, null));
+                System.out.println("HOLA TENGO LOS DOS TERMINOS ARITMETICOS");
                 // System.out.println("adios");
                 return tipoTerm1;
             }
@@ -2205,7 +2207,7 @@ public class Semantico {
 
         if (expresion.getNodoExpresion1() != null) {
             Tipo expr = ctrlExp(expresion, false, true);
-            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(expresion.getNodoId().getNombre(),expresion.getNv(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
+            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("",expresion.getNv(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
         } else if(expresion.getNodoLlamadaFunc() != null){
             //Tipo func = ctrlFunc(null);
             ctrl_LlamadaFunc(expresion.getNodoLlamadaFunc());

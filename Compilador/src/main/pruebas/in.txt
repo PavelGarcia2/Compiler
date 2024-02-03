@@ -1,11 +1,12 @@
 
 main {    
-
-    int a2=1;
-    int b2=6;
-
-    set a2 = b2;    
+    int a = 0;
+    while(a < 100){
+        a = a + 1;
+    }
 }
+
+
 
 
 
