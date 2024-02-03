@@ -13,6 +13,7 @@ import semantico.Semantico;
 import sintactico.Parser;
 
 import java.io.CharArrayReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -45,6 +46,12 @@ public class Main {
                 
                 System.out.println(args[0]);
                 input = new FileReader(args[0]);
+                //si existe el fichero tokens.txt lo borramos
+                File fichero = new File("tokens.txt");
+                if (fichero.exists()) {
+                    fichero.delete();
+                }
+
                 SymbolFactory sf = new ComplexSymbolFactory();
                 Scanner scanner = new Scanner(input);
                 Parser parser = new Parser(scanner, sf);

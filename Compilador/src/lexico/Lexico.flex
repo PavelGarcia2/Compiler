@@ -147,6 +147,7 @@ decimal     = {digito}*{punto}{digito}+
         Location esquerra = new Location(yyline+1, yycolumn+1);
         Location dreta = new Location(yyline+1, yycolumn+yytext().length()+1);
         ComplexSymbol val = new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta);
+        meterToken(ParserSym.terminalNames[type]);
         return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta, val);
     }
 
@@ -155,12 +156,25 @@ decimal     = {digito}*{punto}{digito}+
         // Sumar 1 per a que la primera línia i columna no sigui 0.
         Location esquerra = new Location(yyline+1, yycolumn+1);
         Location dreta = new Location(yyline+1, yycolumn+yytext().length()+1);
-
+        meterToken(ParserSym.terminalNames[type]);
         return new ComplexSymbol(ParserSym.terminalNames[type], type, esquerra, dreta, value);
     }
 
     private void muestraError(String lexema, int linea){
         System.out.println("ERROR: no reconocemos " + lexema + "en la linea " + linea );
+    }
+
+    private void meterToken(String token){
+        //mete el token leido en un txt 
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("tokens.txt", true));
+            writer.write(token);
+            writer.newLine();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 %}

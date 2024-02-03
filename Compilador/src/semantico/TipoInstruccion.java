@@ -5,6 +5,8 @@ public enum TipoInstruccion{
     ASIGNACION("asignacion"),
     COPIA("copia"),
     SUMA("suma"),
+    SUMARAPIDA("sumaRapida"),
+    RESTARAPIDA("restaRapida"),
     RESTA("resta"),
     MULTIPLICACION("multiplicacion"),
     DIVISION("division"),

@@ -1,10 +1,17 @@
 
-main {    
-    int a = 0;
-    while(a < 100){
-        a = a + 1;
-    }
+main {
+    int z;
+    char x;
+    suma();
+
 }
+
+
+fun void suma(int a,int b){
+    a = 235;
+    b = 32;
+}
+
 
 
 

@@ -40,4 +40,11 @@ public class TablaProcedimientos{
     public void decrementarNP(){
         np--;
     }
+
+    public void muestraTP(){
+        System.out.println("Tabla de procedimientos");
+        for(String key : tablaProcedimientos.keySet()){
+            System.out.println("ID: " + key + " Ambito: " + tablaProcedimientos.get(key).getAmbito() + " Etiqueta: " + tablaProcedimientos.get(key).getEtiquetaInicial() + " NumParams: " + tablaProcedimientos.get(key).getNumParams());
+        }
+    }
 }

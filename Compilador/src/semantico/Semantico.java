@@ -26,6 +26,7 @@ public class Semantico {
     private final TablaVariables tablaVariables;
     private final TablaProcedimientos tablaProcedimientos;
     private Codigo3Direcciones g;
+    private int varReturn;
 
     public Semantico(NodoPrograma arbol, Parser parser) {
         this.arbol = arbol;
@@ -111,12 +112,13 @@ public class Semantico {
             g.getIntrucciones().forEach(ins -> {
                 System.out.println(i.getAndIncrement() + "\t" + ins.toString());
             });
-
+            tablaProcedimientos.muestraTP();
             //Generar ensamblador
             GeneradorEnsamblado ensamblado = new GeneradorEnsamblado("ensamblado",ts, tablaVariables, tablaProcedimientos, g.getIntrucciones());
-            ensamblado.generarCodigoMain();
+           ensamblado.generarCodigoMain();
 
-            ts.displayTS();
+           ts.displayTS();
+           
 
         } else {
             parser.report_error("No hemos encontrado el main", main);
@@ -776,7 +778,8 @@ public class Semantico {
             case tsb_bool:
                 // System.out.println("LLAMO A CTRL EXP CON NODO");
                 // ctrlExp(nodo, false, true);
-                //System.out.println("ENTRO EN UNA ASIGNACION BOOLEANA");
+                System.out.println("ENTRO EN UNA ASIGNACION BOOLEANA");
+                
                 // si tipo de izquierda es bool comprobamos deerecha
                 if (nodo.getNodoLiteral() != null) {
                     if (nodo.getNodoLiteral().getTipo() != Tipo.tsb_bool) {
@@ -836,7 +839,23 @@ public class Semantico {
                     System.out.println("NV2:"+nodo.getNv());
                     g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", nodo.getNv(), false,null), null,
                            new Operador3Direcciones(id.getNombre(),id.getNv(), false,d));
+                           
+                } else if(nodo.getNodoExpresionConNegacion() != null){
+                    System.out.println("ES UNA EXPRESION CON NEGACION");
+                    ctrlExp(nodo, false, true);
+                    nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                    id.setNv(nv);
+                    d = new Dvar(nv, Tipo.tsb_bool, id);
+                    ts.poner(id.getNombre(), d, id);
+                    System.out.println("NV: "+nv);
+                    System.out.println("NV2:"+nodo.getNv());
+                    // g.genIntruccion(TipoInstruccion.NOT, null, null,
+                    //        new Operador3Direcciones("", nodo.getNodoExpresionConNegacion().getNv(), false,null));
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", nodo.getNodoExpresionConNegacion().getNv(), false,null), null,
+                           new Operador3Direcciones(id.getNombre(),id.getNv(), false,d));
                 }
+
+                
 
                 // EL 0 es provisional este 0 se tendra que pasar con c3a
 
@@ -1069,7 +1088,9 @@ public class Semantico {
         // simbolos, si no error.
         g.pushFuncionActual(func.getNodoId().getNombre());
         String etiqueta = g.nuevaEtiqueta();
-        int np = g.nuevoProcedimiento(func.getNodoId().getNombre(), ts.getAmbito(), etiqueta, 0);
+        System.out.println("AMBITO = "+ts.getAmbito());
+        System.out.println("FUNC = "+func.getNodoId().getNombre());
+        int np = g.nuevoProcedimiento(func.getNodoId().getNombre(), ts.getAmbito(), etiqueta,0);
        
 
         if (dt == null) { // NO EXISTE EL TIPO O NO ES UN TIPO
@@ -1085,7 +1106,6 @@ public class Semantico {
         if (declArray != null && !declArray.isEmpty()) { // signifca que tenemos una declaracion de array
             // ctrlDeclArray(declArray);
         }
-        System.out.println("adios");
 
         // compruebo el id
         NodoId id = func.getNodoId();
@@ -1122,6 +1142,7 @@ public class Semantico {
         // comprobar las sentencias
 
         if (func.getNodoSents() != null) {
+            //System.out.println("adios");
             ctrlSents(func.getNodoSents());
         }
 
@@ -1132,9 +1153,9 @@ public class Semantico {
         }
         int retval = -1;
         if (ret != null && !ret.isEmpty()) {
-            retval = ctrlReturn(ret, func.getNodoTipo(),np,dfunc);
+            retval = ctrlReturn(ret, func.getNodoTipo(),np,dfunc,func.getNodoId().getNombre());
         }else{
-            g.genIntruccion(TipoInstruccion.RETURN, null, null, new Operador3Direcciones("", np,true,dfunc));
+            g.genIntruccion(TipoInstruccion.RETURN, null, null, new Operador3Direcciones(func.getNodoId().getNombre(), np,true,dfunc));
         }
 
         dfunc.setRetVal(retval);
@@ -1143,7 +1164,7 @@ public class Semantico {
         return tipo.getTipo() ;
     }
 
-    public int ctrlReturn(NodoReturn ret, NodoTipo tipo, int np, DFunc dfunc) {
+    public int ctrlReturn(NodoReturn ret, NodoTipo tipo, int np, DFunc dfunc, String id) {
 
         NodoReturnParam paramReturn = ret.getNodoReturnParam();
         int nv = -1;
@@ -1162,14 +1183,14 @@ public class Semantico {
                 }
                 nv = d1.getNodoId().getNv();
                 nombre = d1.getNodoId().getNombre();
-                g.genIntruccion(TipoInstruccion.RETURN, new Operador3Direcciones(nombre, nv,false,d1), null, new Operador3Direcciones("", np,true,dfunc));
+                g.genIntruccion(TipoInstruccion.RETURN, new Operador3Direcciones(nombre, nv,false,d1), null, new Operador3Direcciones(id, np,true,dfunc));
             } else { // Es un array
                 Darray d1 = (Darray) d;
                 if (d1.getTipus() != tipo.getTipo()) {
                     parser.report_error("Tipos incompatibles", paramReturn.getNodoId());
                 }
                 //nombre = d1.getNodoId().getNombre();
-                g.genIntruccion(TipoInstruccion.RETURN, new Operador3Direcciones(nombre, nv,false,d1), null, new Operador3Direcciones("", np,true,dfunc));
+                g.genIntruccion(TipoInstruccion.RETURN, new Operador3Direcciones(nombre, nv,false,d1), null, new Operador3Direcciones(id, np,true,dfunc));
             }
             return nv;
         } else { // Es un literal
@@ -1463,15 +1484,17 @@ public class Semantico {
                 }
 
                 Descripcion d2 = ts.consultarTD(otras.getNodoId().getNombre());
+                Dvar d1 = null;
+                DConst dconst = null;
 
                 int nv2 = -1;
                 if(Descripcion.TDesc.dvar.toString() == d2.getTDescripcion()){
                     //caso variable
-                    Dvar d1 = (Dvar) d2;
+                    d1 = (Dvar) d2;
                     nv2= d1.getNodoId().getNv();
                 }else{
                     //caso constante
-                    DConst dconst = (DConst) d2;
+                    dconst = (DConst) d2;
                     nv2 = dconst.getNodoId().getNv();
                 }
                 
@@ -1502,13 +1525,29 @@ public class Semantico {
                     ctrlSents(otras.getNodoSents());
                 }
 
-                if(op==0){
-                    //restando
-                    g.genIntruccion(TipoInstruccion.RESTA,new Operador3Direcciones("",nv2,false,null), new Operador3Direcciones("", 1), new Operador3Direcciones("", nv2,false,null));                    
-                }else if(op==1){
-                    //sumando
-                    g.genIntruccion(TipoInstruccion.SUMA,new Operador3Direcciones("",nv2,false,null), new Operador3Direcciones("", 1), new Operador3Direcciones("", nv2,false,null));
-                    //i=i+1
+                if(Descripcion.TDesc.dvar.toString() == d2.getTDescripcion()){
+                   
+                    if(op==0){
+                        //restando
+                        g.genIntruccion(TipoInstruccion.RESTARAPIDA,new Operador3Direcciones("",nv2,false,d1), new Operador3Direcciones("", 1,TipoCambio.INT), new Operador3Direcciones("", nv2,false,d1));                    
+                    }else if(op==1){
+                        //sumando
+                        
+                        g.genIntruccion(TipoInstruccion.SUMARAPIDA,new Operador3Direcciones("",nv2,false,d1), new Operador3Direcciones("", 1,TipoCambio.INT), new Operador3Direcciones("", nv2,false,d1));
+                        //i=i+1
+                    }
+
+                }else{
+
+                    if(op==0){
+                        //restando
+                        g.genIntruccion(TipoInstruccion.RESTARAPIDA,new Operador3Direcciones("",nv2,false,dconst), new Operador3Direcciones("", 1,TipoCambio.INT), new Operador3Direcciones("", nv2,false,dconst));                    
+                    }else if(op==1){
+                        //sumando
+                        g.genIntruccion(TipoInstruccion.SUMARAPIDA,new Operador3Direcciones("",nv2,false,dconst), new Operador3Direcciones("", 1,TipoCambio.INT), new Operador3Direcciones("", nv2,false,dconst));
+                        //i=i+1
+                    }
+
                 }
 
                 g.genIntruccion(TipoInstruccion.GOTO,null,null, new Operador3Direcciones("", etiquetaPreFor));
@@ -1543,18 +1582,27 @@ public class Semantico {
                 }
                 //generamos los saltos a los cases
                 g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones("",ecases));
-                int nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                //int nv3 = g.nuevaVariable(TipoVar.VARIABLE,Tipo.tsb_bool,false);
+                int nv = 0;
                 Dvar d = (Dvar) ts.consultarTD(otras.getNodoId().getNombre());
                 int valc = -2;
                 int i = 0;
                 for (String ecaso : list) {
+                    
                     if(d.getTipus() == Tipo.tsb_char){
                         valc = (int) (valores.get(i).charAt(1));
-                        g.genIntruccion(TipoInstruccion.IFIGUALI, new Operador3Direcciones("", d.getNodoId().getNv(),false,d), new Operador3Direcciones("", valc), new Operador3Direcciones("",nv,false,null));
+                        int nv0 = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_char, false);
+                        g.genIntruccion(TipoInstruccion.COPIA,new Operador3Direcciones("",valc,TipoCambio.CHAR), null, new Operador3Direcciones("",nv0,false,null));
+                        nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                        g.genIntruccion(TipoInstruccion.IFIGUALI, new Operador3Direcciones("", d.getNodoId().getNv(),false,d), new Operador3Direcciones("",nv0,false,null), new Operador3Direcciones("",nv,false,null));
                     }else if(d.getTipus() == Tipo.tsb_int){
                         valc = Integer.parseInt(valores.get(i));
-                        g.genIntruccion(TipoInstruccion.IFIGUALI, new Operador3Direcciones("",d.getNodoId().getNv(),false,d), new Operador3Direcciones("",valc), new Operador3Direcciones("",nv,false,null));
+                        int nv0 = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false);
+                        g.genIntruccion(TipoInstruccion.COPIA,new Operador3Direcciones("",valc,TipoCambio.INT), null, new Operador3Direcciones("",nv0,false,null));
+                        nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                        g.genIntruccion(TipoInstruccion.IFIGUALI, new Operador3Direcciones("", d.getNodoId().getNv(),false,d), new Operador3Direcciones("",nv0,false,null), new Operador3Direcciones("",nv,false,null));
                     }else{
+                        int nv1 = g.nuevaVariable(TipoVar.VARIABLE,Tipo.tsb_char,false);
                         g.genIntruccion(TipoInstruccion.IFIGUALI, new Operador3Direcciones("",d.getNodoId().getNv(),false,d), new Operador3Direcciones(valores.get(i), 0f), new Operador3Direcciones("",nv,false,null));
                     }
                     g.genIntruccion(TipoInstruccion.IFTRUEGOTO, new Operador3Direcciones("",nv,false,null), null, new Operador3Direcciones("",ecaso));
@@ -1611,7 +1659,6 @@ public class Semantico {
                     int nv3 = dvar.getNodoId().getNv();
                     g.genIntruccion(TipoInstruccion.IN, null, null, new Operador3Direcciones("", nv3, false,dvar));
                 }
-               
                 //?¿?¿¿? setTyp char
 
                 break;
@@ -1795,15 +1842,14 @@ public class Semantico {
             }
 
         } else if (exp.getNodoExpresionConNegacion() != null) {
+            System.out.println("HE ENTRADO EN NOT");
             Tipo tipo = ctrlExp(exp.getNodoExpresionConNegacion(), false, true);
-            if (tipo != Tipo.tsb_bool) {
-                parser.report_error("No se puede negar cosas que no son bool", exp.getNodoExpresionConNegacion());
-            }
-            //
-            // obtenemos primero el id
-            // int nv = g.nuevaVariable(TipoVar.VARIABLE, exp.getNodoLiteral().getTipo(),
-            // false);
-            // exp.setNv(nv);
+            System.out.println("NV:"+exp.getNodoExpresionConNegacion().getNv());
+            exp.setNv(exp.getNodoExpresionConNegacion().getNv());
+            g.genIntruccion(TipoInstruccion.NOT, null, null,
+            new Operador3Direcciones("", exp.getNodoExpresionConNegacion().getNv(), false,null));
+                   
+
             return Tipo.tsb_bool;
 
         } else if (exp.getNodoLlamadaFunc() != null) {
@@ -1915,7 +1961,6 @@ public class Semantico {
         if (ts.consultarTD(llamadaFunc.getNodoId().getNombre()) == null) {
             parser.report_error("La funcion no existe", llamadaFunc);
         }
-
         // Vamos a pilar el nodo de la funcion correspondiente
         DFunc d = (DFunc) ts.consultarTD(llamadaFunc.getNodoId().getNombre());
         // Marcador
@@ -2068,7 +2113,8 @@ public class Semantico {
                 n4 = n4.getNodoDeclFuncParams();
             }
         }
-        g.genIntruccion(TipoInstruccion.CALL, null, null, new Operador3Direcciones("", d.getnp(),true, d));
+        //varReturn = g.nuevaVariable(TipoVar.VARIABLE, d.getTipo(), false);
+        g.genIntruccion(TipoInstruccion.CALL, new Operador3Direcciones("",d.getRetVal(),false,null), null, new Operador3Direcciones(llamadaFunc.getNodoId().getNombre(), d.getnp(),true, d));
     }
 
     public void gestionParam() {
@@ -2203,16 +2249,38 @@ public class Semantico {
         if (d == null) {
             parser.report_error("No existe el id", id);
         }
-        Dvar dvar = (Dvar) d;
+
+        Dvar dvar = null;
+        Dargin dargin = null;
+
+        if(d instanceof Dvar){
+            dvar = (Dvar) d;
+
+        }else if(d instanceof Dargin){
+            dargin = (Dargin) d;
+        }
+      
 
         if (expresion.getNodoExpresion1() != null) {
+
             Tipo expr = ctrlExp(expresion, false, true);
-            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("",expresion.getNv(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
+            if(dvar != null){
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("",expresion.getNv(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
+            }else{
+                //Tipo expr = ctrlExp(expresion, false, true);
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("",expresion.getNv(),false, null), null,new Operador3Direcciones(dargin.getNodoId().getNombre(),dargin.getNodoId().getNv(),false, dargin));
+            }
+            
         } else if(expresion.getNodoLlamadaFunc() != null){
             //Tipo func = ctrlFunc(null);
             ctrl_LlamadaFunc(expresion.getNodoLlamadaFunc());
             DFunc dfunc = (DFunc) ts.consultarTD(expresion.getNodoLlamadaFunc().getNodoId().getNombre());
-            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(expresion.getNodoLlamadaFunc().getNodoId().getNombre(),dfunc.getRetVal(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
+            //g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(expresion.getNodoLlamadaFunc().getNodoId().getNombre(),dfunc.getRetVal(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
+            if(dvar != null){
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(expresion.getNodoLlamadaFunc().getNodoId().getNombre(),dfunc.getRetVal(),false, null), null,new Operador3Direcciones(dvar.getNodoId().getNombre(),dvar.getNodoId().getNv(),false, dvar));
+            }else{
+                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(expresion.getNodoLlamadaFunc().getNodoId().getNombre(),dfunc.getRetVal(),false, null), null,new Operador3Direcciones(dargin.getNodoId().getNombre(),dargin.getNodoId().getNv(),false, dargin));
+            }
         } else {
             //System.out.println("ENTRO POR AQUI");
             // comprobar que el id existe en la tabla de simbolos
@@ -2258,14 +2326,26 @@ public class Semantico {
                         if (vali < dt.getLimiteInferior() || vali > dt.getLimiteSuperior()) {
                             parser.report_error("Has excedido los limites", expresion.getNodoLiteral());
                         }
-
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", vali, TipoCambio.INT), null,
+                        if(dvar != null){
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", vali, TipoCambio.INT), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
+                        }else{
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", vali, TipoCambio.INT), null,
+                                new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(), false, dargin));
+                        }
+                        
                         break;
                     case tsb_bool:
                         int valb = Integer.parseInt(valor);
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valb, TipoCambio.BOOL), null,
+
+                        if(dvar != null){
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valb, TipoCambio.BOOL), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
+                        }else{
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valb, TipoCambio.BOOL), null,
+                                new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(), false, dargin));
+                        }
+                        
                         break;
                     case tsb_char:
                         int valc;
@@ -2282,8 +2362,14 @@ public class Semantico {
                             parser.report_error("Has excedido los limites", expresion.getNodoLiteral());
                         }
 
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valc,TipoCambio.CHAR), null,
+                        if(dvar != null){
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valc,TipoCambio.CHAR), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
+                        }else{
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valc,TipoCambio.CHAR), null,
+                                new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(), false, dargin));
+                        }
+                        
                         break;
                     case tsb_float:
                         Float valf = Float.parseFloat(valor);
@@ -2294,12 +2380,26 @@ public class Semantico {
                         if (valf < dt2.getLimiteInfF() || valf > dt2.getLimiteSupF()) {
                             parser.report_error("Has excedido los limites", expresion.getNodoLiteral());
                         }
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valf), null,
+
+                        if(dvar != null){
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valf), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
+                        }else{
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valf), null,
+                                new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(), false, dargin));
+                        }
+                        
                         break;
                     case tsb_str:
-                        g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, 0f), null,
+
+                        if(dvar != null){
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, 0f), null,
                                 new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(),false, dvar));
+                        }else{
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, 0f), null,
+                                new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),false, dargin));
+                        }
+                        
                         break;
                 }
                 
@@ -2335,7 +2435,7 @@ public class Semantico {
                     } else if (var != tipoExpr) {
                         parser.report_error("Tipos incompatibles", expresion);
                     }
-
+                    
                     g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(nombre,nv, false, dt), null,
                                         new Operador3Direcciones(dvar.getNodoId().getNombre(), dvar.getNodoId().getNv(), false, dvar));
                 }
@@ -2359,6 +2459,28 @@ public class Semantico {
                 } else if (var != tipoExpr.getTipo()) {
                     parser.report_error("Tipos incompatibles", expresion);
                 }
+            } else if(expresion.getNodoExpresionConNegacion() != null){
+                    System.out.println("ES UNA EXPRESION CON NEGACION");
+                    ctrlExp(expresion, false, true);
+                     g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNodoExpresionConNegacion().getNv(), false,null), null,
+                           new Operador3Direcciones(id.getNombre(),dvar.getNodoId().getNv(), false,d));
+                    //int nv;
+                    //nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_bool, false);
+                    //id.setNv(nv);
+                    //d = new Dvar(nv, Tipo.tsb_bool, id);
+                    //ts.poner(id.getNombre(), d, id);
+                    //System.out.println("NV: "+nv);
+                    // Descripcion d1 = ts.consultarTD(expresion.getNodoId().getNombre().toString());
+                    // int nv = 0;
+                    // if(d1 instanceof Dvar){
+                        
+                    // }
+                    
+                    // System.out.println("NV2:"+expresion.getNv());
+                    // g.genIntruccion(TipoInstruccion.NOT, null, null,
+                    //        new Operador3Direcciones("", expresion.getNodoExpresionConNegacion().getNv(), false,null));
+                    // g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNodoExpresionConNegacion().getNv(), false,null), null,
+                    //        new Operador3Direcciones(id.getNombre(),dvar.getNodoId().getNv(), false,d));
             }
         }
 
@@ -2381,13 +2503,14 @@ public class Semantico {
             //System.out.println("Pongo la variable en ts: " + n.getNodoId().getNombre());
             int nv = g.nuevaVariable(TipoVar.VARIABLE,n.getNodoTipo().getTipo(),false);
             n.getNodoId().setNv(nv);
-            Dargin param = new Dargin(n.getNodoTipo().getTipo(),nv,false);
+            Dargin param = new Dargin(n.getNodoTipo().getTipo(),nv,false,n.getNodoId());
             ts.poner(n.getNodoId().getNombre(), param, n); //, n.getNodoId() despues del nv
             ts.ponerParam(proc,param,(DFunc) ts.consultarTD(proc));
+
         } else {
             int nv = g.nuevaVariable(TipoVar.VARIABLE,n.getNodoTipo().getTipo(),true);
             n.getNodoId().setNv(nv);
-            Dargin param = new Dargin(n.getNodoTipo().getTipo(), dimensionArr(n.getNodoDeclArray()), true);
+            Dargin param = new Dargin(n.getNodoTipo().getTipo(), dimensionArr(n.getNodoDeclArray()), true,n.getNodoId());
             ts.poner(n.getNodoId().getNombre(), param, n);
             ts.ponerParam(proc,param,(DFunc) ts.consultarTD(proc));
         }
