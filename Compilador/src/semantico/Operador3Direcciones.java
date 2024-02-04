@@ -57,6 +57,7 @@ public class Operador3Direcciones{
         this.valString = valString;
         this.id=id;
         cambio = TipoCambio.STRING;
+        this.tipo = TipoI.LITERAL;
     }
 
     public Operador3Direcciones(String id,String operador,int redundant){

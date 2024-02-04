@@ -1,0 +1,387 @@
+000206DE Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 04/02/2024 21:13:56
+
+00000000                             1      INCLUDE library/MACRO.X68
+00000000                             2              OPT     $1000
+00000000                             3              OPT     MEX
+00000000                             4  
+00000000                             5  ;A AND B, VALUE IN D1
+00000000                             6  CLRH:       MACRO
+00000000                             7              SWAP    \1
+00000000                             8              CLR.W   \1
+00000000                             9              SWAP    \1
+00000000                            10              ENDM
+00000000                            11  
+00000000                            12  ANDM:       MACRO
+00000000                            13              MOVE.L  D0, -(A7)
+00000000                            14              MOVE.L  \1, D0
+00000000                            15              MOVE.L  \2, D1
+00000000                            16              AND.L   D0, D1
+00000000                            17              MOVE.L  (A7)+, D0
+00000000                            18              ENDM
+00000000                            19  
+00000000                            20  ;A OR B, VALUE IN D1
+00000000                            21  
+00000000                            22  ORM:        MACRO
+00000000                            23              MOVE.L  D0, -(A7)
+00000000                            24              MOVE.L  \1, D0
+00000000                            25              MOVE.L  \2, D1
+00000000                            26              OR.L    D0, D1
+00000000                            27              MOVE.L  (A7)+, D0
+00000000                            28              ENDM
+00000000                            29              
+00000000                            30  ;NOT A, VALUE IN D1
+00000000                            31  
+00000000                            32  NOTM:       MACRO
+00000000                            33              MOVE.L  \1, D1
+00000000                            34              NOT.L   D1
+00000000                            35              ENDM
+00000000                            36              
+00000000                            37  ;A + B, VALUE IN D1
+00000000                            38  
+00000000                            39  ADDM:       MACRO
+00000000                            40              MOVE.L  D0, -(A7)
+00000000                            41              MOVE.L  \1, D0
+00000000                            42              MOVE.L  \2, D1
+00000000                            43              ADD.L   D0, D1
+00000000                            44              MOVE.L  (A7)+, D0
+00000000                            45              ENDM
+00000000                            46              
+00000000                            47  ;A - B, VALUE IN D1
+00000000                            48  
+00000000                            49  SUBM:       MACRO
+00000000                            50              MOVE.L  D0, -(A7)
+00000000                            51              MOVE.L  \1, D0
+00000000                            52              MOVE.L  \2, D1
+00000000                            53              SUB.L   D1, D0
+00000000                            54              MOVE.L  D0, D1
+00000000                            55              ENDM
+00000000                            56              
+00000000                            57  ;A / B, VALUE IN D1
+00000000                            58  
+00000000                            59  DIVM:       MACRO
+00000000                            60              MOVE.L  D0, -(A7)
+00000000                            61              MOVE.L  \1, D1
+00000000                            62              MOVE.L  \2, D0
+00000000                            63              DIVS    D1, D0                  ; 68K ONLY SUPPORTS WORD DIVISION
+00000000                            64              MOVE.L  D0, D1
+00000000                            65              MOVE.L  (A7)+, D0
+00000000                            66              ENDM
+00000000                            67              
+00000000                            68  ;A MOD B, VALUE IN D1
+00000000                            69  
+00000000                            70  MODM:       MACRO
+00000000                            71              MOVE.L  D0, -(A7)
+00000000                            72              MOVE.L  \1, D1
+00000000                            73              MOVE.L  \2, D0
+00000000                            74              DIVU    D1, D0
+00000000                            75              CLR.W   D0                      ; CLEAR LOWER PART
+00000000                            76              SWAP    D0                      ; MODULUS TO LOWER (UPPER IS CLEAR)
+00000000                            77              MOVE.L  D0, D1
+00000000                            78              MOVE.L  (A7)+, D0
+00000000                            79              ENDM
+00000000                            80              
+00000000                            81  ;A * B, VALUE IN D1
+00000000                            82  
+00000000                            83  MULTM:      MACRO
+00000000                            84              MOVE.L  D0, -(A7)
+00000000                            85              MOVE.L  \1, D0
+00000000                            86              MOVE.L  \2, D1
+00000000                            87              MULU    D0, D1
+00000000                            88              MOVE.L  (A7)+, D0
+00000000                            89              ENDM
+00000000                            90              
+00000000                            91  ;-A, VALUE IN D1
+00000000                            92  
+00000000                            93  NEGM:       MACRO
+00000000                            94              MOVE.L  \1, D1
+00000000                            95              NEG.L   D1
+00000000                            96              ENDM
+00000000                            97              
+00000000                            98  
+00000000                            99  
+00000000                           100  
+00000000                           101  
+00000000                           102  
+00000000                           103  
+00000000                           104  
+00000000                           105  
+00000000                           106  
+00000000                           107  -------------------- end include --------------------
+00000000                           108      INCLUDE library/CONST.X68
+00000000                           109  
+00000000  =00001000                110  MINIT   EQU $1000
+00000000                           111  
+00000000                           112  ;INSTRUCTION TYPE CONSTANTS (AS ENUMERATED IN THEIR ENUM)
+00000000                           113  ;-----------------------------------------------------------
+00000000  =00000000                114  CLONE   EQU 0
+00000000  =00000001                115  ADD     EQU 1
+00000000  =00000002                116  SUB     EQU 2
+00000000  =00000003                117  MUL     EQU 3
+00000000  =00000004                118  DIV     EQU 4
+00000000  =00000005                119  MOD     EQU 5
+00000000  =00000006                120  NEG     EQU 6
+00000000  =00000007                121  INCR    EQU 7
+00000000  =00000008                122  DECR    EQU 8
+00000000  =00000009                123  AND     EQU 9
+00000000  =0000000A                124  OR      EQU 10
+00000000  =0000000B                125  NOT     EQU 11
+00000000  =0000000C                126  EXP     EQU 12
+00000000  =0000000D                127  ASSIG   EQU 13
+00000000  =0000000E                128  SKIP    EQU 14
+00000000  =0000000F                129  GOTO    EQU 15
+00000000  =00000010                130  LT      EQU 16
+00000000  =00000011                131  LE      EQU 17
+00000000  =00000012                132  GT      EQU 18
+00000000  =00000013                133  GE      EQU 19
+00000000  =00000014                134  EQ      EQU 20
+00000000  =00000015                135  NEQ     EQU 21
+00000000  =00000016                136  INIT    EQU 22
+00000000  =00000017                137  CALL    EQU 23
+00000000  =00000018                138  RETURN  EQU 24
+00000000  =00000019                139  SIMPLE  EQU 25
+00000000  =0000001A                140  COMPLEX EQU 26
+00000000  =0000001B                141  READ    EQU 27
+00000000  =0000001C                142  PRINT   EQU 28
+00000000  =0000001D                143  PRINTLN EQU 29
+00000000                           144  ;------------------------------------------------------------------------------
+00000000                           145  
+00000000                           146  
+00000000                           147  ; --- DYNAMIC MEMORY CONSTANTS ------------------------------------------------
+00000000                           148  
+00000000  =00000400                149  DMMBSIZE    EQU     1024                    ; BLOCK SIZE (BYTES). POWER OF TWO
+00000000  =00000080                150  DMMBNUM     EQU     128                     ; NUMBER OF BLOCKS
+00000000  =00000000                151  DMMSYSID    EQU     0                       ; SYSTEM OWNER ID (MUST BE 0)
+00000000  =FFFFFFFF                152  DMMPRCID    EQU     -1                      ; -1 SO WE CAN USE 0
+00000000  =000001F6                153  PARSPACE    EQU     DMMBSIZE/2-10           ; TEMPORARELY HALF PARAMETERS
+00000000  =0000020A                154  VARSPACE    EQU     DMMBSIZE-PARSPACE       ; WE SUBSTRACT PARAMETER SPACE AND
+00000000                           155                                              ; OTHER VALUES (RETURN, BP, DISP)
+00000000                           156  
+00000000                           157  
+00000000                           158  ; --- TP CONSTANTS ------------------------------------------------------------
+00000000                           159  
+00000000  =00000028                160  VARSIZE     EQU     10*4
+00000000                           161  
+00000000                           162  ; USED FOR OFFSET PURPOUSES, AS GETTING THE CORRECT VALUE WHEN CHECKING THE TP 
+00000000                           163  
+00000000                           164  DISP        DS.L    10                      ; DISP allows 10 as max profundity ([0-9])
+00000028                           165  
+00000028                           166  
+00000028                           167  
+00000028                           168  
+00000028                           169  
+00000028                           170  
+00000028                           171  
+00000028                           172  
+00000028                           173  -------------------- end include --------------------
+00000028                           174      INCLUDE library/VAR.X68
+00000028                           175  ; --- DYNAMIC MEMORY VARIABLES ------------------------------------------------
+00000028                           176  
+00000400                           177              ORG     (*+DMMBSIZE-1)&-DMMBSIZE    ; ALIGN TO DMMBSIZE
+00000400                           178  DMMDATA     DS.B    DMMBSIZE*DMMBNUM            ; DYNAMIC MEMORY ALLOCATION SPACE
+00020400                           179              DS.W    0                           ; JUST IN CASE (SIZE IS POW OF TWO)
+00020400                           180  
+00020400                           181  
+00020400                           182  
+00020400                           183  
+00020400                           184  
+00020400                           185  
+00020400                           186  -------------------- end include --------------------
+00020400                           187  ;-----------------------------------------------------------
+00020400                           188  ;-----------------------------------------------------------
+00020400                           189  ; Initial program lines, main                               
+00020400                           190  ;-----------------------------------------------------------
+00020400                           191  ; Labels to memory space reserved for variables:            
+00020400                           192  ;-----------------------------------------------------------
+00020400                           193  Variable0   DS.L 5
+00020414                           194  Variable1   DS.L 1
+00020418                           195  Variable2   DS.L 1
+0002041C                           196  Variable3   DS.L 1
+00020420                           197  Variable4   DS.L 1
+00020424                           198  Variable5   DS.L 1
+00020428                           199  Variable6   DS.L 1
+0002042C                           200  Variable7   DS.L 1
+00020430                           201  SParam0 DS.B 128
+000204B0= 00                       202      DC.B 0
+000204B1                           203  SParam1 DS.B 128
+00020531= 00                       204      DC.B 0
+00020532                           205  SParam2 DS.B 128
+000205B2= 00                       206      DC.B 0
+000205B3                           207  SParam3 DS.B 128
+00020633= 00                       208      DC.B 0
+00020634                           209  SParam4 DS.B 128
+000206B4= 00                       210      DC.B 0
+000206B6                           211  Param0  DS.L 1
+000206BA                           212  Param1  DS.L 1
+000206BE                           213  Param2  DS.L 1
+000206C2                           214  Param3  DS.L 1
+000206C6                           215  Param4  DS.L 1
+000206CA                           216  Param5  DS.L 1
+000206CE                           217  Param6  DS.L 1
+000206D2                           218  Param7  DS.L 1
+000206D6                           219  Param8  DS.L 1
+000206DA                           220  Param9  DS.L 1
+000206DE                           221  ;-----------------------------------------------------------
+000206DE                           222      DS.W 0
+000206DE                           223  ;-----------------------------------------------------------
+000206DE                           224  globals:
+000206DE                           225  ; Instruction of type: COPIA
+000206DE                           226  ;Operator 1 -> -2, Store in -> 1
+000206DE                           227  
+000206DE  7004                     228      MOVE.L #4, D0 ; Load variable
+000206E0  23C0 00020414            229      MOVE.L D0, (Variable1) ; Store local variable
+000206E6                           230  ; Instruction of type: COPIA
+000206E6                           231  ;Operator 1 -> -2, Store in -> 3
+000206E6                           232  
+000206E6  7004                     233      MOVE.L #4, D0 ; Load variable
+000206E8  23C0 0002041C            234      MOVE.L D0, (Variable3) ; Store local variable
+000206EE                           235  ; Instruction of type: MULTIPLICACION
+000206EE                           236  ;Operator 1 -> 1, Operator 2 -> t3, Store in -> 2
+000206EE                           237  
+000206EE                           238      
+000206EE  2039 00020414            239      MOVE.L (Variable1), D0 ; Load variable
+000206F4  2239 0002041C            240      MOVE.L (Variable3), D1 ; Load variable
+000206FA                           241m     MULTM D0, D1
+000206FA  2F00                     242m             MOVE.L  D0, -(A7)
+000206FC  2000                     243m             MOVE.L  D0, D0
+000206FE  2201                     244m             MOVE.L  D1, D1
+00020700  C2C0                     245m             MULU    D0, D1
+00020702  201F                     246m             MOVE.L  (A7)+, D0
+00020704                           247m             ENDM
+00020704  23C1 00020418            248      MOVE.L D1, (Variable2) ; Store local variable
+0002070A                           249  ; Instruction of type: IND_ASS
+0002070A                           250  ;Operator 1 -> -2, Operator 2 -> t2, Store in -> 0
+0002070A                           251  
+0002070A  41F9 00020400            252      LEA (Variable0), A0
+00020710  2039 00020418            253      MOVE.L (Variable2), D0 ; Load variable
+00020716  D1C0                     254      ADD.L D0, A0 ; D0 = @A[B]
+00020718  7417                     255      MOVE.L #23, D2 ; Load variable
+0002071A  2082                     256      MOVE.L D2, (A0) ; Store C IN A[B]
+0002071C                           257  ; Instruction of type: CALL
+0002071C                           258  ;Operator 1 -> -2
+0002071C  4EF9 00020722            259      JMP main ; Declared all globals
+00020722                           260  main:                                                       
+00020722  2C4F                     261      MOVE.L A7, A6
+00020724                           262  ; Instruction of type: COPIA
+00020724                           263  ;Operator 1 -> -2, Store in -> 4
+00020724                           264  
+00020724  7000                     265      MOVE.L #0, D0 ; Load variable
+00020726  23C0 00020420            266      MOVE.L D0, (Variable4) ; Store local variable
+0002072C                           267  ; Instruction of type: COPIA
+0002072C                           268  ;Operator 1 -> -2, Store in -> 5
+0002072C                           269  
+0002072C  7004                     270      MOVE.L #4, D0 ; Load variable
+0002072E  23C0 00020424            271      MOVE.L D0, (Variable5) ; Store local variable
+00020734                           272  ; Instruction of type: COPIA
+00020734                           273  ;Operator 1 -> -2, Store in -> 7
+00020734                           274  
+00020734  7004                     275      MOVE.L #4, D0 ; Load variable
+00020736  23C0 0002042C            276      MOVE.L D0, (Variable7) ; Store local variable
+0002073C                           277  ; Instruction of type: MULTIPLICACION
+0002073C                           278  ;Operator 1 -> 5, Operator 2 -> t7, Store in -> 6
+0002073C                           279  
+0002073C  2039 00020424            280      MOVE.L (Variable5), D0 ; Load variable
+00020742  2239 0002042C            281      MOVE.L (Variable7), D1 ; Load variable
+00020748                           282m     MULTM D0, D1
+00020748  2F00                     283m             MOVE.L  D0, -(A7)
+0002074A  2000                     284m             MOVE.L  D0, D0
+0002074C  2201                     285m             MOVE.L  D1, D1
+0002074E  C2C0                     286m             MULU    D0, D1
+00020750  201F                     287m             MOVE.L  (A7)+, D0
+00020752                           288m             ENDM
+00020752  23C1 00020428            289      MOVE.L D1, (Variable6) ; Store local variable
+00020758                           290  ; Instruction of type: IND_VAL
+00020758                           291  ;Operator 1 -> 0, Operator 2 -> t6, Store in -> 4
+00020758                           292  
+00020758                           293  ; Instruction of type: PRINT
+00020758                           294  ;, Store in -> 4
+00020758                           295  
+00020758  2239 00020420            296      MOVE.L (Variable4), D1 ; Load variable
+0002075E  7003                     297      MOVE.L #3, D0 ; Prepare display
+00020760  4E4F                     298      TRAP #15
+00020762                           299   ; Expect screen visualization
+00020762                           300      END globals
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ADD                 1
+ADDM                1E8
+AND                 9
+ANDM                5A
+ASSIG               D
+CALL                17
+CLONE               0
+CLRH                0
+COMPLEX             1A
+DECR                8
+DISP                0
+DIV                 4
+DIVM                32D
+DMMBNUM             80
+DMMBSIZE            400
+DMMDATA             400
+DMMPRCID            FFFFFFFF
+DMMSYSID            0
+EQ                  14
+EXP                 C
+GE                  13
+GLOBALS             206DE
+GOTO                F
+GT                  12
+INCR                7
+INIT                16
+LE                  11
+LT                  10
+MAIN                20722
+MINIT               1000
+MOD                 5
+MODM                420
+MUL                 3
+MULTM               571
+NEG                 6
+NEGM                615
+NEQ                 15
+NOT                 B
+NOTM                1A2
+OR                  A
+ORM                 FE
+PARAM0              206B6
+PARAM1              206BA
+PARAM2              206BE
+PARAM3              206C2
+PARAM4              206C6
+PARAM5              206CA
+PARAM6              206CE
+PARAM7              206D2
+PARAM8              206D6
+PARAM9              206DA
+PARSPACE            1F6
+PRINT               1C
+PRINTLN             1D
+READ                1B
+RETURN              18
+SIMPLE              19
+SKIP                E
+SPARAM0             20430
+SPARAM1             204B1
+SPARAM2             20532
+SPARAM3             205B3
+SPARAM4             20634
+SUB                 2
+SUBM                28C
+VARIABLE0           20400
+VARIABLE1           20414
+VARIABLE2           20418
+VARIABLE3           2041C
+VARIABLE4           20420
+VARIABLE5           20424
+VARIABLE6           20428
+VARIABLE7           2042C
+VARSIZE             28
+VARSPACE            20A

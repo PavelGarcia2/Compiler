@@ -16,11 +16,12 @@ public class NodoExpresion extends Nodo{
     NodoExpresion nodoExpresion1;
     NodoExpresion nodoExpresion2;
     NodoOperador nodoOperador;
+    NodoDimArray dim;
     int valorAritmetico;
     int nv;
 
     public NodoExpresion(NodoExpresion conNegacion,NodoExpresion nodoExpresion1,NodoOperador nodoOperador,NodoExpresion nodoExpresion2, 
-    NodoId nodoId, NodoLiteral nodoLiteral, int bool, NodoLlamadaFunc nodoLlamadaFunc,int l, int c) {
+    NodoId nodoId, NodoLiteral nodoLiteral, int bool, NodoLlamadaFunc nodoLlamadaFunc, NodoDimArray dim,int l, int c) {
         super("EXPR", false, l ,c);        
         this.conNegacion = conNegacion;
         this.nodoId = nodoId;
@@ -30,6 +31,7 @@ public class NodoExpresion extends Nodo{
         this.nodoExpresion1 = nodoExpresion1;
         this.nodoExpresion2 = nodoExpresion2;
         this.nodoOperador = nodoOperador;
+        this.dim = dim;
     }
 
     public void setNv(int nv) {
@@ -78,6 +80,10 @@ public class NodoExpresion extends Nodo{
 
     public int getBool() {
         return bool;
+    }
+
+    public NodoDimArray getNodoDimArray(){
+        return dim;
     }
 
     public NodoLlamadaFunc getNodoLlamadaFunc() {

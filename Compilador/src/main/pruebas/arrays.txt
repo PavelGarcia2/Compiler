@@ -1,7 +1,9 @@
-int c[] = new int[4];
-int b = 2;
-set c[5] = 2;
+int a[] = new int[5];
+set a[4] = 23;
+
 
 main {
-
+    int b;    
+    b = a[4];
+    print(b);
 }

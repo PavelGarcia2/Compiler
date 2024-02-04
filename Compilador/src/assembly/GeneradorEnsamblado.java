@@ -141,20 +141,28 @@ public class GeneradorEnsamblado {
 
         switch (instruccion.getTipoIntruccion()) {
             case IND_ASS:
-                System.out.println("INICIO IND_ASS");
                 ensamblado.append(espacioEtiqueta + "LEA" + espacioEtiqueta + "(Variable" + instruccion.getOperadores()[2].getReferencia() + "), A0\n");
                 LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D0");
+            
                 ensamblado.append(espacioEtiqueta + "ADD.L" + espacioNormal + "D0, A0 ; D0 = @A[B]\n");
-                if((Integer)instruccion.getOperadores()[0].getReferencia() != -2){
+                
+                if(instruccion.getOperadores()[0].getReferencia() != -2){
                     LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), instruccion.getOperadores()[0].getId(), "D2");
-                   ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
+                    ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
                 }else{
-                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getValConst(), instruccion.getOperadores()[0].getId(), "D2");
-                   ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
+                    System.out.println("INICIO IND_ASS"+instruccion.getOperadores()[0].getTipo());
+                    LOAD(instruccion.getOperadores()[0], 0, null, "D2");
+                    ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
+        
                 }
                System.out.println("ACABO IND_ASS");
             break;
             case IND_VAL:
+                ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + '(' + tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getIdProcedimiento() + "), A0\n");
+                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D0");
+                ensamblado.append(espacioEtiqueta + "ADD.L" + espacioNormal + "D0, A0 ; D0 = @B[C]\n");
+                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D2");
+                ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
             break;
             case AND:
 
@@ -221,7 +229,7 @@ public class GeneradorEnsamblado {
                 Tipo tipo = null;
                 String idProd = null;
                 if (d instanceof Dvar) {
-                    System.out.println("HOLA");
+                    System.out.println("HOLA ES UNA VARIABLE");
                     //LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[2].getReferencia(), null, "D0");
                     Dvar dvar = (Dvar) d;
                     tipo = dvar.getTipus();
@@ -267,24 +275,27 @@ public class GeneradorEnsamblado {
                 break;
             case GOTO:
 
-                ensamblado.append(
-                        espacioEtiqueta + "JMP" + espacioNormal + instruccion.getOperadores()[2].getEtiqueta() + '\n');
+                ensamblado.append( espacioEtiqueta + "JMP" + espacioNormal + instruccion.getOperadores()[2].getEtiqueta() + '\n');
 
                 break;
 
             case IFDIFERENTE:
 
-                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
-                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+                 if(instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL){
+                    LOAD(instruccion.getOperadores()[0], -88, null, "D0");
+                    LOAD(instruccion.getOperadores()[1], -88, null, "D1");
+                }else{
+                    
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                    LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
+                }
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                         espacioEtiqueta + "BNE" + espacioNormal + "salto"+(eSalto)+ '\n');
 
                 LOAD(new Operador3Direcciones("", 0, TipoCambio.BOOL),instruccion.getOperadores()[2].getReferencia(),"","D0");
                 STORE("D0","",instruccion.getOperadores()[2].getReferencia());
-                ensamblado.append("\tJMP fsalto"+(eSalto)+"");
+                ensamblado.append("\tJMP fsalto"+(eSalto)+" ");
                 ensamblado.append("; Instruction of type: SKIP\n");
                 ensamblado.append("salto"+(eSalto)+":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL),instruccion.getOperadores()[2].getReferencia(),"","D0");
@@ -295,17 +306,21 @@ public class GeneradorEnsamblado {
                 break;
             case IFIGUALI:
             System.out.println("IFIGUALI");
-                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
-                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+           if(instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL){
+                    LOAD(instruccion.getOperadores()[0], -88, null, "D0");
+                    LOAD(instruccion.getOperadores()[1], -88, null, "D1");
+                }else{
+                    
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                    LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
+                }
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                         espacioEtiqueta + "BEQ" + espacioNormal  + "salto"+(eSalto)+ '\n');
 
                 LOAD(new Operador3Direcciones("", 0, TipoCambio.BOOL),instruccion.getOperadores()[2].getReferencia(),"","D0");
                 STORE("D0","",instruccion.getOperadores()[2].getReferencia());
-                ensamblado.append("\tJMP fsalto"+(eSalto)+"");
+                ensamblado.append("\tJMP fsalto"+(eSalto)+" ");
                 ensamblado.append("; Instruction of type: SKIP\n");
                 ensamblado.append("salto"+(eSalto)+":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL),instruccion.getOperadores()[2].getReferencia(),"","D0");
@@ -321,7 +336,7 @@ public class GeneradorEnsamblado {
                 //           tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
 
                 ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "#-1,D1\n");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                         espacioEtiqueta + "BEQ" + espacioNormal + instruccion.getOperadores()[2].getEtiqueta() + '\n');
                 break;
@@ -329,11 +344,15 @@ public class GeneradorEnsamblado {
             case IFMAYOR:
                 System.out.println("IFMAYOR");                
                 
-                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
-                         tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
-                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
-                         tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+               if(instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL){
+                    LOAD(instruccion.getOperadores()[0], -88, null, "D0");
+                    LOAD(instruccion.getOperadores()[1], -88, null, "D1");
+                }else{
+                    
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                    LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
+                }
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                          espacioEtiqueta + "BGT" + espacioNormal + "salto"+(eSalto)+" \n");
  
@@ -354,11 +373,15 @@ public class GeneradorEnsamblado {
 
             case IFMAYORIGUAL:
 
-                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
-                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+               if(instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL){
+                    LOAD(instruccion.getOperadores()[0], -88, null, "D0");
+                    LOAD(instruccion.getOperadores()[1], -88, null, "D1");
+                }else{
+                    
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                    LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
+                }
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                         espacioEtiqueta + "BGE" + espacioNormal +"salto"+(eSalto)+ '\n');
 
@@ -375,11 +398,17 @@ public class GeneradorEnsamblado {
                 break;
             case IFMENOR:
                 System.out.println("IFMENOR");
-                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
-                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+
+                if(instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL){
+                    LOAD(instruccion.getOperadores()[0], -88, null, "D0");
+                    LOAD(instruccion.getOperadores()[1], -88, null, "D1");
+                }else{
+                    
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                    LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
+                }
+
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                         espacioEtiqueta + "BLT" + espacioNormal +"salto"+(eSalto)+ '\n');
 
@@ -397,11 +426,15 @@ public class GeneradorEnsamblado {
 
             case IFMENORIGUAL:
 
-                LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
-                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
-                        tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D0, D1\n");
+                  if(instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL){
+                    LOAD(instruccion.getOperadores()[0], -88, null, "D0");
+                    LOAD(instruccion.getOperadores()[1], -88, null, "D1");
+                }else{
+                    
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                    LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
+                }
+                ensamblado.append(espacioEtiqueta + "CMP.L" + espacioNormal + "D1, D0\n");
                 ensamblado.append(
                         espacioEtiqueta + "BLE" + espacioNormal +"salto"+(eSalto)+ '\n');
 
@@ -548,9 +581,10 @@ public class GeneradorEnsamblado {
 
             case PRINT:
                 System.out.println("Entro prnint");
+                System.out.println("ID: "+instruccion.getOperadores()[2].getId());
                 // System.out.println(instruccion.getOperadores()[2].getId());
-                Descripcion d1 = tablaSimbolos.consultarTD(instruccion.getOperadores()[2].getId());
-                if (d1 == null) {
+                //Descripcion d1 = tablaSimbolos.consultarTD(instruccion.getOperadores()[2].getId());
+                if (instruccion.getOperadores()[2].getReferencia() == -2) {
                     // Es un literal
                     System.out.println("ES un literal");
                     switch (instruccion.getOperadores()[2].getTipoCambio()) {
@@ -617,9 +651,10 @@ public class GeneradorEnsamblado {
             case PRINTLN:
 
                 Descripcion d2 = tablaSimbolos.consultarTD(instruccion.getOperadores()[2].getId());
-                if (d2 == null) {
+               
                     // Es un literal
                     System.out.println("ES un literal");
+                if (instruccion.getOperadores()[2].getReferencia() == -2) {
                     switch (instruccion.getOperadores()[2].getTipoCambio()) {
                         case CHAR:
                             ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "#'"
@@ -736,7 +771,7 @@ public class GeneradorEnsamblado {
                 break;
 
             case SKIP:
-
+                System.out.println("Equeta de skip: "+instruccion.getOperadores()[2].getEtiqueta());
                 ensamblado.append(instruccion.getOperadores()[2].getEtiqueta() + ":\n");
 
                 break;
@@ -872,8 +907,11 @@ public class GeneradorEnsamblado {
     }
 
     private void LOAD(Operador3Direcciones literal, int variableId, String procedureId, String register) {
-        Variable variable = tablaVariables.get(variableId);
-        System.out.println("LOADING... -> " + variable.toString());
+        if(variableId != -88){
+            Variable variable = tablaVariables.get(variableId);
+            System.out.println("LOADING... -> " + variable.toString());
+        }
+
         char size = 'L';
         // Default scope of both:
         int profx = 0;
@@ -891,9 +929,9 @@ public class GeneradorEnsamblado {
         // }
         
         System.out.println("HOLA");
-       
         if (literal.getTipo() == TipoI.LITERAL) // If we have scalar value
         {
+            //System.out.println("HOLA ES TIPO STRING");
             System.out.println("HOLALit");
             switch (literal.getTipoCambio()) {
                 case INT:
@@ -909,6 +947,7 @@ public class GeneradorEnsamblado {
                             + register + " ; Load variable\n");
                     break;
                 case STRING:
+                
                     ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "Variable" + variableId + ", A0\n");
                     ensamblado.append(
                             espacioEtiqueta + "MOVE.L" + espacioNormal + "A0, " + register + " ; Load variable\n");
