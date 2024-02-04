@@ -14,6 +14,8 @@ import tsimbolos.descripciones.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.xml.transform.Source;
+
 import assembly.GeneradorEnsamblado;
 
 /**
@@ -27,6 +29,7 @@ public class Semantico {
     private final TablaProcedimientos tablaProcedimientos;
     private Codigo3Direcciones g;
     private int varReturn;
+    Optimizaciones optimizacion;
 
     public Semantico(NodoPrograma arbol, Parser parser) {
         this.arbol = arbol;
@@ -114,10 +117,53 @@ public class Semantico {
             });
             tablaProcedimientos.muestraTP();
             // Generar ensamblador
-            GeneradorEnsamblado ensamblado = new GeneradorEnsamblado("ensamblado", ts, tablaVariables,
-                    tablaProcedimientos, g.getIntrucciones());
-            ensamblado.generarCodigoMain();
+           // GeneradorEnsamblado ensamblado = new GeneradorEnsamblado("ensamblado", ts, tablaVariables,tablaProcedimientos, g.getIntrucciones());
+            //ensamblado.generarCodigoMain();
 
+
+          System.out.println("Empiezo las optimizaciones\n\n\n");
+           optimizacion= new Optimizaciones(g);
+
+           boolean cambio = true;
+               while (cambio) {
+                   cambio = false;
+                   if (optimizacion.asignacionesDiferidas()) {
+                       cambio = true;
+                   }
+                   if (optimizacion.bracamentsAdjacents()) {
+                       cambio = true;
+                   }
+                   if (optimizacion.bracamentsSobreBrancaments()) {
+                       cambio = true;
+                   }
+                //    if (optimizacion.operacioConstant1()) {
+                //        cambio = true;
+                //    }
+                //    if (optimizacion.operacioConstant2()) {
+                //        cambio = true;
+                //    }
+                //    if (optimizacion.codiInaccesible1()) {
+                //        cambio = true;
+                //    }
+                //    if (optimizacion.codiInaccesible2()) {
+                //        cambio = true;
+                //    }
+               }
+                System.out.println("CD3 OPTIMIZADO");
+
+                System.out.println("Genero el ensamblado optimizado\n\n");
+               //ensamblado = new GeneradorEnsamblado("ensamblado_Optimizado", ts, tablaVariables,tablaProcedimientos, g.getIntrucciones());
+               //ensamblado.generarCodigoMain();
+           
+            
+           System.out.println("CD3 OPTIMIZADO");
+
+           AtomicInteger i2 = new AtomicInteger(0);
+           optimizacion.getIntrucciones().forEach(ins -> {
+               System.out.println(i2.getAndIncrement() + "\t" + ins.toString());
+           });
+
+           System.out.println("\n\n\n\nContenido de la tabla de simbolos");
             ts.displayTS();
 
         } else {
