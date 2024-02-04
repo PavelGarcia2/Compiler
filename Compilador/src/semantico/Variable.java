@@ -11,18 +11,24 @@ public class Variable{
     private final Tipo tipo;
     private final boolean esArray;
     private int dimension;
+    private int size;
 
     public enum TipoVar{
         PARAMETRO, VARIABLE;
     }
 
-    public Variable(String nombre, TipoVar tipoVar, String idProcedimiento, Tipo tipo, boolean esArray, int bytes){
+    public Variable(String nombre, TipoVar tipoVar, String idProcedimiento, Tipo tipo, boolean esArray, int bytes, int size){
         this.nombre = nombre;
         this.tipoVar = tipoVar;
         this.idProcedimiento = idProcedimiento;
         this.tipo = tipo;
         this.esArray = esArray;
         this.bytes = bytes;
+        this.size = size;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public String getNombre(){

@@ -76,7 +76,7 @@ public class GeneradorEnsamblado {
             } else {
                 if (tablaVariables.get(i).esArray()) {
                     ensamblado.append(
-                            tablaVariables.get(i).getNombre() + espacioEtiqueta + "DS.L" + espacioNormal + 15 + "\n");
+                            tablaVariables.get(i).getNombre() + espacioEtiqueta + "DS.L" + espacioNormal + tablaVariables.get(i).getSize() + "\n");
                 } else {
                     ensamblado.append(
                             tablaVariables.get(i).getNombre() + espacioEtiqueta + "DS.L" + espacioNormal + "1\n");

@@ -33,6 +33,10 @@ public class Darray extends Descripcion {
         this.nodoId = nodoId;
     }
 
+    public ArrayList<String> getBounds() {
+        return bounds;
+    }
+
     public NodoId getNodoId() {
         return nodoId;
     }

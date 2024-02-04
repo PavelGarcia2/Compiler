@@ -32,6 +32,8 @@ public enum TipoInstruccion{
     SKIP("skip"),
     PARAM_SIMPLE("param_s"),
     PARAM_COMPOST("param_c"),
+    IND_VAL("ind_val"),
+    IND_ASS("ind_ass")
     ;
 
 

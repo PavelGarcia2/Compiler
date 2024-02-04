@@ -30,8 +30,8 @@ public class Codigo3Direcciones {
         return ""+contadorEtiquetas++;
     }
 
-    public int nuevaVariable(TipoVar tipoVar,Tipo tipo,boolean esArray){
-        tablaVariables.put(new Variable((variable + tablaVariables.getNV()),tipoVar,getFuncionActual(),tipo,esArray,tipo.getBytes()));
+    public int nuevaVariable(TipoVar tipoVar,Tipo tipo,boolean esArray,int size){
+        tablaVariables.put(new Variable((variable + tablaVariables.getNV()),tipoVar,getFuncionActual(),tipo,esArray,tipo.getBytes(),size));
         return tablaVariables.getNV()-1;
     }
 
