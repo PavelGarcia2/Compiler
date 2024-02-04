@@ -140,6 +140,22 @@ public class GeneradorEnsamblado {
     public void generaInstruccion(Intruccion3Direcciones instruccion) {
 
         switch (instruccion.getTipoIntruccion()) {
+            case IND_ASS:
+                System.out.println("INICIO IND_ASS");
+                ensamblado.append(espacioEtiqueta + "LEA" + espacioEtiqueta + "(Variable" + instruccion.getOperadores()[2].getReferencia() + "), A0\n");
+                LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(), tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D0");
+                ensamblado.append(espacioEtiqueta + "ADD.L" + espacioNormal + "D0, A0 ; D0 = @A[B]\n");
+                if((Integer)instruccion.getOperadores()[0].getReferencia() != -2){
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(), instruccion.getOperadores()[0].getId(), "D2");
+                   ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
+                }else{
+                    LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getValConst(), instruccion.getOperadores()[0].getId(), "D2");
+                   ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
+                }
+               System.out.println("ACABO IND_ASS");
+            break;
+            case IND_VAL:
+            break;
             case AND:
 
                 LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
@@ -230,10 +246,10 @@ public class GeneradorEnsamblado {
                     isString = true;
                 }
 
-                System.out.println("PETA");
+            
                 STORE("D0", null, instruccion.getOperadores()[2].getReferencia());
                 isString = false;
-
+                System.out.println("ACABO COPIA");
                 break;
             case DIVISION:
 
@@ -428,11 +444,13 @@ public class GeneradorEnsamblado {
 
             case MULTIPLICACION:
 
+                System.out.println("INICIO MULT");
                 LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
                         tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D0");
+                       
                 LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
                         tablaVariables.get(instruccion.getOperadores()[1].getReferencia()).getIdProcedimiento(), "D1");
-
+                        
                 ensamblado.append(espacioEtiqueta + "MULTM" + espacioNormal + "D0, D1\n");
 
                 STORE("D1", tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getIdProcedimiento(),

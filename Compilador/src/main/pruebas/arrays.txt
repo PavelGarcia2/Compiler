@@ -1,11 +1,7 @@
-int c[][] = new int[2][4];
+int c[] = new int[4];
+int b = 2;
+set c[5] = 2;
 
 main {
-    int a = 0;
-    int b = 2;
-    int res;
-    res = a + b;
-   // set a[0][1]=2;
 
-   // a[2]= 1;
 }

@@ -7,13 +7,11 @@
 ;-----------------------------------------------------------
 ; Labels to memory space reserved for variables:            
 ;-----------------------------------------------------------
-Variable0	DS.L 8
+Variable0	DS.L 4
 Variable1	DS.L 1
 Variable2	DS.L 1
 Variable3	DS.L 1
 Variable4	DS.L 1
-Variable5	DS.L 1
-Variable6	DS.L 1
 SParam0	DS.B 128
 	DC.B 0
 SParam1	DS.B 128
@@ -38,47 +36,40 @@ Param9	DS.L 1
 	DS.W 0
 ;-----------------------------------------------------------
 globals:
-; Instruction of type: CALL
-;Operator 1 -> -2
-
-	JMP main ; Declared all globals
-main:                                                       
-	MOVE.L A7, A6
 ; Instruction of type: COPIA
 ;Operator 1 -> -2, Store in -> 1
 
-	MOVE.L #0, D0 ; Load variable
+	MOVE.L #2, D0 ; Load variable
 	MOVE.L D0, (Variable1) ; Store local variable
 ; Instruction of type: COPIA
 ;Operator 1 -> -2, Store in -> 2
 
-	MOVE.L #2, D0 ; Load variable
+	MOVE.L #5, D0 ; Load variable
 	MOVE.L D0, (Variable2) ; Store local variable
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 3
+;Operator 1 -> -2, Store in -> 4
 
-	MOVE.L #0, D0 ; Load variable
-	MOVE.L D0, (Variable3) ; Store local variable
-; Instruction of type: COPIA
-;Operator 1 -> 1, Store in -> 4
-
-	MOVE.L (Variable1), D0 ; Load variable
+	MOVE.L #4, D0 ; Load variable
 	MOVE.L D0, (Variable4) ; Store local variable
-; Instruction of type: COPIA
-;Operator 1 -> 2, Store in -> 5
+; Instruction of type: MULTIPLICACION
+;Operator 1 -> 2, Operator 2 -> t4, Store in -> 3
 
+	JMP main ; Declared all globals
 	MOVE.L (Variable2), D0 ; Load variable
-	MOVE.L D0, (Variable5) ; Store local variable
-; Instruction of type: SUMA
-;Operator 1 -> 4, Operator 2 -> t5, Store in -> 6
+	MOVE.L (Variable4), D1 ; Load variable
+	MULTM D0, D1
+	MOVE.L D1, (Variable3) ; Store local variable
+; Instruction of type: IND_ASS
+;Operator 1 -> -2, Operator 2 -> t3, Store in -> 0
 
-	MOVE.L (Variable4), D0 ; Load variable
-	MOVE.L (Variable5), D1 ; Load variable
-	ADDM D0, D1
-	MOVE.L D1, (Variable6) ; Store local variable
-; Instruction of type: COPIA
-;Operator 1 -> 6, Store in -> 3
+	LEA	(Variable0), A0
+	MOVE.L (Variable3), D0 ; Load variable
+	ADD.L D0, A0 ; D0 = @A[B]
+	MOVE.L #2, D2 ; Load variable
+	MOVE.L D2, (A0) ; Store C IN A[B]
+; Instruction of type: CALL
+;Operator 1 -> -2
 
-	MOVE.L (Variable6), D0 ; Load variable
-	MOVE.L D0, (Variable3) ; Store local variable
+main:                                                       
+	MOVE.L A7, A6
 	END globals

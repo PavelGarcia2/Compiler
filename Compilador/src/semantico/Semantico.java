@@ -527,100 +527,245 @@ public class Semantico {
                 // System.out.println("Evaluando el array: "+var.getNodoId().getNombre());
 
                 int dim = 0;
+                int offsetNv;
 
-                do {
-                    dim++;
-                    if (dimension.getNodoExpresion().getNodoLiteral() != null) {
+                //Vamos a necesitar los bounds del array
+                Darray da = (Darray) ts.consultarTD(var.getNodoId().getNombre());
+                ArrayList<String> bounds = da.getBounds();
+                
+                //Obtenemos el primer desplazamiento
+                if(bounds.size() > 1){
+
+                    int t1;
+                    if(dimension.getNodoExpresion().getNodoLiteral() != null){
+                        //El primer desplazamiento es un entero
                         if (dimension.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_int) {
                             parser.report_error("No se pueden asignar array de esta forma",
                                     dimension.getNodoExpresion().getNodoLiteral());
                         }
-                    } else if (dimension.getNodoExpresion().getNodoId() != null) {
-                        // System.out.println("ENtro en id " +
-                        // dimension.getNodoExpresion().getNodoId().getNombre());
-                        Dvar d = (Dvar) ts
-                                .consultarTD(dimension.getNodoExpresion().getNodoId().getNombre());
+                        t1 = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false,1);
+                        int i1 = Integer.parseInt(dimension.getNodoExpresion().getNodoLiteral().getValor());
+                        int d2 = Integer.parseInt(bounds.get(1));
+                        g.genIntruccion(TipoInstruccion.MULTIPLICACION, new Operador3Direcciones("", i1, TipoCambio.INT), new Operador3Direcciones("", d2, TipoCambio.INT), new Operador3Direcciones("", t1,false,null));
+                    }
+    
+                    for(int i=0;i<bounds.size();i++){
+                        
+                    }
 
-                        if (d == null) {
+
+                } else {
+                    //M99
+                    //El array es de solo una dimension el desplazamiento se calcula diferente
+                    if(dimension.getNodoDimensiones() != null){
+                        parser.report_error("Dimensiones incorrectas", dimension.getNodoDimensiones());
+                    }
+                    int t1 = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false,1);
+                    int i = 0;
+                    if(dimension.getNodoExpresion().getNodoLiteral() != null){
+                        // t1 = i – li en nuestro caso li 0
+                        compruebaInt(dimension.getNodoExpresion().getNodoLiteral().getTipo(), dimension.getNodoExpresion().getNodoLiteral());
+                        i = Integer.parseInt(dimension.getNodoExpresion().getNodoLiteral().getValor());
+                    }else if(dimension.getNodoExpresion().getNodoId() != null){
+                        Descripcion d = ts.consultarTD(dimension.getNodoExpresion().getNodoId().getNombre());
+                        if(d == null){
                             parser.report_error("La variable utilizada para asignar en el array no existe",
                                     dimension.getNodoExpresion().getNodoId());
                         }
-
-                        if (d.getTipus() != Tipo.tsb_int) {
-                            parser.report_error(
-                                    "La variable utilizada para asignar en un array no es del tipo correcto",
-                                    dimension.getNodoExpresion().getNodoId());
+                        if(d instanceof Dvar){
+                            Dvar dvar = (Dvar) d;
+                            compruebaInt(dvar.getTipus(), dimension.getNodoExpresion().getNodoId());
+                        }else if(d instanceof Dargin){
+                            Dargin dargin = (Dargin) d;
+                            compruebaInt(dargin.getTipus(), dimension.getNodoExpresion().getNodoId());
+                        }else if(d instanceof DConst){
+                            DConst dconst = (DConst) d;
+                            compruebaInt(dconst.getTipo(), dimension.getNodoExpresion().getNodoId());
                         }
-                    } else if (dimension.getNodoExpresion().getNodoExpresion1() != null) {
-                        Tipo asign = ctrlExp(dimension.getNodoExpresion(), false, true);
-                        if (asign != Tipo.tsb_int) {
-                            parser.report_error(
-                                    "La variable utilizada para asignar en un array no es del tipo correcto",
-                                    dimension.getNodoExpresion().getNodoId());
+
+                        i = dimension.getNodoExpresion().getNodoId().getNv();
+
+                    } else if(dimension.getNodoExpresion().getNodoExpresion1() != null){
+                        Tipo tipoExpr = ctrlExp(dimension.getNodoExpresion(), false, false);
+                        compruebaInt(tipoExpr, dimension.getNodoExpresion());
+                        i = dimension.getNodoExpresion().getNv();
+                    }
+                    g.genIntruccion(TipoInstruccion.COPIA,  new Operador3Direcciones("", i, TipoCambio.INT), null, new Operador3Direcciones("", t1,false,null));
+                    //Aqui ya tenemos t1
+
+                    // t2 = t1 * nbytes en t2 tendremos el desplazamiento
+                    int t2 = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false,1);
+                    // Aqui hacemos t2 = t1 * 4
+                    int auxBytes = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false, 1);
+                    g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", 4, TipoCambio.INT), null, new Operador3Direcciones("", auxBytes,false,null));
+                    g.genIntruccion(TipoInstruccion.MULTIPLICACION, new Operador3Direcciones("", t1,false,null), new Operador3Direcciones("", auxBytes,false,null),new Operador3Direcciones("", t2,false,null));
+
+                    //Ahora que tenemos el desplazamiento en t2 ya podemos hacer la asignacion
+                    NodoExpresion nodoExpresion = var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion();
+                    Tipo tipoArr = ((Darray) ts.consultarTD(id.getNombre())).getTipus();
+
+                    if(nodoExpresion.getNodoLiteral() != null){
+                        //Estamos asignando un literal al array
+                        compruebaCompatibles(tipoArr, nodoExpresion.getNodoLiteral().getTipo(), nodoExpresion);
+                        switch(tipoArr){
+                            case tsb_char:
+                            int valor = (int) nodoExpresion.getNodoLiteral().getValor().charAt(1);
+                                g.genIntruccion(TipoInstruccion.IND_ASS, new Operador3Direcciones("", valor,TipoCambio.CHAR), new Operador3Direcciones("", t2,false,null), new Operador3Direcciones(id.getNombre(),id.getNv(), false,null));
+                            break;
+                            case tsb_int:
+                                g.genIntruccion(TipoInstruccion.IND_ASS, new Operador3Direcciones("", Integer.parseInt(nodoExpresion.getNodoLiteral().getValor()),TipoCambio.INT), new Operador3Direcciones("", t2,false,null), new Operador3Direcciones(id.getNombre(),id.getNv(), false,null));
+                            break;
+                            case tsb_bool:
+                                g.genIntruccion(TipoInstruccion.IND_ASS, new Operador3Direcciones("", Integer.parseInt(nodoExpresion.getNodoLiteral().getValor()),TipoCambio.BOOL), new Operador3Direcciones("", t2,false,null), new Operador3Direcciones(id.getNombre(),id.getNv(), false,null));
+                            break;
                         }
+
+                    } else if(nodoExpresion.getNodoId() != null){
+                        Descripcion d = ts.consultarTD(nodoExpresion.getNodoId().getNombre());
+                        if(d == null){
+                            parser.report_error("La variable utilizada para asignar en el array no existe",
+                            nodoExpresion.getNodoId());
+                        }
+                        Tipo tipoId = null;
+                        int nv = 0;
+                        if(d instanceof Dvar){
+                            tipoId = ((Dvar) d).getTipus();
+                            nv = ((Dvar) d).getNodoId().getNv();
+                        }else if(d instanceof Dargin){
+                            tipoId = ((Dargin) d).getTipus();
+                            nv = ((Dargin) d).getNodoId().getNv();
+                        }else if(d instanceof DConst){
+                            tipoId = ((DConst) d).getTipo();
+                            nv = ((DConst) d).getNodoId().getNv();
+                        }
+                        //System.out.println(nodoExpresion.getNodoId().getNv());
+                        compruebaCompatibles(tipoArr, tipoId, nodoExpresion.getNodoId());
+                        g.genIntruccion(TipoInstruccion.IND_ASS, new Operador3Direcciones(nodoExpresion.getNodoId().getNombre(),nv,false,null), new Operador3Direcciones("", t2,false,null), new Operador3Direcciones(id.getNombre(),id.getNv(), false,null));
+                        //Si llegamos aqui los tipos son compatibles pasamos a hacer la asignacion
+                    } else if(nodoExpresion.getNodoExpresion1() != null){
+                        Tipo expr = ctrlExp(nodoExpresion, false, true);
+                        compruebaCompatibles(tipoArr, expr, nodoExpresion);
+                        g.genIntruccion(TipoInstruccion.IND_ASS, new Operador3Direcciones("",nodoExpresion.getNv(),false,null), new Operador3Direcciones("", t2,false,null), new Operador3Direcciones(id.getNombre(),id.getNv(), false,null));
                     }
-
-                    antiguo = dimension;
-
-                    if (dimension.getNodoDimensiones() != null) {
-                        dimension = dimension.getNodoDimensiones().getNodoDimArray();
-                    }
-
-                } while (antiguo.getNodoDimensiones() != null);
-
-                // hay que mirar si estamos haciendo la asignacion con las dimensiones correctas
-                Darray d = (Darray) ts.consultarTD(var.getNodoId().getNombre());
-                // System.out.println(d.getDimensiones());
-                // System.out.println(dim);
-                if (d.getDimensiones() != dim) {
-                    parser.report_error("Estas asignando valores a un array con las dimensiones incorrectas",
-                            var.getNodoId());
                 }
+               
 
-                // Ahora comprobamos que el valor de la expresion sea el compatible con la parte
-                // izquierda
+                // do {
+                //     dim++;
+                //     if (dimension.getNodoExpresion().getNodoLiteral() != null) {
+                //         if (dimension.getNodoExpresion().getNodoLiteral().getTipo() != Tipo.tsb_int) {
+                //             parser.report_error("No se pueden asignar array de esta forma",
+                //                     dimension.getNodoExpresion().getNodoLiteral());
+                //         }
+                //     } else if (dimension.getNodoExpresion().getNodoId() != null) {
+                //         // System.out.println("ENtro en id " +
+                //         // dimension.getNodoExpresion().getNodoId().getNombre());
+                //         Dvar d = (Dvar) ts
+                //                 .consultarTD(dimension.getNodoExpresion().getNodoId().getNombre());
+
+                //         if (d == null) {
+                //             parser.report_error("La variable utilizada para asignar en el array no existe",
+                //                     dimension.getNodoExpresion().getNodoId());
+                //         }
+
+                //         if (d.getTipus() != Tipo.tsb_int) {
+                //             parser.report_error(
+                //                     "La variable utilizada para asignar en un array no es del tipo correcto",
+                //                     dimension.getNodoExpresion().getNodoId());
+                //         }
+                //     } else if (dimension.getNodoExpresion().getNodoExpresion1() != null) {
+                //         Tipo asign = ctrlExp(dimension.getNodoExpresion(), false, true);
+                //         if (asign != Tipo.tsb_int) {
+                //             parser.report_error(
+                //                     "La variable utilizada para asignar en un array no es del tipo correcto",
+                //                     dimension.getNodoExpresion().getNodoId());
+                //         }
+                //     }
+
+                //     antiguo = dimension;
+
+                //     if (dimension.getNodoDimensiones() != null) {
+                //         dimension = dimension.getNodoDimensiones().getNodoDimArray();
+                //     }
+
+                // } while (antiguo.getNodoDimensiones() != null);
+
+                // // hay que mirar si estamos haciendo la asignacion con las dimensiones correctas
+                // Darray d = (Darray) ts.consultarTD(var.getNodoId().getNombre());
+                // // System.out.println(d.getDimensiones());
+                // // System.out.println(dim);
+                // if (d.getDimensiones() != dim) {
+                //     parser.report_error("Estas asignando valores a un array con las dimensiones incorrectas",
+                //             var.getNodoId());
+                // }
                 // TO-DO Permitir meter char en ints, floats en ints e ints en floats
-                if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
-                        .getNodoLiteral() != null) {
-                    if (d.getTipus() != var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
-                            .getNodoExpresion().getNodoLiteral().getTipo()) {
-                        parser.report_error("Valores no compatibles", var.getNodoAsignacion().getNodoTipoAsignacion()
-                                .getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral());
-                    }
-                    System.out.println("HOLA estoy en set LITERAL arrays");
-                    //NodoDimArray dimension = var.getNodoDimArray();
-                    //g.genIntruccion(TipoInstruccion.IND_ASS, literal, new Operador3Direcciones(null, dim,), new Operador3Direcciones(var.getNodoId().getNombre(), var.getNodoId().getNv(),false,d));
-                    switch(d.getTipus()){
-                        case tsb_int:
+                //COMO HACER ARRAYS
+                //TENEMOS QUE HACER INDEX ASIGNAT IND_ASS
+                //ANTES TENEMOS QUE CALCULAR EL DESPLAzAMIENTO
+                // z[i1][i2][i3]
+                // i1 Obtenir el primer desplaçament
+                // t1 = i1 * d2
+                // t2 = t1 + i2
+                // -------------------------
+                // t3 = t2 * d3
+                // t4 = t3 + i3
+                // Això es repeteix per a cada dimensió
+                //--------------------------
+                // t5 = t4 - b
+                // t6 = t5 * nbytes Al final de totes les dimensions
+                // Necesitamos saber i1, i2, i3 hay que cambiar la gramatica
+                // int offsetNv = calcularOffset(darr.getBounds(),nodoDim,bytesTipo);
+                // Como nuestros array son de long que creo que son 4 bytes siempre pasaremos 4 bytes en bytesTipo
+                // Al haber calculado el offset ya podemos hacer
+                // ind_ass | valorAasignar | offsetNv | zNv |
+                // que hará un LEA de z y luego aplicara el offset y le dará valorAasignar
+
+                //calcularOffset(var.getNodoDimArray(),);
+
+
+
+                // if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
+                //         .getNodoLiteral() != null) {
+                //     if (d.getTipus() != var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                //             .getNodoExpresion().getNodoLiteral().getTipo()) {
+                //         parser.report_error("Valores no compatibles", var.getNodoAsignacion().getNodoTipoAsignacion()
+                //                 .getNodoAsignacionNormal().getNodoExpresion().getNodoLiteral());
+                //     }
+                //     System.out.println("HOLA estoy en set LITERAL arrays");
+                //     //M100
+                //     //NodoDimArray dimension = var.getNodoDimArray();
+                //     //g.genIntruccion(TipoInstruccion.IND_ASS, literal, new Operador3Direcciones(null, dim,), new Operador3Direcciones(var.getNodoId().getNombre(), var.getNodoId().getNv(),false,d));
+                //     switch(d.getTipus()){
+                //         case tsb_int:
                             
-                        break;
-                        case tsb_bool:
+                //         break;
+                //         case tsb_bool:
 
-                        break;
-                        case tsb_char:
+                //         break;
+                //         case tsb_char:
 
-                        break;
-                    }
+                //         break;
+                //     }
 
-                } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
-                        .getNodoId() != null) {
-                    Dvar d2 = (Dvar) ts.consultarTD(var.getNodoAsignacion().getNodoTipoAsignacion()
-                            .getNodoAsignacionNormal().getNodoExpresion().getNodoId().getNombre());
-                    if (d2.getTipus() != d.getTipus()) {
-                        parser.report_error("Valores no compatibles", var.getNodoAsignacion().getNodoTipoAsignacion()
-                                .getNodoAsignacionNormal().getNodoExpresion().getNodoId());
-                    }
-                } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
-                        .getNodoExpresion1() != null) {
-                    Tipo tipo = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
-                            .getNodoExpresion(), false, false);
-                    if (tipo != d.getTipus()) {
-                        parser.report_error("Valores no compatibles",
-                                var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
-                                        .getNodoExpresion()
-                                        .getNodoExpresion1());
-                    }
-                }
+                // } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
+                //         .getNodoId() != null) {
+                //     Dvar d2 = (Dvar) ts.consultarTD(var.getNodoAsignacion().getNodoTipoAsignacion()
+                //             .getNodoAsignacionNormal().getNodoExpresion().getNodoId().getNombre());
+                //     if (d2.getTipus() != d.getTipus()) {
+                //         parser.report_error("Valores no compatibles", var.getNodoAsignacion().getNodoTipoAsignacion()
+                //                 .getNodoAsignacionNormal().getNodoExpresion().getNodoId());
+                //     }
+                // } else if (var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal().getNodoExpresion()
+                //         .getNodoExpresion1() != null) {
+                //     Tipo tipo = ctrlExp(var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                //             .getNodoExpresion(), false, false);
+                //     if (tipo != d.getTipus()) {
+                //         parser.report_error("Valores no compatibles",
+                //                 var.getNodoAsignacion().getNodoTipoAsignacion().getNodoAsignacionNormal()
+                //                         .getNodoExpresion()
+                //                         .getNodoExpresion1());
+                //     }
+                // }
             }
         }
     }
@@ -2447,30 +2592,11 @@ public class Semantico {
                         null, new Operador3Direcciones(dargin.getNodoId().getNombre(), dargin.getNodoId().getNv(),
                                 false, dargin));
             } else {
-                //COMO HACER ARRAYS
-                //TENEMOS QUE HACER INDEX ASIGNAT IND_ASS
-                //ANTES TENEMOS QUE CALCULAR EL DESPLAzAMIENTO
-                // z[i1][i2][i3]
-                // i1 Obtenir el primer desplaçament
-                // t1 = i1 * d2
-                // t2 = t1 + i2
-                // -------------------------
-                // t3 = t2 * d3
-                // t4 = t3 + i3
-                // Això es repeteix per a cada dimensió
-                //--------------------------
-                // t5 = t4 - b
-                // t6 = t5 * nbytes Al final de totes les dimensions
-                // Necesitamos saber i1, i2, i3 hay que cambiar la gramatica
-                // int offsetNv = calcularOffset(darr.getBounds(),nodoDim,bytesTipo);
-                // Como nuestros array son de long que creo que son 4 bytes siempre pasaremos 4 bytes en bytesTipo
-                // Al haber calculado el offset ya podemos hacer
-                // ind_ass | valorAasignar | offsetNv | zNv |
-                // que hará un LEA de z y luego aplicara el offset y le dará valorAasignar
-
-                g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNv(), false, null),
-                        null, new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
-                                false, darr));
+                
+                
+                // g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", expresion.getNv(), false, null),
+                //         null, new Operador3Direcciones(darr.getNodoId().getNombre(), darr.getNodoId().getNv(),
+                //                 false, darr));
             }
 
         } else if (expresion.getNodoLlamadaFunc() != null) {
@@ -2880,12 +3006,30 @@ public class Semantico {
 
     }
 
+    public int calcularOffset(){
+        return 0;
+    }
+
     public void ctrlAsignArray() {
 
     }
 
     public void ctrlDimAray() {
 
+    }
+
+    public void compruebaInt(Tipo tipo, Nodo nodo){
+        if (tipo != Tipo.tsb_int) {
+            parser.report_error("Tipo incorrecto debería ser un int",
+                    nodo);
+        }
+    }
+
+    public void compruebaCompatibles(Tipo tipo1, Tipo tipo2, Nodo nodo){
+        if (tipo1 != tipo2) {
+            parser.report_error("Tipos incompatibles",
+                    nodo);
+        }
     }
 
     public static TablaSimbolos getTs() {
