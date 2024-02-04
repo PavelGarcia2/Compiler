@@ -111,6 +111,7 @@ public class Semantico {
             g.genIntruccion(TipoInstruccion.CALL, new Operador3Direcciones("main", "main"), null, null);
             ctrlMain(main);
 
+            System.out.println("\n\nCD3 SIN OPTMIZAR");
             AtomicInteger i = new AtomicInteger(0);
             g.getIntrucciones().forEach(ins -> {
                 System.out.println(i.getAndIncrement() + "\t" + ins.toString());
