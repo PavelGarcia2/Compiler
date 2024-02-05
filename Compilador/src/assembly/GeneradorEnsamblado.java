@@ -623,6 +623,7 @@ public class GeneradorEnsamblado {
 
             case PRINT:
                 System.out.println("Entro prnint");
+                System.out.println("");
                 System.out.println("ID: " + instruccion.getOperadores()[2].getId());
                 // System.out.println(instruccion.getOperadores()[2].getId());
                 // Descripcion d1 =
