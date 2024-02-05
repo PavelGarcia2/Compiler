@@ -328,7 +328,7 @@ public class GeneradorEnsamblado {
                         "", "D0");
                 STORE("D0", "", instruccion.getOperadores()[2].getReferencia());
                 ensamblado.append("\tJMP fsalto" + (eSalto) + " ");
-                ensamblado.append("; Instruction of type: SKIP\n");
+                ensamblado.append(" ; Instruction of type: SKIP\n");
                 ensamblado.append("salto" + (eSalto) + ":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
                         "", "D0");
@@ -435,7 +435,7 @@ public class GeneradorEnsamblado {
                 LOAD(new Operador3Direcciones("", 0, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
                         "", "D0");
                 STORE("D0", "", instruccion.getOperadores()[2].getReferencia());
-                ensamblado.append("\tJMP fsalto" + (eSalto) + "");
+                ensamblado.append("\tJMP fsalto" + (eSalto) + " ");
                 ensamblado.append("; Instruction of type: SKIP\n");
                 ensamblado.append("salto" + (eSalto) + ":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
@@ -484,7 +484,7 @@ public class GeneradorEnsamblado {
                 LOAD(new Operador3Direcciones("", 0, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
                         "", "D0");
                 STORE("D0", "", instruccion.getOperadores()[2].getReferencia());
-                ensamblado.append("\tJMP fsalto" + (eSalto) + "");
+                ensamblado.append("\tJMP fsalto" + (eSalto) + " ");
                 ensamblado.append("; Instruction of type: SKIP\n");
                 ensamblado.append("salto" + (eSalto) + ":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
@@ -532,7 +532,7 @@ public class GeneradorEnsamblado {
                 LOAD(new Operador3Direcciones("", 0, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
                         "", "D0");
                 STORE("D0", "", instruccion.getOperadores()[2].getReferencia());
-                ensamblado.append("\tJMP fsalto" + (eSalto) + "");
+                ensamblado.append("\tJMP fsalto" + (eSalto) + " ");
                 ensamblado.append("; Instruction of type: SKIP\n");
                 ensamblado.append("salto" + (eSalto) + ":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
@@ -579,7 +579,7 @@ public class GeneradorEnsamblado {
                 LOAD(new Operador3Direcciones("", 0, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
                         "", "D0");
                 STORE("D0", "", instruccion.getOperadores()[2].getReferencia());
-                ensamblado.append("\tJMP fsalto" + (eSalto) + "");
+                ensamblado.append("\tJMP fsalto" + (eSalto) + " ");
                 ensamblado.append("; Instruction of type: SKIP\n");
                 ensamblado.append("salto" + (eSalto) + ":\n");
                 LOAD(new Operador3Direcciones("", -1, TipoCambio.BOOL), instruccion.getOperadores()[2].getReferencia(),
