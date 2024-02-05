@@ -6,7 +6,7 @@
 *-----------------------------------------------------------
             OPT     $1000
             OPT     MEX
-
+  
 ;A AND B, VALUE IN D1
 CLRH:       MACRO
             SWAP    \1
@@ -100,6 +100,8 @@ NEGM:       MACRO
             NEG.L   D1
             ENDM
             
+
+
 
 
 

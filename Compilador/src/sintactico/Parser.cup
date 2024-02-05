@@ -449,8 +449,8 @@ EXPRESION ::=tNot:v EXPRESION:e                                                 
          | LITERAL:l                                                                                                                                                                                        {: RESULT = new NodoExpresion( null, null, null, null,null, l, -1, null, null, l.getLine(), l.getColumn()); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null, null,null, null, -1, funcCall, null, funcCall.getLine(), funcCall.getColumn()); :}
 		 | EXPRESION:term1 OPERADOR:op EXPRESION:term2                                                                                                                                                      {: RESULT = new NodoExpresion( null, term1, op, term2, null, null, -1, null, null, term1.getLine(), term1.getColumn()); :}
-         | ID:id DIM_ARRAY:arr                                                                                                                                                                              {: RESULT = new NodoExpresion( null, null, null, null, id, null, -1, null, arr,arr.getLine(), arr.getColumn()); :}
          ;
+         | ID:id DIM_ARRAY:arr                                                                                                                                                                              {: RESULT = new NodoExpresion( null, null, null, null, id, null, -1, null, arr,arr.getLine(), arr.getColumn()); :}
 
 OPERADOR ::= OP_ARIT:op {: RESULT = new NodoOperador(null,op,op.getLine(),op.getColumn()); :}
             | OP_LOG:op {: RESULT = new NodoOperador(op,null,op.getLine(),op.getColumn()); :}
