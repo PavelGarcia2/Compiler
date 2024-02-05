@@ -1,6 +1,6 @@
-000206EE Starting Address
+000206E2 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 05/02/2024 12:20:47
+Created On: 05/02/2024 10:48:52
 
 00000000                             1      INCLUDE library/MACRO.X68
 00000000                             2              OPT     $1000
@@ -197,158 +197,180 @@ Created On: 05/02/2024 12:20:47
 00020400                           193  ; Labels to memory space reserved for variables:            
 00020400                           194  ;-----------------------------------------------------------
 00020400                           195  Variable0   DS.L 1
-00020404                           196  Variable1   DS.L 5
-00020418                           197  Variable2   DS.L 1
-0002041C                           198  Variable3   DS.L 1
-00020420                           199  Variable4   DS.L 1
-00020424                           200  Variable5   DS.L 1
-00020428                           201  Variable6   DS.L 1
-0002042C                           202  Variable7   DS.L 1
-00020430                           203  Variable8   DS.L 1
-00020434                           204  Variable9   DS.L 1
-00020438                           205  Variable10  DS.L 1
-0002043C                           206  Variable11  DS.L 1
-00020440                           207  SParam0 DS.B 128
-000204C0= 00                       208      DC.B 0
-000204C1                           209  SParam1 DS.B 128
-00020541= 00                       210      DC.B 0
-00020542                           211  SParam2 DS.B 128
-000205C2= 00                       212      DC.B 0
-000205C3                           213  SParam3 DS.B 128
-00020643= 00                       214      DC.B 0
-00020644                           215  SParam4 DS.B 128
-000206C4= 00                       216      DC.B 0
-000206C6                           217  Param0  DS.L 1
-000206CA                           218  Param1  DS.L 1
-000206CE                           219  Param2  DS.L 1
-000206D2                           220  Param3  DS.L 1
-000206D6                           221  Param4  DS.L 1
-000206DA                           222  Param5  DS.L 1
-000206DE                           223  Param6  DS.L 1
-000206E2                           224  Param7  DS.L 1
-000206E6                           225  Param8  DS.L 1
-000206EA                           226  Param9  DS.L 1
-000206EE                           227  ;-----------------------------------------------------------
-000206EE                           228      DS.W 0
-000206EE                           229  ;-----------------------------------------------------------
-000206EE                           230  globals:
-000206EE                           231  ; Instruction of type: COPIA
-000206EE                           232  ;Operator 1 -> -2, Store in -> 0
-000206EE                           233  
-000206EE  203C 000003E7            234      MOVE.L #999, D0 ; Load variable
-000206F4  23C0 00020400            235      MOVE.L D0, (Variable0) ; Store local variable
-000206FA                           236  ; Instruction of type: COPIA
-000206FA                           237  ;Operator 1 -> -2, Store in -> 2
-000206FA                           238  
-000206FA  7004                     239      MOVE.L #4, D0 ; Load variable
-000206FC  23C0 00020418            240      MOVE.L D0, (Variable2) ; Store local variable
-00020702                           241  ; Instruction of type: COPIA
-00020702                           242  ;Operator 1 -> -2, Store in -> 4
-00020702                           243  
-00020702  7004                     244      MOVE.L #4, D0 ; Load variable
-00020704  23C0 00020420            245      MOVE.L D0, (Variable4) ; Store local variable
-0002070A                           246  ; Instruction of type: MULTIPLICACION
-0002070A                           247  ;Operator 1 -> 2, Operator 2 -> t4, Store in -> 3
-0002070A                           248  
-0002070A                           249      ;JMP main ; Declared all globals
-0002070A  2039 00020418            250      MOVE.L (Variable2), D0 ; Load variable
-00020710  2239 00020420            251      MOVE.L (Variable4), D1 ; Load variable
-00020716                           252m     MULTM D0, D1
-00020716  2F00                     253m             MOVE.L  D0, -(A7)
-00020718  2000                     254m             MOVE.L  D0, D0
-0002071A  2201                     255m             MOVE.L  D1, D1
-0002071C  C2C0                     256m             MULU    D0, D1
-0002071E  201F                     257m             MOVE.L  (A7)+, D0
-00020720                           258m             ENDM
-00020720  23C1 0002041C            259      MOVE.L D1, (Variable3) ; Store local variable
-00020726                           260  ; Instruction of type: IND_ASS
-00020726                           261  ;Operator 1 -> -2, Operator 2 -> t3, Store in -> 1
-00020726                           262  
-00020726  41F9 00020404            263      LEA (Variable1), A0
-0002072C  2039 0002041C            264      MOVE.L (Variable3), D0 ; Load variable
-00020732  D1C0                     265      ADD.L D0, A0 ; D0 = @A[B]
-00020734  7401                     266      MOVE.L #1, D2 ; Load variable
-00020736  2082                     267      MOVE.L D2, (A0) ; Store C IN A[B]
-00020738                           268  ; Instruction of type: CALL
-00020738                           269  ;Operator 1 -> -2
-00020738                           270  
-00020738                           271  main:                                                       
-00020738  2C4F                     272      MOVE.L A7, A6
-0002073A                           273  ; Instruction of type: COPIA
-0002073A                           274  ;Operator 1 -> -2, Store in -> 5
-0002073A                           275  
-0002073A  7000                     276      MOVE.L #0, D0 ; Load variable
-0002073C  23C0 00020424            277      MOVE.L D0, (Variable5) ; Store local variable
-00020742                           278  ; Instruction of type: COPIA
-00020742                           279  ;Operator 1 -> -2, Store in -> 6
-00020742                           280  
-00020742  7004                     281      MOVE.L #4, D0 ; Load variable
-00020744  23C0 00020428            282      MOVE.L D0, (Variable6) ; Store local variable
-0002074A                           283  ; Instruction of type: COPIA
-0002074A                           284  ;Operator 1 -> -2, Store in -> 8
-0002074A                           285  
-0002074A  7004                     286      MOVE.L #4, D0 ; Load variable
-0002074C  23C0 00020430            287      MOVE.L D0, (Variable8) ; Store local variable
-00020752                           288  ; Instruction of type: MULTIPLICACION
-00020752                           289  ;Operator 1 -> 6, Operator 2 -> t8, Store in -> 7
-00020752                           290  
-00020752  2039 00020428            291      MOVE.L (Variable6), D0 ; Load variable
-00020758  2239 00020430            292      MOVE.L (Variable8), D1 ; Load variable
-0002075E                           293m     MULTM D0, D1
-0002075E  2F00                     294m             MOVE.L  D0, -(A7)
-00020760  2000                     295m             MOVE.L  D0, D0
-00020762  2201                     296m             MOVE.L  D1, D1
-00020764  C2C0                     297m             MULU    D0, D1
-00020766  201F                     298m             MOVE.L  (A7)+, D0
-00020768                           299m             ENDM
-00020768  23C1 0002042C            300      MOVE.L D1, (Variable7) ; Store local variable
-0002076E                           301  ; Instruction of type: IND_ASS
-0002076E                           302  ;Operator 1 -> -2, Operator 2 -> t7, Store in -> 1
-0002076E                           303  
-0002076E  41F9 00020404            304      LEA (Variable1), A0
-00020774  2039 0002042C            305      MOVE.L (Variable7), D0 ; Load variable
-0002077A  D1C0                     306      ADD.L D0, A0 ; D0 = @A[B]
-0002077C  243C 0000090B            307      MOVE.L #2315, D2 ; Load variable
-00020782  2082                     308      MOVE.L D2, (A0) ; Store C IN A[B]
-00020784                           309  ; Instruction of type: COPIA
-00020784                           310  ;Operator 1 -> -2, Store in -> 9
-00020784                           311  
-00020784  7004                     312      MOVE.L #4, D0 ; Load variable
-00020786  23C0 00020434            313      MOVE.L D0, (Variable9) ; Store local variable
-0002078C                           314  ; Instruction of type: COPIA
-0002078C                           315  ;Operator 1 -> -2, Store in -> 11
-0002078C                           316  
-0002078C  7004                     317      MOVE.L #4, D0 ; Load variable
-0002078E  23C0 0002043C            318      MOVE.L D0, (Variable11) ; Store local variable
-00020794                           319  ; Instruction of type: MULTIPLICACION
-00020794                           320  ;Operator 1 -> 9, Operator 2 -> t11, Store in -> 10
-00020794                           321  
-00020794  2039 00020434            322      MOVE.L (Variable9), D0 ; Load variable
-0002079A  2239 0002043C            323      MOVE.L (Variable11), D1 ; Load variable
-000207A0                           324m     MULTM D0, D1
-000207A0  2F00                     325m             MOVE.L  D0, -(A7)
-000207A2  2000                     326m             MOVE.L  D0, D0
-000207A4  2201                     327m             MOVE.L  D1, D1
-000207A6  C2C0                     328m             MULU    D0, D1
-000207A8  201F                     329m             MOVE.L  (A7)+, D0
-000207AA                           330m             ENDM
-000207AA  23C1 00020438            331      MOVE.L D1, (Variable10) ; Store local variable
-000207B0                           332  ; Instruction of type: IND_VAL
-000207B0                           333  ;Operator 1 -> 1, Operator 2 -> t10, Store in -> 5
-000207B0                           334  
-000207B0  41F9 00020404            335      LEA (Variable1), A0
-000207B6  2039 00020438            336      MOVE.L (Variable10), D0 ; Load variable
-000207BC  D1C0                     337      ADD.L D0, A0 ; D0 = @B[C]
-000207BE  2010                     338      MOVE.L (A0), D0 ; D0 = B[C]
-000207C0  23C0 00020424            339      MOVE.L D0, Variable5 ; Store local variable
-000207C6                           340  ; Instruction of type: PRINT
-000207C6                           341  ;, Store in -> 5
-000207C6                           342  
-000207C6  2239 00020424            343      MOVE.L (Variable5), D1 ; Load variable
-000207CC  7003                     344      MOVE.L #3, D0 ; Prepare display
-000207CE  4E4F                     345      TRAP #15
-000207D0                           346   ; Expect screen visualization
-000207D0                           347      END globals
+00020404                           196  Variable1   DS.L 1
+00020408                           197  Variable2   DS.L 1
+0002040C                           198  Variable3   DS.L 1
+00020410                           199  Variable4   DS.L 1
+00020414= 4D 65 6E 6F 72 00        200  Variable5   DC.B 'Menor',0
+0002041A                           201  Variable6   DS.L 1
+0002041E                           202  Variable7   DS.L 1
+00020422                           203  Variable8   DS.L 1
+00020426= 4D 61 79 6F 72 00        204  Variable9   DC.B 'Mayor',0
+0002042C= 49 67 75 61 6C 65 ...    205  Variable10  DC.B 'Iguales',0
+00020434                           206  SParam0 DS.B 128
+000204B4= 00                       207      DC.B 0
+000204B5                           208  SParam1 DS.B 128
+00020535= 00                       209      DC.B 0
+00020536                           210  SParam2 DS.B 128
+000205B6= 00                       211      DC.B 0
+000205B7                           212  SParam3 DS.B 128
+00020637= 00                       213      DC.B 0
+00020638                           214  SParam4 DS.B 128
+000206B8= 00                       215      DC.B 0
+000206BA                           216  Param0  DS.L 1
+000206BE                           217  Param1  DS.L 1
+000206C2                           218  Param2  DS.L 1
+000206C6                           219  Param3  DS.L 1
+000206CA                           220  Param4  DS.L 1
+000206CE                           221  Param5  DS.L 1
+000206D2                           222  Param6  DS.L 1
+000206D6                           223  Param7  DS.L 1
+000206DA                           224  Param8  DS.L 1
+000206DE                           225  Param9  DS.L 1
+000206E2                           226  ;-----------------------------------------------------------
+000206E2                           227      DS.W 0
+000206E2                           228  ;-----------------------------------------------------------
+000206E2                           229  globals:
+000206E2                           230  ; Instruction of type: COPIA
+000206E2                           231  ;Operator 1 -> -2, Store in -> 0
+000206E2                           232  
+000206E2  7000                     233      MOVE.L #0, D0 ; Load variable
+000206E4  23C0 00020400            234      MOVE.L D0, (Variable0) ; Store local variable
+000206EA                           235  ; Instruction of type: COPIA
+000206EA                           236  ;Operator 1 -> -2, Store in -> 1
+000206EA                           237  
+000206EA  7001                     238      MOVE.L #1, D0 ; Load variable
+000206EC  23C0 00020404            239      MOVE.L D0, (Variable1) ; Store local variable
+000206F2                           240  ; Instruction of type: CALL
+000206F2                           241  ;Operator 1 -> -2
+000206F2                           242  
+000206F2  4EF9 000206F8            243      JMP main ; Declared all globals
+000206F8                           244  main:                                                       
+000206F8  2C4F                     245      MOVE.L A7, A6
+000206FA                           246  ; Instruction of type: IFMAYORIGUAL
+000206FA                           247  ;Operator 1 -> 0, Operator 2 -> t1, Store in -> 4
+000206FA                           248  
+000206FA  2039 00020400            249      MOVE.L (Variable0), D0 ; Load variable
+00020700  2239 00020404            250      MOVE.L (Variable1), D1 ; Load variable
+00020706  B081                     251      CMP.L D1, D0
+00020708  6C00 0010                252      BGE salto0
+0002070C  7000                     253      MOVE.L #0, D0 ; Load variable
+0002070E  23C0 00020410            254      MOVE.L D0, (Variable4) ; Store local variable
+00020714  4EF9 00020722            255      JMP fsalto0 ; Instruction of type: SKIP
+0002071A                           256  salto0:
+0002071A  70FF                     257      MOVE.L #-1, D0 ; Load variable
+0002071C  23C0 00020410            258      MOVE.L D0, (Variable4) ; Store local variable
+00020722                           259  ; Instruction of type: SKIP
+00020722                           260  fsalto0:
+00020722                           261  
+00020722                           262  ; Instruction of type: IFTRUEGOTO
+00020722                           263  ;Operator 1 -> 4, Operator 2 -> 0, Store in -> -2
+00020722                           264  
+00020722  2039 00020410            265      MOVE.L (Variable4), D0 ; Load variable
+00020728  72FF                     266      MOVE.L #-1,D1
+0002072A  B081                     267      CMP.L D1, D0
+0002072C  6700 0032                268      BEQ e1
+00020730                           269  ; Instruction of type: COPIA
+00020730                           270  ;Operator 1 -> -2, Store in -> 5
+00020730                           271  
+00020730  41F9 00020414            272      LEA Variable5, A0
+00020736  2008                     273      MOVE.L A0, D0 ; Load variable
+00020738                           274  ; Instruction of type: PRINTLN
+00020738                           275  ;, Store in -> 5
+00020738                           276  
+00020738  41F9 00020414            277      LEA Variable5, A0 ; Cargar la string
+0002073E  2248                     278      MOVE.L A0, A1 ; Ready text
+00020740  700E                     279      MOVE.L #14, D0 ; Prepare display
+00020742  4E4F                     280      TRAP #15
+00020744                           281   ; Expect screen visualization
+00020744  103C 000B                282      MOVE.B #11, D0 ; Next line prepare
+00020748  223C 000000FF            283      MOVE.L #$00FF, D1 ; Request current coordinates
+0002074E  4E4F                     284      TRAP #15 ; Get them in D1.L (HIGH=COL, LOW = ROW)
+00020750  C2BC 000000FF            285      AND.L #$00FF, D1 ; We want always column = 0
+00020756  5201                     286      ADDQ.B #1, D1 ; We increment the current row by 1
+00020758  4E4F                     287      TRAP #15 ; Set new coordinates (next line ready)
+0002075A                           288  ; Instruction of type: GOTO
+0002075A                           289  ;, Store in -> -2
+0002075A                           290  
+0002075A  4EF9 000207F0            291      JMP e2
+00020760                           292  ; Instruction of type: SKIP
+00020760                           293  ;, Store in -> -2
+00020760                           294  
+00020760                           295  e1:
+00020760                           296  ; Instruction of type: IFMENORIGUAL
+00020760                           297  ;Operator 1 -> 0, Operator 2 -> t1, Store in -> 8
+00020760                           298  
+00020760  2039 00020400            299      MOVE.L (Variable0), D0 ; Load variable
+00020766  2239 00020404            300      MOVE.L (Variable1), D1 ; Load variable
+0002076C  B081                     301      CMP.L D1, D0
+0002076E  6F00 0010                302      BLE salto1
+00020772  7000                     303      MOVE.L #0, D0 ; Load variable
+00020774  23C0 00020422            304      MOVE.L D0, (Variable8) ; Store local variable
+0002077A  4EF9 00020788            305      JMP fsalto1 ; Instruction of type: SKIP
+00020780                           306  salto1:
+00020780  70FF                     307      MOVE.L #-1, D0 ; Load variable
+00020782  23C0 00020422            308      MOVE.L D0, (Variable8) ; Store local variable
+00020788                           309  ; Instruction of type: SKIP
+00020788                           310  fsalto1:
+00020788                           311  
+00020788                           312  ; Instruction of type: IFTRUEGOTO
+00020788                           313  ;Operator 1 -> 8, Operator 2 -> 0, Store in -> -2
+00020788                           314  
+00020788  2039 00020422            315      MOVE.L (Variable8), D0 ; Load variable
+0002078E  72FF                     316      MOVE.L #-1,D1
+00020790  B081                     317      CMP.L D1, D0
+00020792  6700 0032                318      BEQ e4
+00020796                           319  ; Instruction of type: COPIA
+00020796                           320  ;Operator 1 -> -2, Store in -> 9
+00020796                           321  
+00020796  41F9 00020426            322      LEA Variable9, A0
+0002079C  2008                     323      MOVE.L A0, D0 ; Load variable
+0002079E                           324  ; Instruction of type: PRINTLN
+0002079E                           325  ;, Store in -> 9
+0002079E                           326  
+0002079E  41F9 00020426            327      LEA Variable9, A0 ; Cargar la string
+000207A4  2248                     328      MOVE.L A0, A1 ; Ready text
+000207A6  700E                     329      MOVE.L #14, D0 ; Prepare display
+000207A8  4E4F                     330      TRAP #15
+000207AA                           331   ; Expect screen visualization
+000207AA  103C 000B                332      MOVE.B #11, D0 ; Next line prepare
+000207AE  223C 000000FF            333      MOVE.L #$00FF, D1 ; Request current coordinates
+000207B4  4E4F                     334      TRAP #15 ; Get them in D1.L (HIGH=COL, LOW = ROW)
+000207B6  C2BC 000000FF            335      AND.L #$00FF, D1 ; We want always column = 0
+000207BC  5201                     336      ADDQ.B #1, D1 ; We increment the current row by 1
+000207BE  4E4F                     337      TRAP #15 ; Set new coordinates (next line ready)
+000207C0                           338  ; Instruction of type: GOTO
+000207C0                           339  ;, Store in -> -2
+000207C0                           340  
+000207C0  4EF9 000207F0            341      JMP e2
+000207C6                           342  ; Instruction of type: SKIP
+000207C6                           343  ;, Store in -> -2
+000207C6                           344  
+000207C6                           345  e4:
+000207C6                           346  ; Instruction of type: COPIA
+000207C6                           347  ;Operator 1 -> -2, Store in -> 10
+000207C6                           348  
+000207C6  41F9 0002042C            349      LEA Variable10, A0
+000207CC  2008                     350      MOVE.L A0, D0 ; Load variable
+000207CE                           351  ; Instruction of type: PRINTLN
+000207CE                           352  ;, Store in -> 10
+000207CE                           353  
+000207CE  41F9 0002042C            354      LEA Variable10, A0 ; Cargar la string
+000207D4  2248                     355      MOVE.L A0, A1 ; Ready text
+000207D6  700E                     356      MOVE.L #14, D0 ; Prepare display
+000207D8  4E4F                     357      TRAP #15
+000207DA                           358   ; Expect screen visualization
+000207DA  103C 000B                359      MOVE.B #11, D0 ; Next line prepare
+000207DE  223C 000000FF            360      MOVE.L #$00FF, D1 ; Request current coordinates
+000207E4  4E4F                     361      TRAP #15 ; Get them in D1.L (HIGH=COL, LOW = ROW)
+000207E6  C2BC 000000FF            362      AND.L #$00FF, D1 ; We want always column = 0
+000207EC  5201                     363      ADDQ.B #1, D1 ; We increment the current row by 1
+000207EE  4E4F                     364      TRAP #15 ; Set new coordinates (next line ready)
+000207F0                           365  ; Instruction of type: SKIP
+000207F0                           366  ;, Store in -> -2
+000207F0                           367  
+000207F0                           368  e2:
+000207F0                           369      END globals
 
 No errors detected
 No warnings generated
@@ -375,17 +397,22 @@ DMMBSIZE            400
 DMMDATA             400
 DMMPRCID            FFFFFFFF
 DMMSYSID            0
+E1                  20760
+E2                  207F0
+E4                  207C6
 EQ                  14
 EXP                 C
+FSALTO0             20722
+FSALTO1             20788
 GE                  13
-GLOBALS             206EE
+GLOBALS             206E2
 GOTO                F
 GT                  12
 INCR                7
 INIT                16
 LE                  11
 LT                  10
-MAIN                20738
+MAIN                206F8
 MINIT               1000
 MOD                 5
 MODM                420
@@ -398,41 +425,42 @@ NOT                 B
 NOTM                1A2
 OR                  A
 ORM                 FE
-PARAM0              206C6
-PARAM1              206CA
-PARAM2              206CE
-PARAM3              206D2
-PARAM4              206D6
-PARAM5              206DA
-PARAM6              206DE
-PARAM7              206E2
-PARAM8              206E6
-PARAM9              206EA
+PARAM0              206BA
+PARAM1              206BE
+PARAM2              206C2
+PARAM3              206C6
+PARAM4              206CA
+PARAM5              206CE
+PARAM6              206D2
+PARAM7              206D6
+PARAM8              206DA
+PARAM9              206DE
 PARSPACE            1F6
 PRINT               1C
 PRINTLN             1D
 READ                1B
 RETURN              18
+SALTO0              2071A
+SALTO1              20780
 SIMPLE              19
 SKIP                E
-SPARAM0             20440
-SPARAM1             204C1
-SPARAM2             20542
-SPARAM3             205C3
-SPARAM4             20644
+SPARAM0             20434
+SPARAM1             204B5
+SPARAM2             20536
+SPARAM3             205B7
+SPARAM4             20638
 SUB                 2
 SUBM                28C
 VARIABLE0           20400
 VARIABLE1           20404
-VARIABLE10          20438
-VARIABLE11          2043C
-VARIABLE2           20418
-VARIABLE3           2041C
-VARIABLE4           20420
-VARIABLE5           20424
-VARIABLE6           20428
-VARIABLE7           2042C
-VARIABLE8           20430
-VARIABLE9           20434
+VARIABLE10          2042C
+VARIABLE2           20408
+VARIABLE3           2040C
+VARIABLE4           20410
+VARIABLE5           20414
+VARIABLE6           2041A
+VARIABLE7           2041E
+VARIABLE8           20422
+VARIABLE9           20426
 VARSIZE             28
 VARSPACE            20A

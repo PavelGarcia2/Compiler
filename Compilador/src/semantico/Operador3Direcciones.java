@@ -15,7 +15,7 @@ public class Operador3Direcciones{
     private float valFloat = -2;
     private String valString = null;
     private boolean proc;
-    private String id = "";
+    private String id = "default";
     private Descripcion d;
 
 
