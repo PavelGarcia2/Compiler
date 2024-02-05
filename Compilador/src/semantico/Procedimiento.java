@@ -1,17 +1,31 @@
 package semantico;
 
+import java.util.ArrayList;
+
+import tsimbolos.descripciones.Dargin;
+
 public class Procedimiento{
     private final int ambito;
     private final String etiquetaInicial;
     private int numParams;
     private int sizeVariables;
     private String id;
+    ArrayList<Dargin> parametros;
 
     public Procedimiento(int ambito, String etiquetaInicial, int numParams, String id){
         this.ambito = ambito;
         this.etiquetaInicial = etiquetaInicial;
         this.numParams = numParams;
         this.id = id;
+        
+    }
+
+    public void setParametros(ArrayList<Dargin> parametros) {
+        this.parametros = parametros;
+    }	
+    
+    public ArrayList<Dargin> getParametros() {
+        return parametros;
     }
 
     public int getAmbito(){

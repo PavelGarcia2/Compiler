@@ -1,14 +1,25 @@
 // Declaracion y seteo de variables 
-int a = 0;
-int b = 2;
+int a = 2; 
+int b = 3; 
+int c = 7;
     
-main {   
-    
-    a = suma(a,b);
-    print(a);
+main {  
+    c = suma2(3+45,b);
+    c = suma(a, b, c);
+    print(c);
 }
 
-fun int suma(int x, int i){
-    i = i+x;
-    return i;
+fun int suma(int x , int i , int y){
+    int a2=0;
+    println(x);
+    println(i);
+    a2 = i+x+y;
+    print("Valor i  ");
+    println(a2);
+    return a2;
+}
+
+fun int suma2(int x, int i){
+    int y = x+i;
+    return y;
 }

@@ -5,8 +5,9 @@ main{
     int b = 5;
 
     while(b > numr){
-        print("Dentro del while");
-        print(2);
+        println("Dentro del while");
+        println(2);
+        numr=numr+1;
     }
 
 }

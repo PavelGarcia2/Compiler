@@ -1,5 +1,6 @@
 //CODIGO CORRECTO
 /* Comprobación de constantes */
+const int a23=231;
 int a = 2;
 int b = a;
 int c = b;
@@ -11,10 +12,11 @@ char asdg;
 set asdg = 1 + 2;
 
 main {
-   str s;
-
+   str s = "sdgfasd";
+   //s = "GADSSG";
+   
    print(s);
-   s = "adasfd";
+   
    x = 2 + 2;
    x = 532;
    x = b;

@@ -161,7 +161,8 @@ decimal     = {digito}*{punto}{digito}+
     }
 
     private void muestraError(String lexema, int linea){
-        System.out.println("ERROR: no reconocemos " + lexema + "en la linea " + linea );
+        System.out.println("ERROR LEXICO: no reconocemos el simbolo '" + lexema + "' en la linea: " + linea );
+        System.exit(0);
     }
 
     private void meterToken(String token){
@@ -242,5 +243,5 @@ decimal     = {digito}*{punto}{digito}+
 {coma}                                 { return symbol(ParserSym.tComa);}
 {puntoComa}                            { return symbol(ParserSym.tPuntocoma); }
 {dosPuntos}                            { return symbol(ParserSym.tDospuntos); }
-.                                      { return symbol(ParserSym.tError); } 
+.                                      { muestraError(this.yytext(),this.yyline+1); } 
 

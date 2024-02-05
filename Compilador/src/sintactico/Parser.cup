@@ -51,7 +51,7 @@ parser code {:
             }
             Location l = token.getLeft();
             if (l != null) {
-                msg.append("ERROR: ");
+                msg.append("ERROR SINTACTICO: ");
                 msg.append(" (fila: ")
                    .append(l.getLine())
                    .append(", columna: ")
@@ -167,7 +167,7 @@ terminal ComplexSymbol tIf,tElse,tElif,tWhile,tFor,tSwitch,tChar;
 
 terminal ComplexSymbol tFloat,tInt,tBool,tStr,tConst;
 
-terminal ComplexSymbol tPrint,tPrintln,tRparen,tLparen,tRbracket,tLbracket,tRcorchete,tLcorchete,tComa,tPuntocoma,tDospuntos,tError,tVoid,tSet;
+terminal ComplexSymbol tPrint,tPrintln,tRparen,tLparen,tRbracket,tLbracket,tRcorchete,tLcorchete,tComa,tPuntocoma,tDospuntos,tVoid,tSet;
 
 terminal Literal tId,tEntero,tLinea,tCaracter,tTrue,tFalse,tDecimal;
 
@@ -196,17 +196,9 @@ non terminal NodoOpArit OP_ARIT;
 non terminal NodoOpRapidos OP_RAPIDOS;
 non terminal NodoOpRapidosSuma OP_RAPIDO_S;
 non terminal NodoOpRapidosResta OP_RAPIDO_R;
-non terminal NodoTermino TERMINO_1;
-non terminal NodoTermino TERMINO_2;
-non terminal NodoTerminoLog TERMINOLOG_1;
-non terminal NodoTerminoLog TERMINOLOG_2;
-non terminal NodoExpresionArit EXPRESION_ARITM;
-non terminal NodoExpresionLog EXPRESION_LOG;
 non terminal NodoExpresion EXPRESION;
 non terminal NodoLlamadaFunc LLAMADA_FUNC;
 non terminal NodoParametros PARAMETROS;
-non terminal NodoParamSimple PARAM_SIMPLE;
-non terminal NodoParamCompuesto PARAM_COMPUESTO;
 non terminal NodoElse ELSE_COND;
 non terminal NodoDeclFuncP DECL_FUNCP;
 non terminal NodoDeclFuncParams DECL_FUNCPARAMS;
@@ -274,7 +266,7 @@ ASIGN_NORMAL ::= EXPRESION:expr                                                 
 ASIGN_ARRAY ::= tNew:n TIPO:tipo DIM_ARRAY:dimArray                                                                                                                                                         {: RESULT = new NodoAsignacionArray(tipo,dimArray,extractLine(n),extractColumn(n)); :}
                 ;
                 
-DIM_ARRAY ::= DIMENSIONES:dimensiones tLcorchete:lCor EXPRESION:expr tRcorchete:rCor                                                                                                                        {: RESULT = new NodoDimArray(dimensiones,expr,extractLine(lCor),extractColumn(lCor)); :}
+DIM_ARRAY ::= tLcorchete:lCor EXPRESION:expr tRcorchete:rCor DIMENSIONES:dimensiones                                                                                                                       {: RESULT = new NodoDimArray(dimensiones,expr,extractLine(lCor),extractColumn(lCor)); :}
                 ;
 
 DIMENSIONES ::= DIM_ARRAY:dimarr                                                                                                                                                                            {: RESULT = new NodoDimensiones(dimarr, dimarr.getLine(), dimarr.getColumn());:}                                                                                                                           
@@ -401,57 +393,14 @@ OP_RAPIDO_S ::= ID:tid tSuma tSuma                                              
 OP_RAPIDO_R ::= ID:tid tResta tResta                                                                                                                                                                         {: RESULT= new NodoOpRapidosResta(tid, tid.getLine(), tid.getColumn()); :}
             ;
 
-// TODO
-TERMINO_1 ::= ID:id                                                                                                                                                                                         {: RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); :}
-         | SIGNO:s tEntero:entero                                                                                                                                                                           {: RESULT = new NodoTermino((int) entero.getLiteral(), s , entero.getLinea(), entero.getColumna()); :}
-         | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); :}
-         | SIGNO:s tDecimal:decimal                                                                                                                                                                         {: RESULT = new NodoTermino((float) decimal.getLiteral() , s , decimal.getLinea(), decimal.getColumna()); :}
-         ;
-
-
-// TODO
-TERMINO_2 ::= ID:id                                                                                                                                                                                         {: RESULT = new NodoTermino(id,id.getLine(),id.getColumn()); :}
-         | SIGNO:s tEntero:entero                                                                                                                                                                           {: RESULT = new NodoTermino((int) entero.getLiteral(), s, entero.getLinea(), entero.getColumna()); :}
-         | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTermino(funcCall,funcCall.getLine(),funcCall.getColumn()); :}
-         | SIGNO:s tDecimal:decimal                                                                                                                                                                         {: RESULT = new NodoTermino((float) decimal.getLiteral(), s, decimal.getLinea(),decimal.getColumna()); :}
-         ;
-
-
-// TODO                                                                                                                                                                                                     NodoId nodoId,int bool,NodoLlamadaFunc nodoLlamadaFunc, int entero, float decimal, NodoSigno nodoSigno,int l, int c
-TERMINOLOG_1 ::= ID:id                                                                                                                                                                                      {: RESULT = new NodoTerminoLog(id,-1,null,-1, -10.0f, null, id.getLine(),id.getColumn()); :}
-         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoTerminoLog(null,1,null, -1, -10.0f, null, t.getLinea(),t.getColumna()); :}
-         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,0,null,-1, -10.0f, null, f.getLinea(),f.getColumna()); :}
-         | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTerminoLog(null, -1, funcCall,-1,-10.0f, null, funcCall.getLine(), funcCall.getColumn()); :}
-         | SIGNO:s tEntero:entero                                                                                                                                                                           {: RESULT = new NodoTerminoLog(null,-1, null,(int) entero.getLiteral(), -10.0f, s, entero.getLinea(), entero.getColumna()); :}
-         | SIGNO:s tDecimal:decimal                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,-1, null, -1, (float) decimal.getLiteral(), s,decimal.getLinea(), decimal.getColumna()); :}
-         ;
-
-// TODO
-TERMINOLOG_2 ::= ID:id                                                                                                                                                                                      {: RESULT = new NodoTerminoLog(id,-1,null, -1, -10.0f, null, id.getLine(),id.getColumn()); :}
-         | tTrue:t                                                                                                                                                                                          {: RESULT = new NodoTerminoLog(null,1,null, -1, -10.0f, null, t.getLinea(),t.getColumna()); :}
-         | tFalse:f                                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,0,null, -1, -10.0f, null ,f.getLinea(),f.getColumna()); :}
-         | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoTerminoLog(null, -1, funcCall, -1 ,-10.0f, null, funcCall.getLine(), funcCall.getColumn()); :}
-         | SIGNO:s tEntero:entero                                                                                                                                                                           {: RESULT = new NodoTerminoLog(null,-1, null,(int) entero.getLiteral(), -10.0f, s, entero.getLinea(), entero.getColumna()); :}
-         | SIGNO:s tDecimal:decimal                                                                                                                                                                         {: RESULT = new NodoTerminoLog(null,-1, null, -1, (float) decimal.getLiteral(), s,decimal.getLinea(), decimal.getColumna()); :}
-         ;
-
-// PEDRO
-EXPRESION_ARITM ::= TERMINO_1:term1 OP_ARIT:oparit TERMINO_2:term2                                                                                                                                          {: RESULT= new NodoExpresionArit(term1,oparit,term2,term1.getLine(),term2.getColumn()); :}
-                ;
-/*
- // PEDRO
-EXPRESION_LOG ::= TERMINOLOG_1:tlog1 OP_LOG:oplog TERMINOLOG_2:tlog2                                                                                                                                        {: RESULT= new NodoExpresionLog(tlog1,oplog,tlog2,tlog1.getLine(),tlog1.getColumn()); :}
-                ;
-*/
 //PEDRO
 EXPRESION ::=tNot:v EXPRESION:e                                                                                                                                                                             {: RESULT = new NodoExpresion(e, null, null, null, null, null, -1, null,null, extractLine(v),extractColumn(v)); :}
          | ID:id                                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null, null,id, null, -1, null, null, id.getLine(), id.getColumn()); :}
          | LITERAL:l                                                                                                                                                                                        {: RESULT = new NodoExpresion( null, null, null, null,null, l, -1, null, null, l.getLine(), l.getColumn()); :}
          | LLAMADA_FUNC:funcCall                                                                                                                                                                            {: RESULT = new NodoExpresion( null, null, null, null,null, null, -1, funcCall, null, funcCall.getLine(), funcCall.getColumn()); :}
 		 | EXPRESION:term1 OPERADOR:op EXPRESION:term2                                                                                                                                                      {: RESULT = new NodoExpresion( null, term1, op, term2, null, null, -1, null, null, term1.getLine(), term1.getColumn()); :}
-         ;
          | ID:id DIM_ARRAY:arr                                                                                                                                                                              {: RESULT = new NodoExpresion( null, null, null, null, id, null, -1, null, arr,arr.getLine(), arr.getColumn()); :}
-
+         ;
 OPERADOR ::= OP_ARIT:op {: RESULT = new NodoOperador(null,op,op.getLine(),op.getColumn()); :}
             | OP_LOG:op {: RESULT = new NodoOperador(op,null,op.getLine(),op.getColumn()); :}
             ;

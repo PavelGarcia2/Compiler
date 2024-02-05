@@ -12,7 +12,7 @@ public class Dargin extends Descripcion{                   // paràmetre formal 
 
     public Dargin (Tipo tipus, int nv, boolean esArray, NodoId nodoId) {
         super(TDesc.dargin);
-        nv += 1;
+        this.nv = nv;
         this.tipus = tipus;
         this.nv = nv;
         this.esArray = esArray;
@@ -21,7 +21,7 @@ public class Dargin extends Descripcion{                   // paràmetre formal 
 
     public Dargin (Tipo tipus, int dim, int nv, boolean esArray, NodoId nodoId) {
         super(TDesc.dargin);
-        nv += 1;
+        this.nv = nv;
         this.tipus = tipus;
         this.nv = nv;
         this.esArray = esArray;

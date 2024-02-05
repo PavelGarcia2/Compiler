@@ -23,3 +23,5 @@ fun int dev(){
 
     return misCojenes24;
 }
+
+//peta por params null ARRAYLIST.size because params is null

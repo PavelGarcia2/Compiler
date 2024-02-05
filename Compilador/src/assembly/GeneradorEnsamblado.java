@@ -43,6 +43,8 @@ public class GeneradorEnsamblado {
     private int counter = 0;
     private int contadorStr = 0;
     private int entrarBloque = 0;
+    private boolean isSimpleP = false;
+    
 
     public GeneradorEnsamblado(String nombreArchivo, TablaSimbolos tablaSimbolos, TablaVariables tablaVariables,
             TablaProcedimientos tablaProcedimientos, ArrayList<Intruccion3Direcciones> instrucciones) {
@@ -750,7 +752,6 @@ public class GeneradorEnsamblado {
                 break;
 
             case PREAMBULO:
-
                 // Preamble
                 if (instruccion.getOperadores()[2].getEtiqueta() == main) {
                     ensamblado.append(";Preamble of MAIN ignored\n");
@@ -771,31 +772,37 @@ public class GeneradorEnsamblado {
                     ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "A6" + ", " + (prof4x - 4)
                             + "(A7) ; DISP(prof) = BP\n");
                     ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "A6" + ", D0 ; D0=EBP\n");
+                    //System.out.println("YEYEMANIN: "+instruccion.getOperadores()[2].getEtiqueta());
+                    ArrayList<Dargin> params = tablaProcedimientos.get(instruccion.getOperadores()[2].getEtiqueta()).getParametros();
 
-                    ArrayList<Dargin> params = tablaSimbolos
-                            .obtenerParams(instruccion.getOperadores()[2].getEtiqueta());
-                    int contadorStrings = 0;
-                    int contadorVars = 0;
-                    for (int i = 0; i < params.size(); i++) {
-                        // Dvar desc = (Dvar) tablaSimbolos.consultaId(params.get(i).getNombre());
-                        if (params.get(i).getTipus() == Tipo.tsb_str) {
-                            ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "SParam" + contadorStrings
-                                    + ", " + "A0 ; Param gest\n");
-                            ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "Variable"
-                                    + params.get(i).getnv() + ", " + "A1 ; Param gest\n");
-                            ensamblado.append(".loop" + contadorStrings + ':' + '\n');
-                            ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "(A0)+, (A1)+ \n");
-                            ensamblado.append(espacioEtiqueta + "TST.B (A0) \n");
-                            ensamblado.append(espacioEtiqueta + "BNE .loop" + contadorStrings + '\n');
-                            ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "#0, (A1)+ \n");
-                            contadorStrings++;
-                        } else {
-                            ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "(Param" + contadorVars++
-                                    + "), " + "(Variable" + params.get(i).getnv() + ") ; Param gest\n");
+                    if(params != null){
+                        
+                        int contadorStrings = 0;
+                        int contadorVars = 0;
+                        for (int i = 0; i < params.size(); i++) {
+                            System.out.println("PARAMS: "+ params.get(i).getnv());
+                            // Dvar desc = (Dvar) tablaSimbolos.consultaId(params.get(i).getNombre());
+                            if (params.get(i).getTipus() == Tipo.tsb_str) {
+                                ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "SParam" + contadorStrings
+                                        + ", " + "A0 ; Param gest\n");
+                                ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "Variable"
+                                        + params.get(i).getnv() + ", " + "A1 ; Param gest\n");
+                                ensamblado.append(".loop" + contadorStrings + ':' + '\n');
+                                ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "(A0)+, (A1)+ \n");
+                                ensamblado.append(espacioEtiqueta + "TST.B (A0) \n");
+                                ensamblado.append(espacioEtiqueta + "BNE .loop" + contadorStrings + '\n');
+                                ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "#0, (A1)+ \n");
+                                contadorStrings++;
+                            } else {
+                                ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "(Param" + contadorVars++
+                                        + "), " + "(Variable" + params.get(i).getnv() + ") ; Param gest\n");
+                            }
                         }
                     }
                 }
-                listaParametros = new ArrayList<>();
+
+                System.out.println("ACABA PREAMBULO");
+                
 
                 break;
 
@@ -988,10 +995,13 @@ public class GeneradorEnsamblado {
 
             case RETURN:
 
-                if (instruccion.getOperadores()[0].getEtiqueta() == main) {
+                if(instruccion.getOperadores()[0]!=null){
+                    if (instruccion.getOperadores()[0].getEtiqueta() == main) {
                     ensamblado.append(espacioEtiqueta + "SIMHALT\n");
                     break;
+                    }
                 }
+                
                 System.out.println("PRE RETURN");
                 // System.out.println(instruccion.getOperadores()[2].getId());
                 int prof4x = tablaProcedimientos.get(instruccion.getOperadores()[2].getId()).getAmbito() * 4;
@@ -1002,7 +1012,7 @@ public class GeneradorEnsamblado {
                 ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "DISP, A0 ; A0 = @DISP\n");
                 ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "(A7)+, " + prof4x
                         + "(A0) ; DISP[prof] = old value\n");
-
+             
                 if (instruccion.getOperadores()[0] != null) {
                     // System.out.println(instruccion.getOperadores()[0].getReferencia());
                     LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
@@ -1089,6 +1099,47 @@ public class GeneradorEnsamblado {
                         instruccion.getOperadores()[2].getReferencia());
 
                 break;
+                
+            case PARAM_SIMPLE:
+                int variableId = instruccion.getOperadores()[2].getReferencia();
+                System.out.println("VARIABLE ID: " + variableId);
+                String procedureId = tablaVariables.get(variableId).getIdProcedimiento();
+                System.out.println("PROCEDURE ID: " + procedureId);
+                isParam = true;
+
+                if (actualParam == 1 && mainCreado) {//caso primer param, hay que modificar EBP, SI MAIN ESTÁ CREADO
+                    ensamblado.append(espacioEtiqueta + "SUB.L" + espacioNormal + '#' + 40 + ", " + "A6" + "\n"); //sumar a EBP la zona params
+                    ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "A6" + ", A7\n");
+                }
+
+                isSimpleP = true;
+                LOAD(instruccion.getOperadores()[2], variableId, procedureId, "D0");
+                isSimpleP = false;
+                isParam = false;
+
+                System.out.println("VALOR t"+variableId);
+                    if (tablaVariables.get(variableId).getTipo() != Tipo.tsb_str) {
+
+                        ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D0, (Variable" + variableId + ") \n");
+                    }
+                    listaParametros.add(variableId);
+                
+            
+                if (tablaVariables.get(variableId).getTipo() == Tipo.tsb_str) {
+                    ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "SParam" + contadorStr + ", " + "A1 ; Param gest\n");
+                    ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "Variable" + variableId + ", " + "A0 ; Param gest\n");
+                    ensamblado.append(".loop" + contador + ": \n");
+                    ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "(A0)+, (A1)+ \n");
+                    ensamblado.append(espacioEtiqueta + "TST.B (A0) \n");
+                    ensamblado.append(espacioEtiqueta + "BNE .loop" + contador-- + '\n');
+                    ensamblado.append(espacioEtiqueta + "MOVE.B" + espacioNormal + "#0, (A1)+ \n");
+                } else {
+
+                    ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + '(' + "Variable" + variableId + "), " + '(' + "Param" + counter + ") ; Param\n");
+                }
+                counter++;
+
+                break;    
 
         }
 
@@ -1233,8 +1284,12 @@ public class GeneradorEnsamblado {
                     ensamblado.append(
                             espacioEtiqueta + "MOVE.L" + espacioNormal + "A0, " + register + " ; Load variable\n");
                     break;
+                
                 default:
                     throw new UnsupportedOperationException("Trying to load something that is not a variable!");
+
+
+
             }
         } else {
             System.out.println("HOLAasgfsag");

@@ -6,6 +6,7 @@ import herramientas.Tipo;
 import semantico.Variable.TipoVar;
 import sintactico.arbol.TipoArit;
 import sintactico.arbol.TipoLog;
+import tsimbolos.descripciones.Dargin;
 
 
 public class Codigo3Direcciones {
@@ -51,6 +52,11 @@ public class Codigo3Direcciones {
         tablaProcedimientos.put(idProcedimiento, new Procedimiento(ambito,etiquetaInicial,parametros,idProcedimiento));
         return tablaProcedimientos.getNP()-1;
 
+    }
+
+    public void setParametros(ArrayList<Dargin> params, String idProcedimiento){
+        Procedimiento procedimiento = tablaProcedimientos.get(idProcedimiento);
+        procedimiento.setParametros(params);
     }
 
     public Procedimiento getProcedimiento(String idProcedimiento){

@@ -13,15 +13,15 @@ public class pruebas {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                TablaSimbolos ts = new TablaSimbolos();
-                TablaExpansion te = ts.getTe();
-                for (int i = 0; i < 100; i++) {
-                    te.put(i, new DatosTE(i, "prueba"+i, new Descripcion(TDesc.dcamp), 10-i+100));
+                // TablaSimbolos ts = new TablaSimbolos();
+                // TablaExpansion te = ts.getTe();
+                // for (int i = 0; i < 100; i++) {
+                //     te.put(i, new DatosTE(i, "prueba"+i, new Descripcion(TDesc.dcamp), 10-i+100));
        
-                }
+                // }
 
-                ts.setTe(te);
-                new mainJframe(ts);
+                // ts.setTe(te);
+                // new mainJframe(ts);
             }
         });
     }
