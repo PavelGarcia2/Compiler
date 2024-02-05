@@ -121,46 +121,46 @@ public class Semantico {
             ensamblado.generarCodigoMain();
 
 
-        //   System.out.println("Empiezo las optimizaciones\n\n\n");
-        //    optimizacion= new Optimizaciones(g);
+          System.out.println("Empiezo las optimizaciones\n\n\n");
+           optimizacion= new Optimizaciones(g);
 
-        //    boolean cambio = true;
-        //        while (cambio) {
-        //            cambio = false;
-        //            if (optimizacion.asignacionesDiferidas()) {
-        //                cambio = true;
-        //            }
-        //            if (optimizacion.bracamentsAdjacents()) {
+           boolean cambio = true;
+               while (cambio) {
+                   cambio = false;
+                   if (optimizacion.asignacionesDiferidas()) {
+                       cambio = true;
+                   }
+                   if (optimizacion.bracamentsAdjacents()) {
 
-        //                cambio = true;
-        //            }
-        //            if (optimizacion.bracamentsSobreBrancaments()) {
-        //                cambio = true;
-        //            }
-        //         //    if (optimizacion.operacioConstant1()) {
-        //         //        cambio = true;
-        //         //    }
-        //         //    if (optimizacion.operacioConstant2()) {
-        //         //        cambio = true;
-        //         //    }
-        //         //    if (optimizacion.codiInaccesible1()) {
-        //         //        cambio = true;
-        //         //    }
-        //         //    if (optimizacion.codiInaccesible2()) {
-        //         //        cambio = true;
-        //         //    }
-        //        }
+                       cambio = true;
+                   }
+                   if (optimizacion.bracamentsSobreBrancaments()) {
+                       cambio = true;
+                   }
+                //    if (optimizacion.operacioConstant1()) {
+                //        cambio = true;
+                //    }
+                //    if (optimizacion.operacioConstant2()) {
+                //        cambio = true;
+                //    }
+                //    if (optimizacion.codiInaccesible1()) {
+                //        cambio = true;
+                //    }
+                //    if (optimizacion.codiInaccesible2()) {
+                //        cambio = true;
+                //    }
+               }
 
-        //         System.out.println("CD3 OPTIMIZADO");
+                System.out.println("CD3 OPTIMIZADO");
 
-        //         AtomicInteger i2 = new AtomicInteger(0);
-        //         optimizacion.getIntrucciones().forEach(ins -> {
-        //             System.out.println(i2.getAndIncrement() + "\t" + ins.toString());
-        //         });
+                AtomicInteger i2 = new AtomicInteger(0);
+                optimizacion.getIntrucciones().forEach(ins -> {
+                    System.out.println(i2.getAndIncrement() + "\t" + ins.toString());
+                });
 
-        //       System.out.println("Genero el ensamblado optimizado\n\n");
-        //        ensamblado = new GeneradorEnsamblado("ensamblado_Optimizado", ts, tablaVariables,tablaProcedimientos, optimizacion.getIntrucciones());
-        //        ensamblado.generarCodigoMain();
+              System.out.println("Genero el ensamblado optimizado\n\n");
+               ensamblado = new GeneradorEnsamblado("ensamblado_Optimizado", ts, tablaVariables,tablaProcedimientos, optimizacion.getIntrucciones());
+               ensamblado.generarCodigoMain();
 
           System.out.println("\n\n\n\nContenido de la tabla de simbolos");
             ts.displayTS();

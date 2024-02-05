@@ -16,39 +16,65 @@ public class Optimizaciones {
     }
 
     public boolean bracamentsAdjacents(){
+        System.out.println("Bracaments Adjacents");
         boolean cambio=false;
         for(int i =0; i< intrucciones.size(); i++){
             //si nos encontramos con un if de cualquier tipo lo modificamos 
             if(logico(intrucciones.get(i).getTipoIntruccion())){
+                System.out.println("Intruccion If Encontrada:"+intrucciones.get(i).toString());
                 Operador3Direcciones op3 = intrucciones.get(i).getOperadores()[2]; //tipo de if
                 int posicionIf = i;
                 i++;
 
+
+                System.out.println("Intruccion IfTrueGoto:"+intrucciones.get(i).toString());
                 Operador3Direcciones op1 = intrucciones.get(i).getOperadores()[2]; //if true goto
-                System.out.println("Valor :"+op3.toString()); 
+                System.out.println("Valor res del if:"+op3.toString()); 
                 int posicionIfGoto = i;
                 i++;
 
+                
+
                 if(i < intrucciones.size() && intrucciones.get(i).getTipoIntruccion() == TipoInstruccion.GOTO){
+                    System.out.println("Intruccion Goto Encontrada:"+intrucciones.get(i).toString());
                     Operador3Direcciones op2 = intrucciones.get(i).getOperadores()[2]; // siguiente salto goto
                     int posicionGoto = i;
                     i++;
+
+                    System.out.println("Intruccion Aumentada++:"+intrucciones.get(i).toString());
+
+
+                    System.out.println("Vakir etiqueta1: "+op1.getEtiqueta() );
+                    System.out.println("Vakir op2Eti: "+intrucciones.get(i).getOperadores()[2].getEtiqueta() );
                     if(i < intrucciones.size() && intrucciones.get(i).getTipoIntruccion() == TipoInstruccion.SKIP && intrucciones.get(i).getOperadores()[2].getEtiqueta().equals(op1.getEtiqueta())){
 
+                        System.out.println("etnbro");
                         intrucciones.get(posicionIf).setTipoIntruccion(opuesto(intrucciones.get(posicionIf).getTipoIntruccion())); //niego el if
-
+                        System.out.println("Intruccion cambiada if:"+intrucciones.get(posicionIf).toString());
                         //intrucciones.get(posicionIfGoto).setOperador(new Operador3Direcciones("", op1.getValString(), TipoCambio.BOOL), 0);
                         intrucciones.get(posicionIfGoto).setOperador(op2, 2);
+                        System.out.println("Intruccion ifgoto:"+intrucciones.get(posicionIfGoto).toString());
                         intrucciones.remove(posicionGoto);
+                        System.out.println("Intruccion eliminada posgoto:"+intrucciones.get(posicionGoto).toString());
                         cambio = true;
 
                         //miramos si podemos borrar el skip
                         boolean borrar = true;
                         for(int j =0; j< intrucciones.size(); j++){
-                            if((aritmetico(intrucciones.get(j).getTipoIntruccion()) || intrucciones.get(j).getTipoIntruccion() == TipoInstruccion.GOTO) && intrucciones.get(j).getOperadores()[2].getEtiqueta().equals(op1.getEtiqueta())){
+
+                            System.out.println("Intruccion anlizanda:"+intrucciones.get(j).toString());
+                            System.out.println("valor arit: "+aritmetico(intrucciones.get(j).getTipoIntruccion()) );
+                            System.out.println("Valor comp: "+ (intrucciones.get(j).getTipoIntruccion() == TipoInstruccion.GOTO));
+                            System.out.println("Vakir etiqueta1: "+op1.getEtiqueta() );
+                            System.out.println("Valor etiq2: "+intrucciones.get(j).getOperadores()[2]);
+                            System.out.println("Valor op1: "+op1.getEtiqueta());
+
+
+                            if((aritmetico(intrucciones.get(j).getTipoIntruccion()) || intrucciones.get(j).getTipoIntruccion() == TipoInstruccion.GOTO) && (intrucciones.get(j).getOperadores()[2].getEtiqueta() != null && intrucciones.get(j).getOperadores()[2].getEtiqueta().equals(op1.getEtiqueta()))){
                                 borrar = false;
                                 break;
                             }
+                            System.out.println("SIguiente intruccion");
                         }
 
                         if(borrar){
@@ -57,6 +83,8 @@ public class Optimizaciones {
                     }
                 }
             }
+
+            System.out.println("Intruccion:"+intrucciones.get(i).toString()); 
         }
         return cambio;
     }
@@ -64,6 +92,7 @@ public class Optimizaciones {
     
     
     public boolean bracamentsSobreBrancaments(){
+        System.out.println("Bracaments Sobre Brancaments");
         boolean cambio = false;
         for (int i = 0; i < intrucciones.size(); i++) {
             if (logico(intrucciones.get(i).getTipoIntruccion())) {
@@ -116,6 +145,7 @@ public class Optimizaciones {
     }
     
     public boolean asignacionesDiferidas(){
+        System.out.println("Asignaciones Diferidas");
         boolean cambio = false;
         for(int i=0; i< intrucciones.size();i++){
             if(aritmetico(intrucciones.get(i).getTipoIntruccion()) || 

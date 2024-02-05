@@ -9,7 +9,8 @@ main {
 
    for(i;i< 5; i++){
     println("En bucle");
-    println(dev());
+    println(i);
+    //println(dev());
    }
 
    println("Despues bucle");
