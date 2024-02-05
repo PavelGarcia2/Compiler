@@ -114,8 +114,7 @@ public class TablaSimbolos {
                     actual = iter.next();
                 }else{
                     break;
-                }
-            
+                }            
             }
         }else{
             n--;
@@ -208,11 +207,11 @@ public class TablaSimbolos {
     // }
 
   
-        public void displayTS() {
-            System.out.println("Tabla de símbolos");
-            for (String key : td.keySet()) {
-                System.out.println(key + " : " + td.get(key).toString());
-            }
+    public void displayTS() {
+        System.out.println("Tabla de símbolos");
+        for (String key : td.keySet()) {
+            System.out.println(key + " : " + td.get(key).toString());
         }
+    }
     
 }

@@ -1,0 +1,16 @@
+int l;
+int k;
+main{
+    int i;
+    for(i;i<10;i++){
+        println("Entro en el bucle");
+        l = fib(i);
+        println(l);
+    }
+    println("TERMINO");
+}
+
+fun int fib(int m){
+    k =m + 1
+    return k;
+}

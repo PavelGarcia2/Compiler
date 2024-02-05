@@ -3433,11 +3433,12 @@ public class Semantico {
         new Operador3Direcciones("",aux3,false,null), 
         new Operador3Direcciones("",t2,false,null));
         
-        int i = 2;   
+        int i = 1;   
         int t4 = -1;    
-        while(siguiente.getNodoDimensiones()!= null){        
-           
-            siguiente = dimension.getNodoDimensiones().getNodoDimArray();
+        System.out.println(bounds.get(2));
+        //siguiente = dimension.getNodoDimensiones().getNodoDimArray();
+        while(siguiente.getNodoDimensiones()!= null){  
+            siguiente = siguiente.getNodoDimensiones().getNodoDimArray();      
 
             // t3 = t2 * d3
             int aux4 = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false, 1);
