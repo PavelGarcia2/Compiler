@@ -116,28 +116,27 @@ public class Semantico {
             g.getIntrucciones().forEach(ins -> {
                 System.out.println(i.getAndIncrement() + "\t" + ins.toString());
             });
-            // tablaProcedimientos.muestraTP();
-            // Generar ensamblador
            // Generar ensamblador
             GeneradorEnsamblado ensamblado = new GeneradorEnsamblado("ensamblado", ts, tablaVariables,tablaProcedimientos, g.getIntrucciones());
             ensamblado.generarCodigoMain();
 
 
-        //   System.out.println("Empiezo las optimizaciones\n\n\n");
-        //    optimizacion= new Optimizaciones(g);
+          System.out.println("Empiezo las optimizaciones\n\n\n");
+           optimizacion= new Optimizaciones(g);
 
-        //    boolean cambio = true;
-        //        while (cambio) {
-        //            cambio = false;
-        //            if (optimizacion.asignacionesDiferidas()) {
-        //                cambio = true;
-        //            }
-        //            if (optimizacion.bracamentsAdjacents()) {
-        //                cambio = true;
-        //            }
-        //            if (optimizacion.bracamentsSobreBrancaments()) {
-        //                cambio = true;
-        //            }
+           boolean cambio = true;
+               while (cambio) {
+                   cambio = false;
+                   if (optimizacion.asignacionesDiferidas()) {
+                       cambio = true;
+                   }
+                   if (optimizacion.bracamentsAdjacents()) {
+
+                       cambio = true;
+                   }
+                   if (optimizacion.bracamentsSobreBrancaments()) {
+                       cambio = true;
+                   }
                 //    if (optimizacion.operacioConstant1()) {
                 //        cambio = true;
                 //    }
@@ -150,21 +149,21 @@ public class Semantico {
                 //    if (optimizacion.codiInaccesible2()) {
                 //        cambio = true;
                 //    }
-               //}
+               }
 
-                // System.out.println("CD3 OPTIMIZADO");
+                System.out.println("CD3 OPTIMIZADO");
 
-                // AtomicInteger i2 = new AtomicInteger(0);
-                // optimizacion.getIntrucciones().forEach(ins -> {
-                //     System.out.println(i2.getAndIncrement() + "\t" + ins.toString());
-                // });
+                AtomicInteger i2 = new AtomicInteger(0);
+                optimizacion.getIntrucciones().forEach(ins -> {
+                    System.out.println(i2.getAndIncrement() + "\t" + ins.toString());
+                });
 
-              // System.out.println("Genero el ensamblado optimizado\n\n");
-               //ensamblado = new GeneradorEnsamblado("ensamblado_Optimizado", ts, tablaVariables,tablaProcedimientos, optimizacion.getIntrucciones());
-               //ensamblado.generarCodigoMain();
+              System.out.println("Genero el ensamblado optimizado\n\n");
+               ensamblado = new GeneradorEnsamblado("ensamblado_Optimizado", ts, tablaVariables,tablaProcedimientos, optimizacion.getIntrucciones());
+               ensamblado.generarCodigoMain();
 
-          // System.out.println("\n\n\n\nContenido de la tabla de simbolos");
-            //ts.displayTS();
+          System.out.println("\n\n\n\nContenido de la tabla de simbolos");
+            ts.displayTS();
         } else {
             parser.report_error("No hemos encontrado el main", main);
         }
@@ -1717,7 +1716,6 @@ public class Semantico {
 
             case 0: // if
                 System.out.println("Detectamos un if");
-
                 if (otras.getNodoExpresion() != null) {
                     ctrlExp(otras.getNodoExpresion(), false, true);
                 }
@@ -1732,17 +1730,21 @@ public class Semantico {
                 String etiquetaS = g.nuevaEtiqueta();
                 g.genIntruccion(TipoInstruccion.GOTO, null, null, new Operador3Direcciones("", etiquetaS));
                 g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones("", etiqueta));
+
                 // comprobamos las sentencias
                 if (otras.getNodoSents() != null) {
                     ctrlSents(otras.getNodoSents());
                 }
 
+                String etiquetaPostIf = g.nuevaEtiqueta();
+                g.genIntruccion(TipoInstruccion.GOTO, null, null, new Operador3Direcciones("",etiquetaPostIf));
                 g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones("", etiquetaS));
+
                 // comprobamos el else
                 if (otras.getNodoElse() != null) {
-                    ctrlElseSent(otras.getNodoElse());
+                    ctrlElseSent(otras.getNodoElse(), etiquetaPostIf);
                 }
-
+                g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones("", etiquetaPostIf));
                 break;
 
             case 1: // while
@@ -1761,8 +1763,10 @@ public class Semantico {
                         new Operador3Direcciones("", otras.getNodoExpresion().getNv(), false, null),
                         new Operador3Direcciones("", 0, TipoCambio.INT),
                         new Operador3Direcciones("", sentsWhile));
+
                 g.genIntruccion(TipoInstruccion.GOTO, null, null, new Operador3Direcciones("", etiquetaPostWhile));
                 g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones("", sentsWhile));
+
                 // comprobamos las sentencias
                 if (otras.getNodoSents() != null) {
                     ctrlSents(otras.getNodoSents());
@@ -2560,7 +2564,7 @@ public class Semantico {
         }
     }
 
-    public void ctrlElseSent(NodoElse elseSent) {
+    public void ctrlElseSent(NodoElse elseSent,String etiquetaFin) {
 
         // else
         if (elseSent.getNodoExpresion() == null) {
@@ -2598,11 +2602,13 @@ public class Semantico {
                 ctrlSents(elseSent.getNodoSents());
             }
 
+            
+            g.genIntruccion(TipoInstruccion.GOTO, null, null, new Operador3Direcciones("", etiquetaFin));
             g.genIntruccion(TipoInstruccion.SKIP, null, null, new Operador3Direcciones("", etiquetaFalse));
 
             // compruebo el else
             if (elseSent.getNodoElse() != null) {
-                ctrlElseSent(elseSent.getNodoElse());
+                ctrlElseSent(elseSent.getNodoElse(),etiquetaFin);
             }
         }
     }

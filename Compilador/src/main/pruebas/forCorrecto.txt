@@ -1,15 +1,16 @@
 main{
     
-    int numr = 24;
-    int b = 5;
+    int numr = 5;
+    int b = 0;
 
     int i;
 
-    for(i;b > numr;i++){
-        print("Dentro del for");
+    for(i; i < numr;i++){
+        println("Dentro del for");
         println(2);
-        print('a'); //sale el valor asci en vez de la letra 
-        print(b);
+        println('a'); //sale el valor asci en vez de la letra 
+        println(b);
+        b=b+1;
     }
 
 }

@@ -1,14 +1,24 @@
 const char asf = 'a';
 const int caquita = 2;
 
-main {
-   //int a = fuasd();
-   if(true > 1 * 2){
+int suma=0;
 
+main {
+   int i=0;
+   println("Antes bucle");
+
+   for(i;i< 5; i++){
+    println("En bucle");
+    println(dev());
    }
+
+   println("Despues bucle");
 }
 
 //Decl funcs
-fun int fuasd(){
-    return 0;
+fun int dev(){
+    int misCojenes24;    
+    misCojenes24 =misCojenes24+1;
+
+    return misCojenes24;
 }

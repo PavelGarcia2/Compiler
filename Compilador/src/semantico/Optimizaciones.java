@@ -3,6 +3,8 @@ package semantico;
 
 import java.util.ArrayList;
 
+import herramientas.Tipo;
+import semantico.Operador3Direcciones.TipoCambio;
 import semantico.Operador3Direcciones.TipoI;
 
 public class Optimizaciones {
@@ -17,17 +19,77 @@ public class Optimizaciones {
         boolean cambio=false;
         for(int i =0; i< intrucciones.size(); i++){
             //si nos encontramos con un if de cualquier tipo lo modificamos 
+            if(logico(intrucciones.get(i).getTipoIntruccion())){
+                Operador3Direcciones op3 = intrucciones.get(i).getOperadores()[2]; //tipo de if
+                int posicionIf = i;
+                i++;
 
+                Operador3Direcciones op1 = intrucciones.get(i).getOperadores()[2]; //if true goto
+                System.out.println("Valor :"+op3.toString()); 
+                int posicionIfGoto = i;
+                i++;
+
+                if(i < intrucciones.size() && intrucciones.get(i).getTipoIntruccion() == TipoInstruccion.GOTO){
+                    Operador3Direcciones op2 = intrucciones.get(i).getOperadores()[2]; // siguiente salto goto
+                    int posicionGoto = i;
+                    i++;
+                    if(i < intrucciones.size() && intrucciones.get(i).getTipoIntruccion() == TipoInstruccion.SKIP && intrucciones.get(i).getOperadores()[2].getEtiqueta().equals(op1.getEtiqueta())){
+
+                        intrucciones.get(posicionIf).setTipoIntruccion(opuesto(intrucciones.get(posicionIf).getTipoIntruccion())); //niego el if
+
+                        //intrucciones.get(posicionIfGoto).setOperador(new Operador3Direcciones("", op1.getValString(), TipoCambio.BOOL), 0);
+                        intrucciones.get(posicionIfGoto).setOperador(op2, 2);
+                        intrucciones.remove(posicionGoto);
+                        cambio = true;
+
+                        //miramos si podemos borrar el skip
+                        boolean borrar = true;
+                        for(int j =0; j< intrucciones.size(); j++){
+                            if((aritmetico(intrucciones.get(j).getTipoIntruccion()) || intrucciones.get(j).getTipoIntruccion() == TipoInstruccion.GOTO) && intrucciones.get(j).getOperadores()[2].getEtiqueta().equals(op1.getEtiqueta())){
+                                borrar = false;
+                                break;
+                            }
+                        }
+
+                        if(borrar){
+                            intrucciones.remove(posicionGoto);
+                        }
+                    }
+                }
+            }
         }
-
         return cambio;
-
     }
 
     
     
     public boolean bracamentsSobreBrancaments(){
-        return false;
+        boolean cambio = false;
+        for (int i = 0; i < intrucciones.size(); i++) {
+            if (logico(intrucciones.get(i).getTipoIntruccion())) {
+                int posIf = i;
+                Operador3Direcciones e1 = intrucciones.get(i).getOperadores()[2];
+                for (int j = i + 1; j < intrucciones.size(); j++) {
+                    if (intrucciones.get(j).getTipoIntruccion() == TipoInstruccion.SKIP && intrucciones.get(j).getOperadores()[2].getEtiqueta().equals(e1.getEtiqueta())) {
+                        if (j + 1 < intrucciones.size() && intrucciones.get(j + 1).getTipoIntruccion() == TipoInstruccion.GOTO) {
+                            intrucciones.get(posIf).setOperador(intrucciones.get(j + 1).getOperadores()[2],2);
+                            boolean borrar = true;
+                            for (int k = 0; k < intrucciones.size(); k++) {
+                                if ((logico(intrucciones.get(k).getTipoIntruccion()) || intrucciones.get(k).getTipoIntruccion() == TipoInstruccion.GOTO) && intrucciones.get(k).getOperadores()[2].getEtiqueta().equals(e1.getEtiqueta())) {
+                                    borrar = false;
+                                    break;
+                                }
+                            }
+                            if (borrar) {
+                                cambio = true;
+                                intrucciones.remove(j);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return cambio;
     }
     
     public boolean asignacioDeBooleanos(){
@@ -35,6 +97,7 @@ public class Optimizaciones {
     }
     
     public boolean operacionesConstantes(){
+
         return false;
     }
 

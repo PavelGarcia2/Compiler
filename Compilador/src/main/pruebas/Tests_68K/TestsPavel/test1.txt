@@ -3,12 +3,11 @@
  	JMP fsalto0; Instruction of type: SKIP pne el punto y coma pegado y peta
    NO_SOLUCIONADO
 */
-int i ;
-set i = 0;
+int i =0;
 main {
     println("Entro");
     while(i<100){ //falla en la comprobacion no entra en el bucle
-        println("E");
+        println(i);
         i=i+1;
     }
     println("Salgo");

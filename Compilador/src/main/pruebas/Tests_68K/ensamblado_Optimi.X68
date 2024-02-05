@@ -58,23 +58,13 @@ globals:
 	JMP main ; Declared all globals
 main:                                                       
 	MOVE.L A7, A6
-; Instruction of type: COPIA
-;Operator 1 -> 0, Store in -> 2
+; Instruction of type: IFMAYORIGUAL
+;Operator 1 -> 0, Operator 2 -> t1, Store in -> 4
 
 	MOVE.L (Variable0), D0 ; Load variable
-	MOVE.L D0, (Variable2) ; Store local variable
-; Instruction of type: COPIA
-;Operator 1 -> 1, Store in -> 3
-
-	MOVE.L (Variable1), D0 ; Load variable
-	MOVE.L D0, (Variable3) ; Store local variable
-; Instruction of type: IFMENOR
-;Operator 1 -> 2, Operator 2 -> t3, Store in -> 4
-
-	MOVE.L (Variable2), D0 ; Load variable
-	MOVE.L (Variable3), D1 ; Load variable
+	MOVE.L (Variable1), D1 ; Load variable
 	CMP.L D1, D0
-	BLT salto0
+	BGE salto0
 	MOVE.L #0, D0 ; Load variable
 	MOVE.L D0, (Variable4) ; Store local variable
 	JMP fsalto0 ; Instruction of type: SKIP
@@ -90,15 +80,7 @@ fsalto0:
 	MOVE.L (Variable4), D0 ; Load variable
 	MOVE.L #-1,D1
 	CMP.L D1, D0
-	BEQ e0
-; Instruction of type: GOTO
-;, Store in -> -2
-
-	JMP e1
-; Instruction of type: SKIP
-;, Store in -> -2
-
-e0:
+	BEQ e1
 ; Instruction of type: COPIA
 ;Operator 1 -> -2, Store in -> 5
 
@@ -126,23 +108,13 @@ e0:
 ;, Store in -> -2
 
 e1:
-; Instruction of type: COPIA
-;Operator 1 -> 0, Store in -> 6
+; Instruction of type: IFMENORIGUAL
+;Operator 1 -> 0, Operator 2 -> t1, Store in -> 8
 
 	MOVE.L (Variable0), D0 ; Load variable
-	MOVE.L D0, (Variable6) ; Store local variable
-; Instruction of type: COPIA
-;Operator 1 -> 1, Store in -> 7
-
-	MOVE.L (Variable1), D0 ; Load variable
-	MOVE.L D0, (Variable7) ; Store local variable
-; Instruction of type: IFMAYOR
-;Operator 1 -> 6, Operator 2 -> t7, Store in -> 8
-
-	MOVE.L (Variable6), D0 ; Load variable
-	MOVE.L (Variable7), D1 ; Load variable
+	MOVE.L (Variable1), D1 ; Load variable
 	CMP.L D1, D0
-	BGT salto1 
+	BLE salto1
 	MOVE.L #0, D0 ; Load variable
 	MOVE.L D0, (Variable8) ; Store local variable
 	JMP fsalto1 ; Instruction of type: SKIP
@@ -158,15 +130,7 @@ fsalto1:
 	MOVE.L (Variable8), D0 ; Load variable
 	MOVE.L #-1,D1
 	CMP.L D1, D0
-	BEQ e3
-; Instruction of type: GOTO
-;, Store in -> -2
-
-	JMP e4
-; Instruction of type: SKIP
-;, Store in -> -2
-
-e3:
+	BEQ e4
 ; Instruction of type: COPIA
 ;Operator 1 -> -2, Store in -> 9
 
