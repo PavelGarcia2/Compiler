@@ -1,14 +1,20 @@
 
 
 main{
-    int numr = 24;
+    int numr = 23;
     int b;
 
-    if(0 == numr mod 2){
-        print("Es par");
-        b=2;
+    if(0== numr mod 2){
+        if(false){
+            println("Es par");
+            println("Es par");           
+        }
+        println("Es par");
+        b=numr mod 2;
+        print(b);
         numr=3;
-    }elif(false){
+    }else{
+        print("Es impar");
         b = 5;
     }
 }

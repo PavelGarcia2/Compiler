@@ -1,15 +1,14 @@
 // Declaracion y seteo de variables 
 int a = 0;
-int b = 1;
+int b = 2;
     
-main {
+main {   
     
-    if(a<b){  
-        println("Menor");
-    }elif(a>b){
-        println("Mayor");
-    }else{
-        println("Iguales");
-    }
-    
+    a = suma(a,b);
+    print(a);
+}
+
+fun int suma(int x, int i){
+    i = i+x;
+    return i;
 }

@@ -1,20 +1,27 @@
-char b = 0;
+char b;
 set b = 'b';
 int sasd = -2;
 
 
 main {
-    char a = 25;
+    char a = b;
     int z = -1;
-    a = 255;
+   
     z = -23;
 
+    println(a);
     switch(a){
+        
         case 'a':
             print("Hola soy a");
         break;
+
         case 'b':
             print("Hola soy b");
+        break;
+
+        default:
+          print("No se que letra es");
         break;
     }
     

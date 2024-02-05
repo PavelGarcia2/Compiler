@@ -1,14 +1,14 @@
 // Declaracion y seteo de variables 
 int a = 3;
-float z = 2;
+int z = 2;
 str f = "adios";
 int b;
 
 set b = z; 
 int k = 3;
-float l = k;
+int l = k;
 set k=l;
-char mamapinga = 23;
+char mamapinga = 'b';
 
 int arr[][] = new int[5][3];
 
@@ -20,6 +20,8 @@ main {
 
     if(a < b){
         print("Hola");
+    }else{
+        println("adios");
     }
     
 }
