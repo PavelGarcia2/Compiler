@@ -1,5 +1,0 @@
-Para compilar:
-
-flex lexico.l
-
-bison -d -t sintacticov2.y
