@@ -1,12 +1,12 @@
 Contendio de la tabla de símbolos
 
-tsb_char : tsimbolos.auxi.Datos@6ae40994
-tsb_void : tsimbolos.auxi.Datos@1a93a7ca
-false : tsimbolos.auxi.Datos@3d82c5f3
-suma : tsimbolos.auxi.Datos@2b05039f
-tsb_int : tsimbolos.auxi.Datos@61e717c2
-tsb_str : tsimbolos.auxi.Datos@66cd51c3
-true : tsimbolos.auxi.Datos@4dcbadb4
-tsb_float : tsimbolos.auxi.Datos@4e515669
-tsb_bool : tsimbolos.auxi.Datos@17d10166
+tsb_char : tsimbolos.auxi.Datos@6659c656
+hola : tsimbolos.auxi.Datos@6d5380c2
+tsb_void : tsimbolos.auxi.Datos@45ff54e6
+false : tsimbolos.auxi.Datos@2328c243
+tsb_int : tsimbolos.auxi.Datos@bebdb06
+tsb_str : tsimbolos.auxi.Datos@7a4f0f29
+true : tsimbolos.auxi.Datos@45283ce2
+tsb_float : tsimbolos.auxi.Datos@2077d4de
+tsb_bool : tsimbolos.auxi.Datos@7591083d
 

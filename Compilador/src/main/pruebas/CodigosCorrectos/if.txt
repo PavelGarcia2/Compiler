@@ -1,0 +1,10 @@
+//seteo de un int a una variable tipo array 
+
+main{
+    int a;
+    int lala[]=new int[2];
+    set lala[1]= 2;
+    a=lala[1];
+    
+    println(a);
+}

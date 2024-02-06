@@ -1,0 +1,5 @@
+str hola="";
+main{
+    in(hola);
+    print(hola);
+}
