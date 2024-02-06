@@ -181,6 +181,14 @@ public class Semantico {
             System.out.println("Archivo de la tabla de simbolos generado.\n\n");
             System.out.println("--------------------------------------");
 
+            
+
+            
+            System.out.println("\nGenero archivo del contenido de la tabla de variables...\n\n ");
+            tablaVariables.imprimirVariables();
+            System.out.println("Archivo de la tabla de variables generado.\n");
+            System.out.println("--------------------------------------");
+
 
 
         } else {
@@ -2280,32 +2288,6 @@ public class Semantico {
             }
         }
         return Tipo.tsb_void;
-    }
-
-    public void ctrlOpLog(NodoOpLog nodoOpLog) {
-
-        switch (nodoOpLog.getTipusOpLog()) { // supongo que es crear lo del c3d
-            case AND:
-                break;
-            case DIFERENTE:
-                break;
-            case IGUALIGUAL:
-                break;
-            case IGUALMAYOR:
-                break;
-            case IGUALMENOR:
-                break;
-            case MAYOR:
-                break;
-            case MENOR:
-                break;
-            case OR:
-                break;
-            default:
-                break;
-
-        }
-
     }
 
     public void ctrl_LlamadaFunc(NodoLlamadaFunc llamadaFunc) {

@@ -71,6 +71,11 @@ public class Variable{
     }
 
 
+    @Override
+    public String toString(){
+        return "Id variable: " + nombre + ", tipo: " + tipoVar + ", offset: " + dimension + ", del procedimiento: " + idProcedimiento + " y con tamaño de bytes: " + bytes;
+    }
+
 
 
 }
