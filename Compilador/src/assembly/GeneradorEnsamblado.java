@@ -143,7 +143,7 @@ public class GeneradorEnsamblado {
 
         switch (instruccion.getTipoIntruccion()) {
             case IND_ASS:
-            System.out.println("INDASS");
+           
                 ensamblado.append(espacioEtiqueta + "LEA" + espacioEtiqueta + "(Variable"
                         + instruccion.getOperadores()[2].getReferencia() + "), A0\n");
                 LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
@@ -164,10 +164,10 @@ public class GeneradorEnsamblado {
                     ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "D2, (A0) ; Store C IN A[B]\n");
 
                 }
-                System.out.println("ACABO IND_ASS");
+                
                 break;
             case IND_VAL:
-            System.out.println("INDVAL");
+            
                 ensamblado.append(espacioEtiqueta + "LEA" + espacioNormal + "(Variable"
                         + instruccion.getOperadores()[0].getReferencia() + "), A0\n");
                 LOAD(instruccion.getOperadores()[1], instruccion.getOperadores()[1].getReferencia(),
@@ -403,7 +403,7 @@ public class GeneradorEnsamblado {
 
                 break;
             case IFIGUALI:
-                System.out.println("IFIGUALI");
+                
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
                     LOAD(instruccion.getOperadores()[0], -88, null, "D0");
@@ -467,7 +467,7 @@ public class GeneradorEnsamblado {
                 break;
 
             case IFMAYOR:
-                System.out.println("IFMAYOR");
+                
 
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
@@ -517,7 +517,7 @@ public class GeneradorEnsamblado {
                 break;
 
             case IFMAYORIGUAL:
-                System.out.println("IFMAYORIGUAL");
+                
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
                     LOAD(instruccion.getOperadores()[0], -88, null, "D0");
@@ -563,7 +563,7 @@ public class GeneradorEnsamblado {
 
                 break;
             case IFMENOR:
-                System.out.println("IFMENOR");
+                
 
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
@@ -612,8 +612,6 @@ public class GeneradorEnsamblado {
                 break;
 
             case IFMENORIGUAL:
-
-                System.out.println("IFMENORIGUAL");
 
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
@@ -674,7 +672,6 @@ public class GeneradorEnsamblado {
 
             case MODULO:
 
-                System.out.println("INICIO MODULO");
 
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
@@ -755,7 +752,7 @@ public class GeneradorEnsamblado {
                 break;
 
             case NEGACION:
-                System.out.println("NEGACION");
+                
                 LOAD(instruccion.getOperadores()[0], instruccion.getOperadores()[0].getReferencia(),
                         tablaVariables.get(instruccion.getOperadores()[0].getReferencia()).getIdProcedimiento(), "D1");
                 ensamblado.append(espacioEtiqueta + "NEGM" + espacioNormal + "D1"); // If we already use D1 for result,
@@ -767,7 +764,7 @@ public class GeneradorEnsamblado {
                 break;
 
             case NOT:
-                //
+                
                 LOAD(instruccion.getOperadores()[2], instruccion.getOperadores()[2].getReferencia(),
                         tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getIdProcedimiento(), "D1");
                 ensamblado.append(espacioEtiqueta + "NOTM" + espacioNormal + "D1  \n"); // If we already use D1 for
@@ -780,7 +777,7 @@ public class GeneradorEnsamblado {
                 break;
 
             case OR:
-                System.out.println("OR");
+                
                 if (instruccion.getOperadores()[0].getTipo() == TipoI.LITERAL
                         && instruccion.getOperadores()[1].getTipo() == TipoI.LITERAL) {
 

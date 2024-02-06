@@ -111,6 +111,8 @@ public class Semantico {
                 ctrlDeclListFunciones(funcList);
             }
 
+            
+
             g.genIntruccion(TipoInstruccion.CALL, new Operador3Direcciones("main", "main"), null, null);
             ctrlMain(main);
 
@@ -119,12 +121,19 @@ public class Semantico {
             g.getIntrucciones().forEach(ins -> {
                 System.out.println(i.getAndIncrement() + "\t" + ins.toString());
             });
+
+            System.out.println("--------------------------------------");
+            System.out.println("\nGenero el ensamblado sin optimizar...\n\n");
             // Generar ensamblador
             GeneradorEnsamblado ensamblado = new GeneradorEnsamblado("ensamblado", ts, tablaVariables,
                     tablaProcedimientos, g.getIntrucciones());
             ensamblado.generarCodigoMain();
 
-            System.out.println("Empiezo las optimizaciones\n\n\n");
+            System.out.println("Codigo ensamblador sin optimizar generado.\n\n");
+            System.out.println("--------------------------------------");
+
+            System.out.println("Empiezo las optimizaciones\n\n");
+            System.out.println("Optimizaciones aplicadas: \n");
             optimizacion = new Optimizaciones(g);
 
             boolean cambio = true;
@@ -148,28 +157,31 @@ public class Semantico {
                 // }
                 // if (optimizacion.eliminacionBloquesInaccesibles()) {
                 // cambio = true;
-                // }
-                // if (optimizacion.codiInaccesible1()) {
-                // cambio = true;
-                // }
-                // if (optimizacion.codiInaccesible2()) {
-                // cambio = true;
-                // }
             }
 
+            System.out.println("\n--------------------------------------");
             System.out.println("CD3 OPTIMIZADO");
+            System.out.println("--------------------------------------\n");
 
             AtomicInteger i2 = new AtomicInteger(0);
             optimizacion.getIntrucciones().forEach(ins -> {
                 System.out.println(i2.getAndIncrement() + "\t" + ins.toString());
             });
-
-            System.out.println("Genero el ensamblado optimizado\n\n");
+            System.out.println("--------------------------------------");
+            System.out.println("\nGenero el ensamblado optimizado...\n\n");
             ensamblado = new GeneradorEnsamblado("ensamblado_Optimizado", ts, tablaVariables, tablaProcedimientos,
                     optimizacion.getIntrucciones());
             ensamblado.generarCodigoMain();
 
+            System.out.println("Codigo ensamblador optimizado generado.\n\n");
+
+            System.out.println("--------------------------------------");
+            System.out.println("\nGenero archivo del contenido de la tabla de simbolos...\n\n ");
             ts.displayTS();
+            System.out.println("Archivo de la tabla de simbolos generado.\n\n");
+            System.out.println("--------------------------------------");
+
+
 
         } else {
             parser.report_error("No hemos encontrado el main", main);
@@ -907,7 +919,7 @@ public class Semantico {
                     nv = g.nuevaVariable(TipoVar.VARIABLE, Tipo.tsb_int, false, 1);
                     id.setNv(nv);
 
-                    System.out.println("Pongo en la ts " + id.getNombre());
+                    //System.out.println("Pongo en la ts " + id.getNombre());
                     d = new Dvar(nv, Tipo.tsb_int, id);
                     ts.poner(id.getNombre(), d, id);
                     g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones("", valor, TipoCambio.INT), null,
