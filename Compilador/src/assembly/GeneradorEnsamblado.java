@@ -1227,11 +1227,6 @@ public class GeneradorEnsamblado {
                 // System.out.println("LA REFERENCIA: " +
                 // instruction.getOperadores()[2].getReferencia());
                 if (instruction.getOperadores()[2].getReferencia() == i) {
-                    // System.out.println("HE ENTRADO");
-                    // if (instruction.getOperadores()[0].getEtiqueta() == null) {
-                    // return getValorString(instruction.getOperadores()[0].getValString());
-                    // }
-                    // System.out.println("HOLA"+instruction.getOperadores()[0].getValString());
                     return (instruction.getOperadores()[0].getValString()).replace('"', '\'');
                 }
             }
@@ -1381,12 +1376,6 @@ public class GeneradorEnsamblado {
         // System.out.println("SIZE de variableId: " + variable.getSize());
         int profx = 0;
         int profp = 0;
-        // boolean notGlobal = tablaProcedimientos.get(variable.getIdProcedimiento()) !=
-        // null;
-        // if (notGlobal) {
-        // profx = tablaProcedimientos.get(variable.getIdProcedimiento()).getAmbito();
-        // profp = tablaProcedimientos.get(procedureId).getAmbito();
-        // }
         // OFFSET DE LA VARIABLE
         int dx = variable.getDimension();
         if (isParam) {
@@ -1399,7 +1388,6 @@ public class GeneradorEnsamblado {
         if (profx == profp && dx < 0) { // Local variable
             // System.out.println("ENTRO POR AQUI");
             // Look up variable space, if sums correctly and add all the space to A7 and we
-            // win jejeje
             if (true) {
                 if (variable.esArray()) {
                     int sizeArray = tablaVariables.get(variableId).getBytes();
@@ -1423,11 +1411,6 @@ public class GeneradorEnsamblado {
                             + variableId + ") ; Store local variable\n");
                 }
             }
-            // if (notGlobal) {
-            // tablaProcedimientos.get(variable.getIdProcedimiento())
-            // .setSizeVariables(tablaProcedimientos.get(variable.getIdProcedimiento()).getSizeVariables()
-            // + tablaVariables.get(variableId).getBytes());
-            // }
         } else if (profx == profp && dx > 0) { // Local parameter
             if (true) {
                 ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + register + ", " + "(Variable"
