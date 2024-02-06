@@ -2,9 +2,9 @@
 
 
 main{
+    int numer = 24;
 
-    int numero = 24;
-    if(numero%2)
+    if(0==numer mod 2)
         println("Es par");
     }
 }

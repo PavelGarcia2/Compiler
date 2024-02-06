@@ -1,0 +1,13 @@
+//se intenta usar "a" que es una variable la cual no ha sido creada de manera correcta, es decir no se ha hecho int a
+
+//por ende sale error semantico
+
+//ERROR SEMANTICO: No existe el id en la linea: 8, columna: 5
+
+main{
+    a=2;
+
+    while(a > 2){
+
+    }
+}

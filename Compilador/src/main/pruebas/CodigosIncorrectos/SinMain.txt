@@ -1,0 +1,13 @@
+//falta un main
+
+int a;
+char car ;
+bool b;
+str x ;
+
+int arr[][] = new int[1][2]; 
+
+set a = 5;
+set x = "asd";
+set car = 'm';
+set b= false;

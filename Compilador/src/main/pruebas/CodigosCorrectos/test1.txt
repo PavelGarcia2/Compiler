@@ -1,0 +1,10 @@
+//printea el valor de i del 0 al 100 usando un while
+int i =0;
+main {
+    println("Entro");
+    while(i<100){ //falla en la comprobacion no entra en el bucle
+        println(i);
+        i=i+1;
+    }
+    println("Salgo");
+}

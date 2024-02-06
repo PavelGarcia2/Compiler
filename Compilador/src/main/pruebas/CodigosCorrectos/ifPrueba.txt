@@ -4,7 +4,8 @@ int b = 3;
 int c = 7;
     
 main {  
-    c = suma2(3+45,b);
+    c = suma2(45+3,b);
+     println(c);
     c = suma(a, b, c);
     print(c);
 }

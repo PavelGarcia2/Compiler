@@ -157,6 +157,7 @@ public class Semantico {
                 // }
                 // if (optimizacion.eliminacionBloquesInaccesibles()) {
                 // cambio = true;
+                // }
             }
 
             System.out.println("\n--------------------------------------");
@@ -2370,7 +2371,7 @@ public class Semantico {
                             int vali = Integer.parseInt(valor);
                             // Generamos instruccion
                             g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
-                                    new Operador3Direcciones("", vali));
+                                    new Operador3Direcciones("", vali,TipoCambio.INT));
                             break;
                         case tsb_bool:
                             int valb = Integer.parseInt(valor);

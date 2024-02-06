@@ -1,0 +1,39 @@
+/*
+Errores sintacticos 
+
+Nombres de funciones mal, func en vez de fun
+
+no hay return cuando la funcion es int
+
+String en vez de str
+*/
+
+    int edad1;
+    int edad2;
+    String nombre;
+
+    main {
+        int multEdad;
+        edad1 = 10;
+        edad2 = 2;
+        println(mayor(edad1,edad2));
+        multEdad= multiplicarEdad(edad1,3);
+        println("Edad multiplicada = ");
+        print(multEdad);
+    }   
+
+
+    func bool mayor (int edad12, int edad22) {
+        bool esmayor = false;
+        if(edad12 > edad22){
+            esmayor = true;
+        }
+        return esmayor;
+    }
+
+    func int multiplicarEdad (int edad, int mult) {
+        int res= edad * mult;
+        
+    }
+
+   

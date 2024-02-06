@@ -1,0 +1,14 @@
+//Incrementa el valor de numr printeando que esta dentro dedl while y printea un 2, asi hasta que numr no sea igual a b.
+
+main{
+
+    int numr = 24;
+    int b = 52;
+
+    while(b > numr){
+        println("Dentro del while");
+        println(2);
+        numr=numr+1;
+    }
+
+}

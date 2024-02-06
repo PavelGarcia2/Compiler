@@ -1,0 +1,13 @@
+// se intenta sobre asignar un valor a una constante 
+
+//en el main se intenta crear una variable con el mismo id que la constante ya declarada cuando no esta permitido, error semantico
+
+const int a=4;
+const int b=3;
+
+main{
+    int a=20;
+    int b=23;
+
+    print(a);
+}

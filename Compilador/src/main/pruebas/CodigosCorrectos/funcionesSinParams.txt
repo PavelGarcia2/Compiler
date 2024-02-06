@@ -1,5 +1,5 @@
 const char asf = 'a';
-const int caquita = 2;
+const int constante1 = 2;
 
 int suma=0;
 
@@ -18,10 +18,8 @@ main {
 
 //Decl funcs
 fun int dev(){
-    int misCojenes24;    
-    misCojenes24 =misCojenes24+1;
+    int res;    
+    res =res+1;
 
-    return misCojenes24;
+    return res;
 }
-
-//peta por params null ARRAYLIST.size because params is null

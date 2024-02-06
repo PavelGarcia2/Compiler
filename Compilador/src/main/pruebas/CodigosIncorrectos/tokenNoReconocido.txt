@@ -1,0 +1,9 @@
+//uso de un token el cual no sabemos que es,  este '^', error lexico
+
+//ERROR LEXICO: no reconocemos el simbolo '^' en la linea: 7
+
+main{
+
+    char a= ^ ;
+
+}
