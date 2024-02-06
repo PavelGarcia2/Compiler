@@ -3,7 +3,7 @@
 main {
     int z=1;
     char x;
-    z = suma(1+2,2+2);
+    z = suma(1,2);
     println(z);
 }
 

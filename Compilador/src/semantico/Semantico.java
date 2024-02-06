@@ -2357,6 +2357,7 @@ public class Semantico {
                             n1.getNodoExpresion());
 
                 } else if (n1.getNodoExpresion().getNodoLiteral() != null) {
+                    /* 
                     // MIRAR que es tenemos un literal dentro de la llamada de la funcion
                     // Vamos a sacar el tipo del literal
                     llamada = n1.getNodoExpresion().getNodoLiteral().getTipo();
@@ -2398,6 +2399,10 @@ public class Semantico {
                                     new Operador3Direcciones(valor, 0f));
                             break;
                     }
+
+                    */
+
+                    parser.report_error("No puedes meter literales por parametro", n1.getNodoExpresion().getNodoLiteral());
 
                 } else if (n1.getNodoExpresion().getNodoExpresion1() != null) {
                     // Si metemos una expresion
