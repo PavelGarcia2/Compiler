@@ -2238,54 +2238,58 @@ public class Semantico {
                             n1.getNodoExpresion());
 
                 } else if (n1.getNodoExpresion().getNodoLiteral() != null) {
-                    /*
-                     * // MIRAR que es tenemos un literal dentro de la llamada de la funcion
-                     * // Vamos a sacar el tipo del literal
-                     * llamada = n1.getNodoExpresion().getNodoLiteral().getTipo();
-                     * // System.out.println("Tipo llamada: " + llamada);
-                     * // System.out.println("Tipo funcion: " + funcion);
-                     * if (funcion != llamada) {
-                     * parser.report_error("Parametro incorrecto",
-                     * n1.getNodoExpresion().getNodoLiteral());
-                     * }
-                     * String valor = n1.getNodoExpresion().getNodoLiteral().getValor();
-                     * switch (llamada) {
-                     * case tsb_int:
-                     * int vali = Integer.parseInt(valor);
-                     * // Generamos instruccion
-                     * g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
-                     * new Operador3Direcciones("", vali,TipoCambio.INT));
-                     * break;
-                     * case tsb_bool:
-                     * int valb = Integer.parseInt(valor);
-                     * g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
-                     * new Operador3Direcciones("", valb));
-                     * break;
-                     * case tsb_char:
-                     * int valc;
-                     * if (funcion != Tipo.tsb_int) {
-                     * valc = (int) (valor.charAt(1));
-                     * } else {
-                     * valc = Integer.parseInt(valor);
-                     * }
-                     * g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
-                     * new Operador3Direcciones("", "", valc));
-                     * break;
-                     * case tsb_float:
-                     * Float valf = Float.parseFloat(valor);
-                     * g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
-                     * new Operador3Direcciones("", valf));
-                     * break;
-                     * case tsb_str:
-                     * g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
-                     * new Operador3Direcciones(valor, 0f));
-                     * break;
-                     * }
-                     * 
-                     */
 
-                    parser.report_error("No puedes meter literales por parametro",
-                            n1.getNodoExpresion().getNodoLiteral());
+                    // MIRAR que es tenemos un literal dentro de la llamada de la funcion
+                    // Vamos a sacar el tipo del literal
+                    llamada = n1.getNodoExpresion().getNodoLiteral().getTipo();
+                    // System.out.println("Tipo llamada: " + llamada);
+                    // System.out.println("Tipo funcion: " + funcion);
+                    if (funcion != llamada) {
+                        parser.report_error("Parametro incorrecto",
+                                n1.getNodoExpresion().getNodoLiteral());
+                    }
+                    String valor = n1.getNodoExpresion().getNodoLiteral().getValor();
+                    int t1 = g.nuevaVariable(TipoVar.VARIABLE, llamada, false, 1) ;
+                    switch (llamada) {
+                        case tsb_int:
+                            int vali = Integer.parseInt(valor);
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(null,vali,TipoCambio.INT), null, new Operador3Direcciones("", t1, false,null));
+                            // Generamos instruccion
+                            g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
+                                    new Operador3Direcciones("", t1, false, null));
+                            break;
+                        case tsb_bool:
+                            int valb = Integer.parseInt(valor);
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(null,valb,TipoCambio.BOOL), null, new Operador3Direcciones("", t1, false,null));
+                            g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
+                                    new Operador3Direcciones("", t1, false, null));
+                            break;
+                        case tsb_char:
+                            int valc;
+                            if (funcion != Tipo.tsb_int) {
+                                valc = (int) (valor.charAt(1));
+                            } else {
+                                valc = Integer.parseInt(valor);
+                            }
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(null,valc,TipoCambio.INT), null, new Operador3Direcciones("", t1, false,null));
+                            g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
+                                    new Operador3Direcciones("", t1, false, null));
+                            break;
+                        case tsb_float:
+                            Float valf = Float.parseFloat(valor);
+                            g.genIntruccion(TipoInstruccion.COPIA, new Operador3Direcciones(null,valf,TipoCambio.FLOAT), null, new Operador3Direcciones("", t1, false,null));
+                            g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
+                                   new Operador3Direcciones("", t1, false, null));
+                            break;
+                        case tsb_str:
+                            g.genIntruccion(TipoInstruccion.COPIA,new Operador3Direcciones(valor, 0f), null, new Operador3Direcciones("", t1, false,null));
+                            g.genIntruccion(TipoInstruccion.PARAM_SIMPLE, null, null,
+                                     new Operador3Direcciones("", t1, false,null));
+                            break;
+                    }
+
+                    // parser.report_error("No puedes meter literales por parametro",
+                    // n1.getNodoExpresion().getNodoLiteral());
 
                 } else if (n1.getNodoExpresion().getNodoExpresion1() != null) {
                     // Si metemos una expresion
