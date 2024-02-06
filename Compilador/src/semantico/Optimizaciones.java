@@ -120,15 +120,6 @@ public class Optimizaciones {
         }
         return cambio;
     }
-    
-    public boolean asignacioDeBooleanos(){
-        return false;
-    }
-    
-    public boolean operacionesConstantes(){
-
-        return false;
-    }
 
     public boolean eliminacionCodigoInaccesible(){
         System.out.println("Eliminacion Codigo Inaccesible");
@@ -187,16 +178,6 @@ public class Optimizaciones {
             }
         }
         return canvi;
-    }
-    
-    public boolean desplazamientoDeConstantes(){
-        return false;
-    }
-    
-    public boolean normalizacionOperaciones(){
-
-        return false;
-        
     }
     
     public boolean asignacionesDiferidas(){
