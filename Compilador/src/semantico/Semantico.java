@@ -2,6 +2,9 @@ package semantico;
 
 import sintactico.arbol.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -166,8 +169,13 @@ public class Semantico {
                     optimizacion.getIntrucciones());
             ensamblado.generarCodigoMain();
 
-            // System.out.println("\n\n\n\nContenido de la tabla de simbolos");
-            // ts.displayTS();
+            System.out.println("\n\n\n\nContenido de la tabla de simbolos");
+            ts.displayTS2();
+
+            
+
+
+
         } else {
             parser.report_error("No hemos encontrado el main", main);
         }

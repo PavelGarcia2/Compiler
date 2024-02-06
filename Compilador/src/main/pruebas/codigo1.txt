@@ -34,7 +34,7 @@ main {
         cdsa = 2;
     }
     y[2] = 11;
-    asf= resultado(1,2,true);
+    //asf= resultado(1,2,true);
 }
 
 //DECL FUNCS

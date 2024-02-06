@@ -15,13 +15,14 @@ Variable4	DS.L 1
 Variable5	DS.L 1
 Variable6	DS.L 1
 Variable7	DS.L 1
-Variable8	DC.B 'Es par',0
+Variable8	DS.L 1
 Variable9	DC.B 'Es par',0
 Variable10	DC.B 'Es par',0
-Variable11	DS.L 1
+Variable11	DC.B 'Es par',0
 Variable12	DS.L 1
 Variable13	DS.L 1
-Variable14	DC.B 'Es impar',0
+Variable14	DS.L 1
+Variable15	DC.B 'Es impar',0
 SParam0	DS.B 128
 	DC.B 0
 SParam1	DS.B 128
@@ -46,6 +47,11 @@ Param9	DS.L 1
 	DS.W 0
 ;-----------------------------------------------------------
 globals:
+; Instruction of type: COPIA
+;Operator 1 -> -2, Store in -> 0
+
+	MOVE.L #40, D0 ; Load variable
+	MOVE.L D0, (Variable0) ; Store local variable
 ; Instruction of type: CALL
 ;Operator 1 -> -2
 
@@ -53,42 +59,42 @@ globals:
 main:                                                       
 	MOVE.L A7, A6
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 0
-
-	MOVE.L #23, D0 ; Load variable
-	MOVE.L D0, (Variable0) ; Store local variable
-; Instruction of type: COPIA
 ;Operator 1 -> -2, Store in -> 1
 
-	MOVE.L #0, D0 ; Load variable
+	MOVE.L #23, D0 ; Load variable
 	MOVE.L D0, (Variable1) ; Store local variable
-; Instruction of type: MODULO
-;Operator 1 -> 0, Operator 2 -> 2, Store in -> 5
+; Instruction of type: COPIA
+;Operator 1 -> -2, Store in -> 2
 
-	MOVE.L (Variable0), D0 ; Load variable
+	MOVE.L #0, D0 ; Load variable
+	MOVE.L D0, (Variable2) ; Store local variable
+; Instruction of type: MODULO
+;Operator 1 -> 1, Operator 2 -> 2, Store in -> 6
+
+	MOVE.L (Variable1), D0 ; Load variable
 	MOVE.L #2, D1 ; Load variable
 	MODM D1, D0
-	MOVE.L D1, (Variable5) ; Store local variable
+	MOVE.L D1, (Variable6) ; Store local variable
 ; Instruction of type: IFDIFERENTE
-;Operator 1 -> -2, Operator 2 -> t5, Store in -> 6
+;Operator 1 -> -2, Operator 2 -> t6, Store in -> 7
 
 	MOVE.L #0, D0 ; Load variable
-	MOVE.L (Variable5), D1 ; Load variable
+	MOVE.L (Variable6), D1 ; Load variable
 	CMP.L D1, D0
 	BNE salto0
 	MOVE.L #0, D0 ; Load variable
-	MOVE.L D0, (Variable6) ; Store local variable
+	MOVE.L D0, (Variable7) ; Store local variable
 	JMP fsalto0  ; Instruction of type: SKIP
 salto0:
 	MOVE.L #-1, D0 ; Load variable
-	MOVE.L D0, (Variable6) ; Store local variable
+	MOVE.L D0, (Variable7) ; Store local variable
 ; Instruction of type: SKIP
 fsalto0:
 
 ; Instruction of type: IFTRUEGOTO
-;Operator 1 -> 6, Operator 2 -> 0, Store in -> -2
+;Operator 1 -> 7, Operator 2 -> 0, Store in -> -2
 
-	MOVE.L (Variable6), D0 ; Load variable
+	MOVE.L (Variable7), D0 ; Load variable
 	MOVE.L #-1,D1
 	CMP.L D1, D0
 	BEQ e1
@@ -108,14 +114,14 @@ fsalto0:
 
 e2:
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 8
+;Operator 1 -> -2, Store in -> 9
 
-	LEA Variable8, A0
+	LEA Variable9, A0
 	MOVE.L A0, D0 ; Load variable
 ; Instruction of type: PRINTLN
-;, Store in -> 8
+;, Store in -> 9
 
-	LEA	Variable8, A0 ; Cargar la string
+	LEA	Variable9, A0 ; Cargar la string
 	MOVE.L A0, A1 ; Ready text
 	MOVE.L #14, D0 ; Prepare display
 	TRAP #15
@@ -127,14 +133,14 @@ e2:
 	ADDQ.B #1, D1 ; We increment the current row by 1
 	TRAP #15 ; Set new coordinates (next line ready)
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 9
+;Operator 1 -> -2, Store in -> 10
 
-	LEA Variable9, A0
+	LEA Variable10, A0
 	MOVE.L A0, D0 ; Load variable
 ; Instruction of type: PRINTLN
-;, Store in -> 9
+;, Store in -> 10
 
-	LEA	Variable9, A0 ; Cargar la string
+	LEA	Variable10, A0 ; Cargar la string
 	MOVE.L A0, A1 ; Ready text
 	MOVE.L #14, D0 ; Prepare display
 	TRAP #15
@@ -158,14 +164,14 @@ e3:
 
 e4:
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 10
+;Operator 1 -> -2, Store in -> 11
 
-	LEA Variable10, A0
+	LEA Variable11, A0
 	MOVE.L A0, D0 ; Load variable
 ; Instruction of type: PRINTLN
-;, Store in -> 10
+;, Store in -> 11
 
-	LEA	Variable10, A0 ; Cargar la string
+	LEA	Variable11, A0 ; Cargar la string
 	MOVE.L A0, A1 ; Ready text
 	MOVE.L #14, D0 ; Prepare display
 	TRAP #15
@@ -177,24 +183,24 @@ e4:
 	ADDQ.B #1, D1 ; We increment the current row by 1
 	TRAP #15 ; Set new coordinates (next line ready)
 ; Instruction of type: MODULO
-;Operator 1 -> 0, Operator 2 -> 2, Store in -> 1
+;Operator 1 -> 1, Operator 2 -> 2, Store in -> 2
 
-	MOVE.L (Variable0), D0 ; Load variable
+	MOVE.L (Variable1), D0 ; Load variable
 	MOVE.L #2, D1 ; Load variable
 	MODM D1, D0
-	MOVE.L D1, (Variable1) ; Store local variable
+	MOVE.L D1, (Variable2) ; Store local variable
 ; Instruction of type: PRINT
-;, Store in -> 1
+;, Store in -> 2
 
-	MOVE.L (Variable1), D1 ; Load variable
+	MOVE.L (Variable2), D1 ; Load variable
 	MOVE.L #3, D0 ; Prepare display
 	TRAP #15
  ; Expect screen visualization
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 0
+;Operator 1 -> -2, Store in -> 1
 
 	MOVE.L #3, D0 ; Load variable
-	MOVE.L D0, (Variable0) ; Store local variable
+	MOVE.L D0, (Variable1) ; Store local variable
 ; Instruction of type: GOTO
 ;, Store in -> -2
 
@@ -204,23 +210,23 @@ e4:
 
 e1:
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 14
+;Operator 1 -> -2, Store in -> 15
 
-	LEA Variable14, A0
+	LEA Variable15, A0
 	MOVE.L A0, D0 ; Load variable
 ; Instruction of type: PRINT
-;, Store in -> 14
+;, Store in -> 15
 
-	LEA	Variable14, A0 ; Cargar la string
+	LEA	Variable15, A0 ; Cargar la string
 	MOVE.L A0, A1 ; Ready text
 	MOVE.L #14, D0 ; Prepare display
 	TRAP #15
  ; Expect screen visualization
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 1
+;Operator 1 -> -2, Store in -> 2
 
 	MOVE.L #5, D0 ; Load variable
-	MOVE.L D0, (Variable1) ; Store local variable
+	MOVE.L D0, (Variable2) ; Store local variable
 ; Instruction of type: SKIP
 ;, Store in -> -2
 

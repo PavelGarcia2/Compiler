@@ -1,5 +1,5 @@
 
-
+int global1=40;
 main{
     int numr = 23;
     int b;

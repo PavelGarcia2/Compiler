@@ -1,5 +1,8 @@
 package tsimbolos;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -129,14 +132,6 @@ public class TablaSimbolos {
         return n;
     }
 
-    // public void ponerParam(String idPr, String idParam, Dargin d) {
-    //     Descripcion d1 = this.consultarTD(idPr);
-    //     if(!(d1 instanceof Dproc)){
-    //         System.out.println("ERROR!");
-    //     }
-    //     Dproc dproc = (Dproc) this.consultarTD(idPr);  
-    // }
-
     public void ponerParam(String idpr, Dargin dArgumento, DFunc d){
         if(consultarTD(idpr) == null){
             parser.report_error("El procedimiento no existe", null);
@@ -171,41 +166,6 @@ public class TablaSimbolos {
         
     }
 
-    // public Descripcion consultarTE(int idx) {
-
-    // }
-
-    // public int consultarNext(int idx) {
-
-    // }
-
-    // public boolean last(int idx) {
-
-    // }
-
-    // public String toString() {
-
-    // }
-
-    // public TablaExpansion getTe() {
-
-    // }
-
-    // public void setTe(TablaExpansion te) {
-
-    // }
-
-    // /**
-    //  * Mete las dimensiones del array en la tabla de símbolos
-    //  * 
-    //  * @param id
-    //  * @param d
-    //  * @return si se ha podido insertar
-    //  * 
-    //  */
-    // public boolean ponerIndice(String id, Descripcion d) {
-    // }
-
   
     public void displayTS() {
         System.out.println("Tabla de símbolos");
@@ -213,5 +173,36 @@ public class TablaSimbolos {
             System.out.println(key + " : " + td.get(key).toString());
         }
     }
+
+    private StringBuilder resultadoTS = new StringBuilder();
+
+    public void displayTS2() {
+        // Limpiar el StringBuilder antes de cada llamada
+        resultadoTS.setLength(0);
+
+        // Llenar el StringBuilder con el resultado de displayTS2
+        resultadoTS.append("Contendio de la tabla de símbolos\n\n");
+        for (String value : td.keySet()) {
+            resultadoTS.append(value + " : " + td.get(value).toString()).append("\n");
+        }
+
+        // Escribir el resultado en un archivo
+        escribeTS(resultadoTS.toString());
+    }
+
+
+    private void escribeTS(String token){
+        //mete el token leido en un txt 
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("Compilador/src/resultadosEjecucion/tablaSimbolos.txt", false));
+            writer.write(token);
+            writer.newLine();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     
 }

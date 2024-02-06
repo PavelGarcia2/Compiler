@@ -169,7 +169,7 @@ decimal     = {digito}*{punto}{digito}+
         //mete el token leido en un txt 
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter("tokens.txt", true));
+            writer = new BufferedWriter(new FileWriter("Compilador/src/resultadosEjecucion/tokens.txt", true));
             writer.write(token);
             writer.newLine();
             writer.close();

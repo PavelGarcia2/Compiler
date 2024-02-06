@@ -1,0 +1,12 @@
+Contendio de la tabla de símbolos
+
+tsb_char : tsimbolos.auxi.Datos@4ee285c6
+tsb_void : tsimbolos.auxi.Datos@621be5d1
+false : tsimbolos.auxi.Datos@573fd745
+tsb_int : tsimbolos.auxi.Datos@15327b79
+tsb_str : tsimbolos.auxi.Datos@4f2410ac
+true : tsimbolos.auxi.Datos@722c41f4
+tsb_float : tsimbolos.auxi.Datos@5b80350b
+global1 : tsimbolos.auxi.Datos@5d6f64b1
+tsb_bool : tsimbolos.auxi.Datos@32a1bec0
+

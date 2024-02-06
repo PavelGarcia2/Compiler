@@ -47,7 +47,7 @@ public class Main {
                 System.out.println(args[0]);
                 input = new FileReader(args[0]);
                 //si existe el fichero tokens.txt lo borramos
-                File fichero = new File("tokens.txt");
+                File fichero = new File("Compilador/src/resultadosEjecucion/tokens.txt");
                 if (fichero.exists()) {
                     fichero.delete();
                 }
