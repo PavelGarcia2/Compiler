@@ -1,10 +1,3 @@
-*-----------------------------------------------------------
-* Title      : Block
-* Written by : Emanuel Hegedus
-* Date       : 2022
-* Description: Calls to instantiate and call block funtions
-*-----------------------------------------------------------
-
 ;------------------------------------------------------------------------------
 ;INPUT: A0-POINTER TO MEMORY SPACE, D0.W->PROCID, D0.L HIGH PART->ID
 ;OUTPUT: A0.W-BLOCK POINTER

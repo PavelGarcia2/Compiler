@@ -1,10 +1,3 @@
-*-----------------------------------------------------------
-* Title      : Constants
-* Written by : Emanuel Hegedus
-* Date       : 2022
-* Description: Constants usefull to all files
-*-----------------------------------------------------------
-
 MINIT   EQU $1000
 
 ;INSTRUCTION TYPE CONSTANTS (AS ENUMERATED IN THEIR ENUM)

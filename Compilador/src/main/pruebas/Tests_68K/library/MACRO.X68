@@ -1,9 +1,4 @@
-*-----------------------------------------------------------
-* Title      : MACROs
-* Written by : Emanuel Hegedus
-* Date       : 2022
-* Description: Macros for usefull operations
-*-----------------------------------------------------------
+
             OPT     $1000
             OPT     MEX
   

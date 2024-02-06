@@ -1,9 +1,4 @@
-*-----------------------------------------------------------
-* Title      : DYNAMIC MEMORY MANAGEMENT
-* Written by : Emanuel Hegedus
-* Date       : 2022
-* Description: MEMORY MANAGEMENT METHODS
-*-----------------------------------------------------------
+
 ; =============================================================================
 ; DYNAMIC MEMORY MANAGEMENT (SYSTEM CODE)
 ; DYNAMIC MEMORY IS A SET OF DMMBNUM SLOTS OF DMMBSIZE BYTES EACH ONE.

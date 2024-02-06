@@ -1,9 +1,4 @@
-*-----------------------------------------------------------
-* Title      : Variables
-* Written by : Emanuel Hegedus
-* Date       : 2022
-* Description: Variables usefull to all files
-*-----------------------------------------------------------
+
 ; --- DYNAMIC MEMORY VARIABLES ------------------------------------------------
 
             ORG     (*+DMMBSIZE-1)&-DMMBSIZE    ; ALIGN TO DMMBSIZE
