@@ -660,13 +660,32 @@ public class GeneradorEnsamblado {
                 break;
 
             case IN:
+                Variable variable2 = tablaVariables.get(instruccion.getOperadores()[2].getReferencia());
+            switch (variable2.getTipo()) {
 
-                ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "#5, D0 ; Prepare read\n");
-                ensamblado.append(espacioEtiqueta + "TRAP" + espacioNormal + "#15 ; Expect input\n");
-                ensamblado.append(espacioEtiqueta + "AND.L" + espacioNormal
-                        + "#$00FF, D1 ; Mask upper word (we read char = 2 bytes)\n");
-                STORE("D1", tablaVariables.get(instruccion.getOperadores()[2].getReferencia()).getIdProcedimiento(),
-                        instruccion.getOperadores()[2].getReferencia());
+                case tsb_char:
+                        ensamblado.append(espacioEtiqueta + "LEA" + espacioEtiqueta +"Variable" + instruccion.getOperadores()[2].getReferencia() + ", A1 ; Cargar la string\n");
+                        ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "#5, D0 ; Prepare read\n");
+                        ensamblado.append(espacioEtiqueta + "TRAP" + espacioNormal + "#15 ; Expect input\n");
+                        ensamblado.append(espacioEtiqueta + "AND.L" + espacioNormal + "#$00FF, D1 ; Mascara en D1\n");
+                        STORE("D1", null, instruccion.getOperadores()[2].getReferencia());
+                    break;
+
+                case tsb_int:
+                        
+                        ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "#4, D0 ; Prepare read\n");
+                        ensamblado.append(espacioEtiqueta + "TRAP" + espacioNormal + "#15 ; Expect input\n");
+                        STORE("D1", null, instruccion.getOperadores()[2].getReferencia());
+
+                    break;
+
+                case tsb_str:
+                        ensamblado.append(espacioEtiqueta + "LEA" + espacioEtiqueta +"Variable" + instruccion.getOperadores()[2].getReferencia() + ", A1 ; Cargar la string\n");
+                        ensamblado.append(espacioEtiqueta + "MOVE.L" + espacioNormal + "#2, D0 ; Prepare read\n");
+                        ensamblado.append(espacioEtiqueta + "TRAP" + espacioNormal + "#15 ; Expect input\n");
+                    break;
+             }
+
 
                 break;
 

@@ -1,4 +1,4 @@
 Contenido de la tabla de variables
 
-Id variable: Variable0, tipo: VARIABLE, offset: 0, del procedimiento: null y con tamaño de bytes: 128
+Id variable: Variable0, tipo: VARIABLE, offset: -4, del procedimiento: null y con tamaño de bytes: 2
 

@@ -1840,14 +1840,14 @@ public class Semantico {
                     if (desc == null) {
                         parser.report_error("Variable inexistente", otras.getNodoDevuelto().getId());
                     }
-                    Dvar dvar = (Dvar) desc;
-                    if (dvar.getTipus() != Tipo.tsb_str) {
-                        parser.report_error("El tipo debe ser str", otras.getNodoDevuelto().getId());
+                    Dvar dvar = (Dvar) desc;                    
+                    Tipo t = dvar.getTipus();
+                    if(t != Tipo.tsb_int & t != Tipo.tsb_char & t != Tipo.tsb_str ){
+                        parser.report_error("El tipo es incorrecto", otras.getNodoDevuelto().getId());
                     }
                     int nv3 = dvar.getNodoId().getNv();
                     g.genIntruccion(TipoInstruccion.IN, null, null, new Operador3Direcciones("", nv3, false, dvar));
-                }
-                // ?¿?¿¿? setTyp char
+                }                
 
                 break;
 

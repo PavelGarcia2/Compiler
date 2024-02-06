@@ -1,5 +1,5 @@
-str hola="";
 main{
+    char hola;
     in(hola);
-    print(hola);
+    println(hola);
 }
