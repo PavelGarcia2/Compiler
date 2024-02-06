@@ -166,17 +166,10 @@ public class TablaSimbolos {
         
     }
 
-  
-    public void displayTS() {
-        System.out.println("Tabla de símbolos");
-        for (String key : td.keySet()) {
-            System.out.println(key + " : " + td.get(key).toString());
-        }
-    }
 
     private StringBuilder resultadoTS = new StringBuilder();
 
-    public void displayTS2() {
+    public void displayTS() {
         // Limpiar el StringBuilder antes de cada llamada
         resultadoTS.setLength(0);
 

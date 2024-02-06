@@ -143,6 +143,11 @@ tId
 tIgual
 tEntero
 tPuntocoma
+tPrintln
+tLparen
+tLinea
+tRparen
+tPuntocoma
 tRbracket
 tElif
 tLparen
@@ -271,4 +276,5 @@ tReturn
 tId
 tPuntocoma
 tRbracket
+EOF
 EOF

@@ -1,12 +1,22 @@
 Contendio de la tabla de símbolos
 
-tsb_char : tsimbolos.auxi.Datos@4ee285c6
-tsb_void : tsimbolos.auxi.Datos@621be5d1
-false : tsimbolos.auxi.Datos@573fd745
-tsb_int : tsimbolos.auxi.Datos@15327b79
-tsb_str : tsimbolos.auxi.Datos@4f2410ac
-true : tsimbolos.auxi.Datos@722c41f4
-tsb_float : tsimbolos.auxi.Datos@5b80350b
-global1 : tsimbolos.auxi.Datos@5d6f64b1
-tsb_bool : tsimbolos.auxi.Datos@32a1bec0
+b2 : tsimbolos.auxi.Datos@66cd51c3
+an : tsimbolos.auxi.Datos@4dcbadb4
+cdsa : tsimbolos.auxi.Datos@4e515669
+tsb_char : tsimbolos.auxi.Datos@17d10166
+x : tsimbolos.auxi.Datos@1b9e1916
+y : tsimbolos.auxi.Datos@ba8a1dc
+z : tsimbolos.auxi.Datos@4f8e5cde
+tsb_void : tsimbolos.auxi.Datos@504bae78
+resultado : tsimbolos.auxi.Datos@3b764bce
+gato : tsimbolos.auxi.Datos@759ebb3d
+false : tsimbolos.auxi.Datos@484b61fc
+suma : tsimbolos.auxi.Datos@45fe3ee3
+tsb_int : tsimbolos.auxi.Datos@4cdf35a9
+resta : tsimbolos.auxi.Datos@4c98385c
+tsb_str : tsimbolos.auxi.Datos@5fcfe4b2
+true : tsimbolos.auxi.Datos@6bf2d08e
+tsb_float : tsimbolos.auxi.Datos@5eb5c224
+a2 : tsimbolos.auxi.Datos@53e25b76
+tsb_bool : tsimbolos.auxi.Datos@73a8dfcc
 

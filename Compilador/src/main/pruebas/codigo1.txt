@@ -28,6 +28,7 @@ main {
 
     if(a2 != b2){
         asf = 1;
+        println("asf es 1");
     }elif(uno == true){
         uno=false;
     }else{

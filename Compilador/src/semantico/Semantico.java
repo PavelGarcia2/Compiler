@@ -169,12 +169,7 @@ public class Semantico {
                     optimizacion.getIntrucciones());
             ensamblado.generarCodigoMain();
 
-            System.out.println("\n\n\n\nContenido de la tabla de simbolos");
-            ts.displayTS2();
-
-            
-
-
+            ts.displayTS();
 
         } else {
             parser.report_error("No hemos encontrado el main", main);

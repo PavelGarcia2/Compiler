@@ -83,12 +83,13 @@ Variable72	DS.L 1
 Variable73	DS.L 1
 Variable74	DS.L 1
 Variable75	DS.L 1
-Variable76	DS.L 1
+Variable76	DC.B 'asf es 1',0
 Variable77	DS.L 1
 Variable78	DS.L 1
 Variable79	DS.L 1
 Variable80	DS.L 1
 Variable81	DS.L 1
+Variable82	DS.L 1
 SParam0	DS.B 128
 	DC.B 0
 SParam1	DS.B 128
@@ -760,6 +761,25 @@ e10:
 
 	MOVE.L #1, D0 ; Load variable
 	MOVE.L D0, (Variable60) ; Store local variable
+; Instruction of type: COPIA
+;Operator 1 -> -2, Store in -> 76
+
+	LEA Variable76, A0
+	MOVE.L A0, D0 ; Load variable
+; Instruction of type: PRINTLN
+;, Store in -> 76
+
+	LEA	Variable76, A0 ; Cargar la string
+	MOVE.L A0, A1 ; Ready text
+	MOVE.L #14, D0 ; Prepare display
+	TRAP #15
+ ; Expect screen visualization
+	MOVE.B #11, D0 ; Next line prepare
+	MOVE.L #$00FF, D1 ; Request current coordinates
+	TRAP #15 ; Get them in D1.L (HIGH=COL, LOW = ROW)
+	AND.L #$00FF, D1 ; We want always column = 0
+	ADDQ.B #1, D1 ; We increment the current row by 1
+	TRAP #15 ; Set new coordinates (next line ready)
 ; Instruction of type: GOTO
 ;, Store in -> -2
 
@@ -769,35 +789,35 @@ e10:
 
 e11:
 ; Instruction of type: COPIA
-;Operator 1 -> 67, Store in -> 76
+;Operator 1 -> 67, Store in -> 77
 
 	MOVE.L (Variable67), D0 ; Load variable
-	MOVE.L D0, (Variable76) ; Store local variable
+	MOVE.L D0, (Variable77) ; Store local variable
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 77
+;Operator 1 -> -2, Store in -> 78
 
 	MOVE.L #-1, D0 ; Load variable
-	MOVE.L D0, (Variable77) ; Store local variable
+	MOVE.L D0, (Variable78) ; Store local variable
 ; Instruction of type: IFIGUALI
-;Operator 1 -> 76, Operator 2 -> t77, Store in -> 78
+;Operator 1 -> 77, Operator 2 -> t78, Store in -> 79
 
-	MOVE.L (Variable76), D0 ; Load variable
-	MOVE.L (Variable77), D1 ; Load variable
+	MOVE.L (Variable77), D0 ; Load variable
+	MOVE.L (Variable78), D1 ; Load variable
 	CMP.L D1, D0
 	BEQ salto4
 	MOVE.L #0, D0 ; Load variable
-	MOVE.L D0, (Variable78) ; Store local variable
+	MOVE.L D0, (Variable79) ; Store local variable
 	JMP fsalto4 ; Instruction of type: SKIP
 salto4:
 	MOVE.L #-1, D0 ; Load variable
-	MOVE.L D0, (Variable78) ; Store local variable
+	MOVE.L D0, (Variable79) ; Store local variable
 ; Instruction of type: SKIP
 fsalto4:
 
 ; Instruction of type: IFTRUEGOTO
-;Operator 1 -> 78, Operator 2 -> 0, Store in -> -2
+;Operator 1 -> 79, Operator 2 -> 0, Store in -> -2
 
-	MOVE.L (Variable78), D0 ; Load variable
+	MOVE.L (Variable79), D0 ; Load variable
 	MOVE.L #-1,D1
 	CMP.L D1, D0
 	BEQ e13
@@ -832,27 +852,27 @@ e14:
 
 e12:
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 79
+;Operator 1 -> -2, Store in -> 80
 
 	MOVE.L #2, D0 ; Load variable
-	MOVE.L D0, (Variable79) ; Store local variable
+	MOVE.L D0, (Variable80) ; Store local variable
 ; Instruction of type: COPIA
-;Operator 1 -> -2, Store in -> 81
+;Operator 1 -> -2, Store in -> 82
 
 	MOVE.L #4, D0 ; Load variable
-	MOVE.L D0, (Variable81) ; Store local variable
+	MOVE.L D0, (Variable82) ; Store local variable
 ; Instruction of type: MULTIPLICACION
-;Operator 1 -> 79, Operator 2 -> t81, Store in -> 80
+;Operator 1 -> 80, Operator 2 -> t82, Store in -> 81
 
-	MOVE.L (Variable79), D0 ; Load variable
-	MOVE.L (Variable81), D1 ; Load variable
+	MOVE.L (Variable80), D0 ; Load variable
+	MOVE.L (Variable82), D1 ; Load variable
 	MULTM D0, D1
-	MOVE.L D1, (Variable80) ; Store local variable
+	MOVE.L D1, (Variable81) ; Store local variable
 ; Instruction of type: IND_ASS
-;Operator 1 -> -2, Operator 2 -> t80, Store in -> 6
+;Operator 1 -> -2, Operator 2 -> t81, Store in -> 6
 
 	LEA	(Variable6), A0
-	MOVE.L (Variable80), D0 ; Load variable
+	MOVE.L (Variable81), D0 ; Load variable
 	ADD.L D0, A0 ; D0 = @A[B]
 	MOVE.L #11, D2 ; Load variable
 	MOVE.L D2, (A0) ; Store C IN A[B]
