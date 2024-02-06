@@ -1,13 +1,17 @@
 Contenido de la tabla de variables
 
-Id variable: Variable0, tipo: VARIABLE, offset: -4, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable1, tipo: VARIABLE, offset: -8, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable2, tipo: VARIABLE, offset: -12, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable3, tipo: VARIABLE, offset: -16, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable4, tipo: VARIABLE, offset: -20, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable5, tipo: VARIABLE, offset: 0, del procedimiento: null y con tamaño de bytes: 128
-Id variable: Variable6, tipo: VARIABLE, offset: -24, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable7, tipo: VARIABLE, offset: -28, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable8, tipo: VARIABLE, offset: -32, del procedimiento: null y con tamaño de bytes: 4
-Id variable: Variable9, tipo: VARIABLE, offset: -36, del procedimiento: null y con tamaño de bytes: 4
+Id variable: Variable0, tipo: VARIABLE, offset: -4, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable1, tipo: VARIABLE, offset: -8, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable2, tipo: VARIABLE, offset: -12, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable3, tipo: VARIABLE, offset: -16, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable4, tipo: VARIABLE, offset: -20, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable5, tipo: VARIABLE, offset: -24, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable6, tipo: VARIABLE, offset: -28, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable7, tipo: VARIABLE, offset: -32, del procedimiento: suma y con tamaño de bytes: 2
+Id variable: Variable8, tipo: VARIABLE, offset: -36, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable9, tipo: VARIABLE, offset: -40, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable10, tipo: VARIABLE, offset: -44, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable11, tipo: VARIABLE, offset: -48, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable12, tipo: VARIABLE, offset: -52, del procedimiento: suma y con tamaño de bytes: 4
+Id variable: Variable13, tipo: VARIABLE, offset: -56, del procedimiento: suma y con tamaño de bytes: 4
 

@@ -13,7 +13,11 @@ tIgual
 tId
 tLparen
 tEntero
+tSuma
+tEntero
 tComa
+tEntero
+tSuma
 tEntero
 tRparen
 tPuntocoma
@@ -41,8 +45,14 @@ tId
 tSuma
 tId
 tPuntocoma
+tPrintln
+tLparen
+tId
+tRparen
+tPuntocoma
 tReturn
 tId
 tPuntocoma
 tRbracket
+EOF
 EOF

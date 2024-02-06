@@ -3,14 +3,14 @@
 main {
     int z=1;
     char x;
-    z = suma(1,2);
+    z = suma(1+2,2+2);
     println(z);
 }
 
 
 fun int suma(int a,int b){
-    int res = a + b;
-    //res = a+b;
+    int res = a+b;
+    println(res);
     return res;
 }
 
